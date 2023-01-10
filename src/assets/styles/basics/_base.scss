@@ -1,0 +1,68 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: Poppins;
+  line-height: 1.6;
+  color: $main-dark;
+}
+
+body {
+  font-size: rem(16px);
+  margin: 0;
+  background-color: $light;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  line-height: 1;
+}
+
+img,
+video {
+  width: 100%;
+}
+
+a,
+a:visited {
+  text-decoration: none;
+  color: unset;
+}
+
+button,
+.btn {
+  appearance: none;
+  display: inline-block;
+  border: none;
+  background-color: unset;
+  font-size: em(16px);
+  padding: 12px 24px;
+  border: 1px solid $main-dark;
+  border-radius: 6px;
+  cursor: pointer;
+
+  &.btn-bg {
+    position: relative;
+    &::before {
+      content: '';
+      background-color: $main;
+      position: absolute;
+      inset: 0;
+      border-radius: 6px;
+      transform: translate(2.5%, 6%);
+      z-index: -1;
+      transition: transform 0.2s;
+    }
+    &:hover {
+      &::before {
+        transform: translate(0, 0);
+      }
+    }
+  }
+}

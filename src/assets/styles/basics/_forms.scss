@@ -1,0 +1,41 @@
+// clearing forms:
+
+/* clears the ‘X’ from Internet Explorer */
+input[type='search']::-ms-clear {
+  display: none;
+  width: 0;
+  height: 0;
+}
+input[type='search']::-ms-reveal {
+  display: none;
+  width: 0;
+  height: 0;
+}
+/* clears the ‘X’ from Chrome */
+input[type='search']::-webkit-search-decoration,
+input[type='search']::-webkit-search-cancel-button,
+input[type='search']::-webkit-search-results-button,
+input[type='search']::-webkit-search-results-decoration {
+  display: none;
+}
+
+input {
+  font-size: em(14px);
+  padding-block: 10px;
+  appearance: none;
+  border: none;
+  background-color: #fff;
+  box-shadow: $shadow;
+  border-radius: 4px;
+  color: $main-dark;
+  outline: 1px solid transparent;
+  transition: outline-color 0.15s ease-in;
+
+  &::placeholder {
+    color: $main-dark-20;
+  }
+
+  &:focus-visible {
+    outline-color: $main-dark-20;
+  }
+}

@@ -1,0 +1,37 @@
+.main-container {
+  display: grid;
+  grid-template-columns: $sitePadding 1fr $sitePadding;
+
+  > * {
+    grid-column: 2;
+
+    &.full {
+      grid-column: 1 /-1;
+    }
+  }
+
+  @include for-narrow-layout {
+    grid-template-columns:
+      minmax($sitePadding, 1fr)
+      minmax(auto, $mobile-breakpoint)
+      minmax($sitePadding, 1fr);
+  }
+  @include for-normal-layout {
+    grid-template-columns:
+      minmax($sitePadding, 1fr)
+      minmax(auto, $narrow-breakpoint)
+      minmax($sitePadding, 1fr);
+  }
+  @include for-wide-layout {
+    grid-template-columns:
+      minmax($sitePadding, 1fr)
+      minmax(auto, $normal-breakpoint)
+      minmax($sitePadding, 1fr);
+  }
+}
+
+@mixin grid($colAmount: 12, $gap: 36px) {
+  display: grid;
+  grid-template-columns: repeat($colAmount, minmax(0, 1fr));
+  gap: $gap;
+}
