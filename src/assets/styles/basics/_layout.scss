@@ -29,9 +29,3 @@
       minmax($sitePadding, 1fr);
   }
 }
-
-@mixin grid($colAmount: 12, $gap: 36px) {
-  display: grid;
-  grid-template-columns: repeat($colAmount, minmax(0, 1fr));
-  gap: $gap;
-}

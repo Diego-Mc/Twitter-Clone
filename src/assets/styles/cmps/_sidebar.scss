@@ -1,0 +1,17 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  .nav-btn {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+    gap: 16px;
+    text-transform: capitalize;
+    svg {
+      width: rem(26.5px);
+      height: rem(26.5px);
+      fill: currentColor;
+    }
+  }
+}

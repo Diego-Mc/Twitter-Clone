@@ -1,0 +1,22 @@
+#root {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 1fr minmax(0, 1fr);
+  grid-template-areas: '. app .';
+}
+
+.main-app {
+  grid-area: app;
+  display: grid;
+  grid-template-columns: 275px 990px;
+  grid-template-areas: 'header header' 'sidebar content';
+  .main-header {
+    grid-area: header;
+  }
+
+  .content {
+    grid-area: content;
+    display: grid;
+    grid-template-columns: 598px 350px;
+    justify-content: space-between;
+  }
+}

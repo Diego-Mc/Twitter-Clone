@@ -6,10 +6,10 @@ html {
   font-family: Poppins;
   line-height: 1.6;
   color: $main-dark;
+  font-size: 16px;
 }
 
 body {
-  font-size: rem(16px);
   margin: 0;
   background-color: $light;
 }
@@ -38,31 +38,9 @@ a:visited {
 button,
 .btn {
   appearance: none;
-  display: inline-block;
   border: none;
   background-color: unset;
   font-size: em(16px);
   padding: 12px 24px;
-  border: 1px solid $main-dark;
-  border-radius: 6px;
   cursor: pointer;
-
-  &.btn-bg {
-    position: relative;
-    &::before {
-      content: '';
-      background-color: $main;
-      position: absolute;
-      inset: 0;
-      border-radius: 6px;
-      transform: translate(2.5%, 6%);
-      z-index: -1;
-      transition: transform 0.2s;
-    }
-    &:hover {
-      &::before {
-        transform: translate(0, 0);
-      }
-    }
-  }
 }
