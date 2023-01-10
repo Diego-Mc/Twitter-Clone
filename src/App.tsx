@@ -15,7 +15,7 @@ function App() {
       <div className="main-app">
         <Header />
         <Sidebar />
-        <div className="content">
+        <div className="main-content">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/explore" element={<Explore />} />
@@ -25,8 +25,8 @@ function App() {
             <Route path="/search/:term" element={<Search />} />
             <Route path="/post/:postId" element={<PostDetails />} />
           </Routes>
-          <FeedAside />
         </div>
+        <FeedAside />
       </div>
     </BrowserRouter>
   )

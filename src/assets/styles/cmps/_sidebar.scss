@@ -1,17 +1,38 @@
 .sidebar {
   display: flex;
   flex-direction: column;
-  .nav-btn {
-    height: 60px;
+  .nav-btns {
     display: flex;
-    align-items: center;
-    font-size: 20px;
-    gap: 16px;
-    text-transform: capitalize;
-    svg {
-      width: rem(26.5px);
-      height: rem(26.5px);
-      fill: currentColor;
+    flex-direction: column;
+    .nav-btn {
+      height: 60px;
+      display: flex;
+      align-items: center;
+      font-size: 20px;
+      gap: 16px;
+      text-transform: capitalize;
+      svg {
+        width: rem(26.5px);
+        height: rem(26.5px);
+        fill: currentColor;
+      }
+      p.active {
+        font-weight: 700;
+      }
+    }
+  }
+
+  .tweet-btn {
+    font-size: rem(17px);
+    width: 90%;
+    margin-block: 16px;
+  }
+
+  .user-preview {
+    margin-top: auto;
+    .follow-btn {
+      display: none;
+      // TODO: remove this and change to a react solution...
     }
   }
 }

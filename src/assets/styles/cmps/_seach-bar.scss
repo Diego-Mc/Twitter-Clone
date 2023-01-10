@@ -1,0 +1,41 @@
+.search-bar {
+  width: 100%;
+  position: relative;
+  height: 42px;
+  width: $feed-aside-inner-width-l;
+  margin-left: auto;
+  svg {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    height: 1.25rem;
+    min-width: 32px;
+    padding-left: 16px;
+    z-index: 10;
+    fill: currentColor;
+    color: var(--dark-gray);
+  }
+  input {
+    background-color: var(--extra-light-gray);
+    position: absolute;
+    inset: 0;
+    padding-left: 48px;
+    font-size: 1rem;
+    border-radius: 4rem;
+    border: 1px solid transparent;
+    &::placeholder {
+      color: var(--dark-gray);
+    }
+  }
+
+  &:has(input:focus) {
+    input {
+      background-color: #fff;
+      border-color: var(--blue);
+    }
+    svg {
+      color: var(--blue);
+    }
+  }
+}

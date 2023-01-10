@@ -38,7 +38,7 @@ const NavButton: React.FC<NavButtonProps> = ({ type, to, end }) => {
       {({ isActive }) => (
         <>
           {getIcon(isActive)}
-          <p>{type}</p>
+          <p className={isActive ? 'active' : ''}>{type}</p>
         </>
       )}
     </NavLink>
@@ -50,11 +50,13 @@ interface SidebarProps {}
 export const Sidebar: React.FC<SidebarProps> = ({}) => {
   return (
     <section className="sidebar">
-      <NavButton to="/" type="home" />
-      <NavButton to="/explore" type="explore" />
-      <NavButton to="/bookmarks" type="bookmarks" />
-      <NavButton to="/profile" type="profile" end />
-      <button>Tweet</button>
+      <div className="nav-btns">
+        <NavButton to="/" type="home" />
+        <NavButton to="/explore" type="explore" />
+        <NavButton to="/bookmarks" type="bookmarks" />
+        <NavButton to="/profile" type="profile" end />
+      </div>
+      <button className="tweet-btn primary pill">Tweet</button>
       <UserPreview />
     </section>
   )

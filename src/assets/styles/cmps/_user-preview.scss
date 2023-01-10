@@ -1,0 +1,36 @@
+.user-preview {
+  padding: 12px 16px;
+  display: grid;
+  grid-template-areas: 'img full-name follow' 'img username follow';
+  grid-template-columns: 48px 1fr min-content;
+  column-gap: 12px;
+  align-items: center;
+  cursor: pointer;
+
+  .user-img {
+    grid-area: img;
+  }
+
+  .full-name {
+    grid-area: full-name;
+    font-size: 1rem;
+  }
+
+  .username {
+    grid-area: username;
+    font-size: 1rem;
+  }
+
+  .follow-btn {
+    grid-area: follow;
+  }
+
+  &:last-child {
+    border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;
+  }
+
+  &:hover {
+    background-color: var(--extra-light-gray);
+  }
+}

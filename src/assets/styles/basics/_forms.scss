@@ -25,17 +25,16 @@ input {
   appearance: none;
   border: none;
   background-color: #fff;
-  box-shadow: $shadow;
   border-radius: 4px;
-  color: $main-dark;
+  color: var(--black);
   outline: 1px solid transparent;
   transition: outline-color 0.15s ease-in;
 
   &::placeholder {
-    color: $main-dark-20;
+    color: white;
   }
 
   &:focus-visible {
-    outline-color: $main-dark-20;
+    outline-color: white;
   }
 }

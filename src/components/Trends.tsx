@@ -7,7 +7,7 @@ export const TrendPreview: React.FC<TrendPreviewProps> = ({}) => {
     <article className="trend-preview">
       <small className="tag">Trending</small>
       <h6 className="trend-name">Kimmel</h6>
-      <small className="tweet-amount">2,734 Tweets</small>
+      <small className="tweet-count">2,734 Tweets</small>
     </article>
   )
 }
@@ -18,7 +18,7 @@ export const Trends: React.FC<TrendsProps> = ({}) => {
   return (
     <section className="trends">
       <h3 className="title">Trends for you</h3>
-      <div className="trends-list">
+      <div className="trend-list">
         <TrendPreview />
         <TrendPreview />
         <TrendPreview />

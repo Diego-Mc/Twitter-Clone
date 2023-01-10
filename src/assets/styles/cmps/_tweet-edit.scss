@@ -1,0 +1,46 @@
+.tweet-edit {
+  display: grid;
+  grid-template-areas: 'img content' '. options';
+  grid-template-columns: 48px 1fr;
+  column-gap: 16px;
+  padding: 12px 16px;
+  border-bottom: $border;
+
+  .user-img {
+    grid-area: img;
+  }
+  .content {
+    grid-area: content;
+    font-size: rem(20px);
+    font-family: chirp;
+    display: flex;
+    align-items: center;
+    color: var(--dark-gray);
+    padding-block: 12px;
+  }
+  .options {
+    grid-area: options;
+    height: 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    .icons {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      svg {
+        width: 20px;
+        height: 20px;
+        margin-block: 7px;
+        fill: currentColor;
+        color: var(--blue);
+      }
+    }
+
+    .tweet-btn {
+      height: 36px;
+      padding-block: 0;
+      opacity: 0.5;
+    }
+  }
+}

@@ -1,0 +1,37 @@
+.main-header {
+  height: 54px;
+  display: grid;
+  grid-template-columns: $sidebar-width-l $main-content-width $feed-aside-width-l;
+  align-items: center;
+
+  .logo-container {
+    width: 50px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    svg {
+      fill: currentColor;
+      color: var(--blue);
+      height: 30px;
+    }
+  }
+
+  .main-view {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-inline: 10px;
+    height: 100%;
+    border-inline: $border;
+    .view-title {
+      font-size: rem(20px);
+    }
+    svg {
+      fill: currentColor;
+      color: var(--black);
+      height: 20px;
+      width: 20px;
+    }
+  }
+}

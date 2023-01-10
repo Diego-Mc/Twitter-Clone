@@ -61,7 +61,7 @@
   position: absolute;
   top: -56px;
   font-size: rem(14px);
-  color: $main-dark-opacity;
+  color: var(--dark-gray);
 }
 
 @mixin grid($colAmount: 12, $gap: 36px) {
