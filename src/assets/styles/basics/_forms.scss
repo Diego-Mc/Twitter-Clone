@@ -19,22 +19,22 @@ input[type='search']::-webkit-search-results-decoration {
   display: none;
 }
 
-input {
-  font-size: em(14px);
-  padding-block: 10px;
-  appearance: none;
-  border: none;
-  background-color: #fff;
-  border-radius: 4px;
-  color: var(--black);
-  outline: 1px solid transparent;
-  transition: outline-color 0.15s ease-in;
+// input {
+//   font-size: em(14px);
+//   padding-block: 10px;
+//   appearance: none;
+//   border: none;
+//   background-color: #fff;
+//   border-radius: 4px;
+//   color: var(--black);
+//   outline: 1px solid transparent;
+//   transition: outline-color 0.15s ease-in;
 
-  &::placeholder {
-    color: white;
-  }
+//   &::placeholder {
+//     color: white;
+//   }
 
-  &:focus-visible {
-    outline-color: white;
-  }
-}
+//   &:focus-visible {
+//     outline-color: white;
+//   }
+// }

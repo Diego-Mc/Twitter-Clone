@@ -1,16 +1,24 @@
 .sidebar {
   display: flex;
   flex-direction: column;
+  padding-inline: 12px;
   .nav-btns {
     display: flex;
     flex-direction: column;
+    width: 250px;
+    gap: 4px;
     .nav-btn {
-      height: 60px;
+      // height: 60px;
+      width: fit-content;
+      height: fit-content;
       display: flex;
       align-items: center;
       font-size: 20px;
       gap: 16px;
       text-transform: capitalize;
+      font-weight: 400;
+      padding: 12px;
+      position: relative;
       svg {
         width: rem(26.5px);
         height: rem(26.5px);
@@ -19,6 +27,18 @@
       p.active {
         font-weight: 700;
       }
+
+      &::before {
+        content: '';
+        transition: background-color 0.2s;
+        position: absolute;
+      }
+      &:hover::before {
+        inset: 0;
+        background-color: rgba(15, 20, 25, 0.1);
+        border-radius: 5rem;
+        transform: scaleX(110%) scale(95%);
+      }
     }
   }
 
@@ -26,6 +46,11 @@
     font-size: rem(17px);
     width: 90%;
     margin-block: 16px;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: rgba(26, 140, 216);
+    }
   }
 
   .user-preview {
@@ -33,6 +58,14 @@
     .follow-btn {
       display: none;
       // TODO: remove this and change to a react solution...
+    }
+    .img-container .user-img {
+      width: 40px;
+      height: 40px;
+    }
+
+    &:hover {
+      border-radius: 5rem;
     }
   }
 }

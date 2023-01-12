@@ -1,33 +1,55 @@
 .user-preview {
   padding: 12px 16px;
-  display: grid;
-  grid-template-areas: 'img full-name follow' 'img username follow';
-  grid-template-columns: 48px 1fr min-content;
-  column-gap: 12px;
+  display: flex;
   align-items: center;
   cursor: pointer;
 
-  .user-img {
-    grid-area: img;
+  .img-container {
+    margin-right: 12px;
+    display: flex;
+    .user-img {
+      width: 48px;
+      height: 48px;
+    }
   }
 
-  .full-name {
-    grid-area: full-name;
-    font-size: 1rem;
+  .preview-content {
+    width: 100%;
   }
 
-  .username {
-    grid-area: username;
-    font-size: 1rem;
+  .user-info-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 40px;
+    .info {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      .full-name {
+        font-size: 1rem;
+        line-height: 20px;
+        margin-bottom: 2px;
+      }
+
+      .username {
+        font-size: 1rem;
+        line-height: 20px;
+        color: var(--dark-gray);
+      }
+    }
+    .follow-btn {
+      grid-area: follow;
+      &:hover {
+        background-color: var(--black-hover);
+      }
+    }
   }
 
-  .follow-btn {
-    grid-area: follow;
-  }
-
-  &:last-child {
-    border-bottom-left-radius: 16px;
-    border-bottom-right-radius: 16px;
+  .description {
+    display: none;
+    padding-top: 7px;
   }
 
   &:hover {

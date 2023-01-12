@@ -16,12 +16,24 @@ const TweetEdit: React.FC<TweetEditProps> = ({}) => {
       <div className="content">What's happening?</div>
       <div className="options">
         <div className="icons">
-          <ImgIcon />
-          <GifIcon />
-          <PollIcon />
-          <EmojiIcon />
-          <DateIcon />
-          <LocationIcon />
+          <div className="icon-wrap blue">
+            <ImgIcon />
+          </div>
+          <div className="icon-wrap blue">
+            <GifIcon />
+          </div>
+          <div className="icon-wrap blue">
+            <PollIcon />
+          </div>
+          <div className="icon-wrap blue">
+            <EmojiIcon />
+          </div>
+          <div className="icon-wrap blue">
+            <DateIcon />
+          </div>
+          <div className="icon-wrap blue">
+            <LocationIcon />
+          </div>
         </div>
         <button className="tweet-btn primary pill">Tweet</button>
       </div>
@@ -35,6 +47,7 @@ export const Home: React.FC<HomeProps> = ({}) => {
   return (
     <main className="home-view">
       <TweetEdit />
+      <section className="show-more">Show 35 Tweets</section>
       <PostList />
     </main>
   )

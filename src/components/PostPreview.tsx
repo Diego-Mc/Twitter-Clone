@@ -10,10 +10,10 @@ export const PostPreview: React.FC<PostPreviewProps> = ({}) => {
     <article className="post-preview">
       <img src="default-user-img.png" alt="" className="user-img" />
       <span className="header">
-        <span className="fullname">Browyn Williams</span>
+        <span className="full-name link">Browyn Williams</span>
         <span className="username">@brownynwilliams</span>
         <span className="divider">·</span>
-        <span className="time">6h</span>
+        <span className="time link">6h</span>
       </span>
       <div className="post-content">
         <p className="post-text">
@@ -24,15 +24,21 @@ export const PostPreview: React.FC<PostPreviewProps> = ({}) => {
       </div>
       <div className="options">
         <div className="icon comment">
-          <CommentIcon />
+          <div className="icon-wrap sm">
+            <CommentIcon />
+          </div>
           <span className="amount">1</span>
         </div>
         <div className="icon like">
-          <HeartIcon />
+          <div className="icon-wrap sm">
+            <HeartIcon />
+          </div>
           <span className="amount">28</span>
         </div>
         <div className="icon share">
-          <ShareIcon />
+          <div className="icon-wrap sm">
+            <ShareIcon />
+          </div>
         </div>
       </div>
     </article>

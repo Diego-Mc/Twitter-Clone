@@ -5,15 +5,25 @@
   align-items: center;
 
   .logo-container {
+    // padding-left: 12px;
+    transform: translateX(calc(24px - 50% + 15px));
     width: 50px;
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+    border-radius: 50%;
+    cursor: pointer;
     svg {
+      // padding-left: 12px;
       fill: currentColor;
       color: var(--blue);
       height: 30px;
+    }
+
+    transition: background-color 0.2s;
+    &:hover {
+      background-color: rgba(29, 155, 240, 0.1);
     }
   }
 
@@ -21,17 +31,18 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-inline: 10px;
+    padding-inline: 16px;
     height: 100%;
     border-inline: $border;
+    background-color: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    cursor: pointer;
     .view-title {
       font-size: rem(20px);
     }
-    svg {
-      fill: currentColor;
-      color: var(--black);
-      height: 20px;
-      width: 20px;
-    }
+  }
+
+  .search-bar {
+    margin-right: 12px;
   }
 }

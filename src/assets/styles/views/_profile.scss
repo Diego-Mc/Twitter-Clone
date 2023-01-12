@@ -1,0 +1,128 @@
+.profile-view {
+  .profile-header {
+    .cover {
+      display: flex;
+    }
+    .details {
+      padding: 12px 16px;
+      margin-bottom: 16px;
+      .header {
+        display: flex;
+        justify-content: space-between;
+        height: 56px;
+        align-items: flex-end;
+        margin-bottom: 20px;
+        .user-img {
+          width: 140px;
+          height: 140px;
+          border: 4px solid white;
+        }
+        .setup-btn {
+          align-self: flex-start;
+        }
+      }
+
+      .info {
+        * {
+          color: var(--dark-gray);
+        }
+        .full-name {
+          font-size: rem(20px);
+          color: var(--black);
+        }
+
+        .username {
+          margin-bottom: 18px;
+        }
+
+        .date-info {
+          margin-bottom: 14px;
+        }
+        .metadata {
+          display: flex;
+          gap: 20px;
+          .bold {
+            font-weight: 700;
+            color: var(--black);
+          }
+          * {
+            font-size: rem(14px);
+          }
+          small {
+            display: flex;
+            gap: 4px;
+          }
+        }
+      }
+    }
+  }
+
+  .profile-tabs {
+    display: flex;
+    width: 100%;
+    height: 50px;
+    border-bottom: $border;
+    .tab {
+      padding-inline: 16px;
+      flex-grow: 1;
+      cursor: pointer;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .text {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        font-weight: 700;
+        color: var(--dark-gray);
+        &::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          height: 4px;
+          width: 110%;
+          border-radius: 4rem;
+        }
+      }
+
+      transition: background-color 0.2s;
+      &:hover {
+        background-color: var(--extra-light-gray);
+      }
+    }
+    input {
+      max-width: 0;
+      max-height: 0;
+      opacity: 0;
+      position: fixed;
+    }
+
+    input:checked + .tab {
+      .text {
+        color: var(--black);
+        &::after {
+          background-color: var(--blue);
+        }
+      }
+    }
+  }
+
+  .who-to-follow {
+    .title {
+      padding: 12px 16px;
+      font-size: rem(20px);
+      font-weight: 800;
+    }
+
+    .user-preview {
+      align-items: flex-start;
+      .description {
+        display: flex;
+      }
+    }
+    border-bottom: $border;
+  }
+}

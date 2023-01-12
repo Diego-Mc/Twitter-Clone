@@ -1,0 +1,15 @@
+.home-view {
+  .show-more {
+    border-bottom: $border;
+    text-align: center;
+    color: var(--blue);
+    min-height: 1px;
+    padding-block: 12px;
+    padding-block: 4px;
+    line-height: 39px;
+    cursor: pointer;
+    &:hover {
+      background-color: var(--extra-extra-light-gray);
+    }
+  }
+}

@@ -1,10 +1,10 @@
 // REM Functions
 @function rem($size) {
-    $remSize: calc($size / 16px);
-    @return calc($remSize * 1rem);
+  $remSize: calc($size / 15px);
+  @return calc($remSize * 1rem);
 }
 
 // EM Functions
-@function em($pixels, $context: 16px) {
-    @return calc(($pixels/$context) * 1em);
+@function em($pixels, $context: 15px) {
+  @return calc(($pixels/$context) * 1em);
 }

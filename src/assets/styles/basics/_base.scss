@@ -67,4 +67,15 @@ button,
     background-color: var(--black);
     color: white;
   }
+
+  &.white {
+    font-size: 1rem;
+    padding: 0 16px;
+    height: 34px;
+    width: fit-content;
+    background-color: transparent;
+    color: var(--black);
+    border: $border;
+    border-color: var(--light-gray);
+  }
 }

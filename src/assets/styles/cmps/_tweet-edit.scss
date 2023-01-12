@@ -24,16 +24,15 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
+    color: var(--blue);
     .icons {
       display: flex;
       align-items: center;
-      gap: 14px;
-      svg {
-        width: 20px;
-        height: 20px;
-        margin-block: 7px;
-        fill: currentColor;
-        color: var(--blue);
+
+      .icon-wrap {
+        &:hover {
+          background-color: var(--blue-hover);
+        }
       }
     }
 

@@ -22,11 +22,6 @@
       margin-block: 2px 4px;
     }
 
-    &:last-child {
-      border-bottom-left-radius: 16px;
-      border-bottom-right-radius: 16px;
-    }
-
     &:hover {
       background-color: var(--extra-light-gray);
     }

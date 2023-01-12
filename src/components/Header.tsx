@@ -13,7 +13,9 @@ export const Header: React.FC<HeaderProps> = ({}) => {
       </div>
       <div className="main-view">
         <h1 className="view-title">Home</h1>
-        <SparkIcon />
+        <div className="icon-wrap">
+          <SparkIcon />
+        </div>
       </div>
       <SearchBar />
     </header>

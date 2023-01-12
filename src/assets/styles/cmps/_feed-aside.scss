@@ -5,6 +5,7 @@
   margin-top: 16px;
   width: $feed-aside-inner-width-l;
   margin-left: auto;
+  margin-right: 10px;
 
   .who-to-follow,
   .trends {
@@ -16,5 +17,15 @@
       font-weight: 800;
       line-height: 24px;
     }
+  }
+
+  .trends .trend-preview:last-child {
+    border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;
+  }
+
+  .who-to-follow .user-preview:last-child {
+    border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;
   }
 }

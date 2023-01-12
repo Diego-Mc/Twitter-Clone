@@ -1,7 +1,12 @@
 import React from 'react'
+import { PostList } from '../components/PostList'
 
 interface BookmarksProps {}
 
 export const Bookmarks: React.FC<BookmarksProps> = ({}) => {
-  return <h1>Bookmarks</h1>
+  return (
+    <section className="bookmarks-view">
+      <PostList />
+    </section>
+  )
 }
