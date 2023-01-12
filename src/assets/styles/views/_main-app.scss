@@ -1,6 +1,6 @@
 #root {
   display: grid;
-  grid-template-columns: 1fr max-content 1fr;
+  grid-template-columns: 1fr minmax(0, max-content) 1fr;
   grid-template-areas: '. app .';
 }
 
@@ -27,7 +27,81 @@
     //   minmax(auto, $mobile-breakpoint)
     //   minmax($sitePadding, 1fr);
     // background-color: orange;
+    grid-template-columns: minmax(0, $main-content-width);
+    grid-template-rows: min-content 1fr min-content;
+    grid-template-areas: 'header' 'content' 'sidebar';
+
+    .main-content {
+      margin-block: $header-height-s;
+    }
+
+    .main-header {
+      grid-template-columns: minmax(0, $main-content-width);
+      height: $header-height-s;
+      .logo-container {
+        display: none;
+      }
+    }
+
+    .feed-aside {
+      display: none;
+    }
+    .main-header {
+      .search-bar {
+        display: none;
+      }
+    }
+    .sidebar {
+      flex-direction: row;
+      top: unset;
+      bottom: 0;
+      background-color: white;
+      border-inline: $border;
+      border-top: $border;
+      //TODO: add small shadow
+      height: $header-height-s;
+      width: $main-content-width;
+      justify-content: space-between;
+      .user-preview {
+        display: none;
+      }
+      .tweet-btn {
+        position: absolute;
+        right: 16px;
+        bottom: $header-height-s;
+        width: 56px;
+        height: 56px;
+      }
+      .nav-btns {
+        justify-content: space-evenly;
+        flex-direction: row;
+        width: 100%;
+      }
+    }
   }
+
+  @media screen and (max-width: $main-content-width) {
+    .home-view {
+      .tweet-edit {
+        display: none;
+      }
+    }
+    .sidebar {
+      width: 100%;
+    }
+    .profile-view {
+      .profile-header {
+        .details .header .user-img {
+          width: 90px;
+          height: 90px;
+        }
+        .info {
+          margin-top: 16px;
+        }
+      }
+    }
+  }
+
   @include for-narrow-layout {
     // grid-template-columns:
     //   minmax($sitePadding, 1fr)

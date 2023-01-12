@@ -1,6 +1,7 @@
 import React from 'react'
 import { PostList } from '../components/PostList'
 import { WhoToFollow } from '../components/WhoToFollow'
+import { ReactComponent as CalendarIcon } from '../assets/icons/calendar.svg'
 
 interface ProfileProps {}
 
@@ -24,7 +25,10 @@ export const Profile: React.FC<ProfileProps> = ({}) => {
           <section className="info">
             <h3 className="full-name">Diego Mc</h3>
             <p className="username">@DiegoMc99</p>
-            <p className="date-info">Joined October 2022</p>
+            <p className="date-info">
+              <CalendarIcon className="icon" />
+              Joined October 2022
+            </p>
             <span className="metadata">
               <small>
                 <span className="bold">32</span>
