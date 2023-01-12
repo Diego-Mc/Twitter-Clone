@@ -1,9 +1,13 @@
 .feed-aside {
+  position: fixed;
+  top: $header-height;
+  right: calc((100% - $mobile-breakpoint) / 2);
+
   display: flex;
   flex-direction: column;
   gap: 16px;
   margin-top: 16px;
-  width: $feed-aside-inner-width-l;
+  width: $feed-aside-inner-width-s;
   margin-left: auto;
   margin-right: 10px;
 

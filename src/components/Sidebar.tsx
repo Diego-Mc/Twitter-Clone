@@ -8,6 +8,7 @@ import { ReactComponent as ProfileIcon } from '../assets/icons/profile.svg'
 import { ReactComponent as ProfileIconFilled } from '../assets/icons/profile_filled.svg'
 import { ReactComponent as BookmarkIcon } from '../assets/icons/bookmark.svg'
 import { ReactComponent as BookmarkIconFilled } from '../assets/icons/bookmark_filled.svg'
+import { ReactComponent as ComposeIcon } from '../assets/icons/compose.svg'
 import { UserPreview } from './UserPreview'
 
 interface NavButtonProps {
@@ -56,7 +57,10 @@ export const Sidebar: React.FC<SidebarProps> = ({}) => {
         <NavButton to="/bookmarks" type="bookmarks" />
         <NavButton to="/profile" type="profile" end />
       </div>
-      <button className="tweet-btn primary pill">Tweet</button>
+      <button className="tweet-btn primary pill">
+        <span>Tweet</span>
+        <ComposeIcon />
+      </button>
       <UserPreview />
     </section>
   )

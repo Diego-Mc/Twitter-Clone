@@ -1,13 +1,18 @@
 .main-header {
-  height: 54px;
+  position: fixed;
+  // background-color: white;
+  z-index: 100;
+
+  height: $header-height;
   display: grid;
-  grid-template-columns: $sidebar-width-l $main-content-width $feed-aside-width-l;
+
+  grid-template-columns: $sidebar-width-xs $main-content-width $feed-aside-width-s;
   align-items: center;
 
   .logo-container {
-    // padding-left: 12px;
-    transform: translateX(calc(24px - 50% + 15px));
+    // transform: translateX(calc(24px - 50% + 15px));
     width: 50px;
+    margin-inline: auto;
     height: 100%;
     display: flex;
     justify-content: center;
@@ -15,7 +20,6 @@
     border-radius: 50%;
     cursor: pointer;
     svg {
-      // padding-left: 12px;
       fill: currentColor;
       color: var(--blue);
       height: 30px;

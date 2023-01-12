@@ -22,21 +22,25 @@
   --black-hover: rgb(39, 44, 48);
 }
 
+// Breakpoints
+$mobile-breakpoint: 988px;
+$narrow-breakpoint: 1078px;
+$normal-breakpoint: 1265px;
+
 // sizes
 $app-max-width: 1265px;
 $main-content-width: 598px;
 $sidebar-width-l: 275px;
 $sidebar-width-s: 88px;
-$feed-aside-width-l: $app-max-width - $sidebar-width-l - $main-content-width;
+$sidebar-width-xs: 68px;
+$feed-aside-width-l: $normal-breakpoint - $sidebar-width-l - $main-content-width;
 $feed-aside-inner-width-l: 350px;
-$feed-aside-width-s: 290px;
+$feed-aside-inner-width-s: 290px;
+$feed-aside-width-s: 320px;
+
+$header-height: 45px;
 
 //utils
 $border: 1px solid var(--extra-light-gray);
-
-// Breakpoints
-$mobile-breakpoint: 460px;
-$narrow-breakpoint: 720px;
-$normal-breakpoint: 960px;
 
 $sitePadding: 36px;

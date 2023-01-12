@@ -1,13 +1,14 @@
 #root {
   display: grid;
-  grid-template-columns: 1fr minmax(0, $app-max-width) 1fr;
+  grid-template-columns: 1fr max-content 1fr;
   grid-template-areas: '. app .';
 }
 
 .main-app {
   grid-area: app;
   display: grid;
-  grid-template-columns: $sidebar-width-l $main-content-width $feed-aside-width-l;
+
+  grid-template-columns: $sidebar-width-xs $main-content-width $feed-aside-width-s;
   grid-template-rows: min-content 1fr;
   grid-template-areas: 'header header header' 'sidebar content aside';
   min-height: 100vh;
@@ -16,5 +17,100 @@
   }
   .main-content {
     border-inline: $border;
+    grid-area: content;
+    margin-top: $header-height;
+  }
+
+  @include for-mobile-layout {
+    // grid-template-columns:
+    //   minmax($sitePadding, 1fr)
+    //   minmax(auto, $mobile-breakpoint)
+    //   minmax($sitePadding, 1fr);
+    // background-color: orange;
+  }
+  @include for-narrow-layout {
+    // grid-template-columns:
+    //   minmax($sitePadding, 1fr)
+    //   minmax(auto, $mobile-breakpoint)
+    //   minmax($sitePadding, 1fr);
+    // background-color: red;
+  }
+  @media screen and (min-width: 1008px) {
+    grid-template-columns: $sidebar-width-s $main-content-width $feed-aside-width-s;
+    .main-header {
+      grid-template-columns: $sidebar-width-s $main-content-width $feed-aside-width-s;
+    }
+    .sidebar {
+      padding-inline: 12px;
+    }
+    .feed-aside {
+      right: calc((100% - $mobile-breakpoint) / 2 - 6px);
+    }
+  }
+  @include for-normal-layout {
+    grid-template-columns: $sidebar-width-s $main-content-width $feed-aside-width-l;
+    .main-header {
+      grid-template-columns: $sidebar-width-s $main-content-width $feed-aside-width-l;
+    }
+    .feed-aside,
+    .search-bar {
+      width: $feed-aside-inner-width-l;
+    }
+
+    .feed-aside {
+      right: calc((100% - $narrow-breakpoint) / 2);
+    }
+  }
+  @include for-wide-layout {
+    grid-template-columns: $sidebar-width-l $main-content-width $feed-aside-width-l;
+
+    .main-header {
+      grid-template-columns: $sidebar-width-l $main-content-width $feed-aside-width-l;
+
+      .logo-container {
+        transform: translateX(calc(24px - 50% + 15px));
+        margin-inline: unset;
+      }
+    }
+
+    .feed-aside {
+      right: calc((100% - $normal-breakpoint) / 2);
+    }
+
+    .sidebar {
+      width: $sidebar-width-l;
+      align-items: flex-start;
+      .nav-btn {
+        p {
+          display: flex;
+        }
+        &:hover::before {
+          transform: scaleX(110%) scale(95%);
+        }
+      }
+
+      .tweet-btn {
+        width: 90%;
+
+        span {
+          display: flex;
+        }
+
+        svg {
+          display: none;
+        }
+      }
+
+      .user-preview {
+        width: 100%;
+        padding: 12px;
+        .preview-content {
+          display: flex;
+        }
+        .img-container {
+          margin-right: 12px;
+        }
+      }
+    }
   }
 }

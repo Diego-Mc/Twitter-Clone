@@ -1,11 +1,16 @@
 .sidebar {
+  position: fixed;
+  top: $header-height;
+  height: calc(100% - $header-height);
+
   display: flex;
   flex-direction: column;
-  padding-inline: 12px;
+  align-items: center;
+  padding-inline: 4px;
   .nav-btns {
     display: flex;
     flex-direction: column;
-    width: 250px;
+    // width: 250px;
     gap: 4px;
     .nav-btn {
       // height: 60px;
@@ -24,8 +29,11 @@
         height: rem(26.5px);
         fill: currentColor;
       }
-      p.active {
-        font-weight: 700;
+      p {
+        display: none;
+        &.active {
+          font-weight: 700;
+        }
       }
 
       &::before {
@@ -37,16 +45,30 @@
         inset: 0;
         background-color: rgba(15, 20, 25, 0.1);
         border-radius: 5rem;
-        transform: scaleX(110%) scale(95%);
       }
     }
   }
 
   .tweet-btn {
     font-size: rem(17px);
-    width: 90%;
+    width: 50px;
+    height: 50px;
+    padding: 0;
     margin-block: 16px;
     transition: background-color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    span {
+      display: none;
+    }
+
+    svg {
+      width: 24px;
+      height: 24px;
+      fill: currentColor;
+    }
 
     &:hover {
       background-color: rgba(26, 140, 216);
@@ -55,6 +77,16 @@
 
   .user-preview {
     margin-top: auto;
+    width: fit-content;
+    padding: 12px;
+
+    .preview-content {
+      display: none;
+    }
+    .img-container {
+      margin: 0;
+    }
+
     .follow-btn {
       display: none;
       // TODO: remove this and change to a react solution...
