@@ -6,9 +6,12 @@
   grid-template-areas: 'img header' 'img content' 'img options';
   column-gap: 12px;
   cursor: pointer;
-  img {
+  .user-img {
     grid-area: img;
     border-radius: 50%;
+  }
+  .post-img {
+    border-radius: 16px;
   }
   .header {
     grid-area: header;
@@ -24,6 +27,7 @@
   .post-content {
     display: flex;
     flex-direction: column;
+    gap: 12px;
   }
   .options {
     display: flex;

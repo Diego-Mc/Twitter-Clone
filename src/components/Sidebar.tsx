@@ -10,6 +10,9 @@ import { ReactComponent as BookmarkIcon } from '../assets/icons/bookmark.svg'
 import { ReactComponent as BookmarkIconFilled } from '../assets/icons/bookmark_filled.svg'
 import { ReactComponent as ComposeIcon } from '../assets/icons/compose.svg'
 import { UserPreview } from './UserPreview'
+import { useSelector } from 'react-redux'
+import { UserProps } from '../types/models'
+import { RootState } from '../features/store'
 
 interface NavButtonProps {
   type: string
@@ -49,6 +52,8 @@ const NavButton: React.FC<NavButtonProps> = ({ type, to, end }) => {
 interface SidebarProps {}
 
 export const Sidebar: React.FC<SidebarProps> = ({}) => {
+  const user = useSelector<RootState, UserProps>(({ user }) => user)
+
   return (
     <section className="sidebar">
       <div className="nav-btns">
@@ -61,7 +66,7 @@ export const Sidebar: React.FC<SidebarProps> = ({}) => {
         <span>Tweet</span>
         <ComposeIcon />
       </button>
-      <UserPreview />
+      <UserPreview user={user} />
     </section>
   )
 }

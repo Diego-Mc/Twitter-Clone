@@ -7,14 +7,14 @@
 // $extra-extra-light-gray: #f5f8fa;
 
 :root {
-  --blue: #1da1f2;
+  --blue: #1d9bf0;
   --green: #00ba7c;
   --red: #f91880;
-  --black: #14171a;
-  --dark-gray: #657786;
-  --light-gray: #aab8c2;
-  --extra-light-gray: #e1e8ed;
-  --extra-extra-light-gray: #f5f8fa;
+  --black: #0f1419;
+  --dark-gray: #536471;
+  --light-gray: #eff3f4;
+  --extra-light-gray: #eff3f4;
+  --extra-extra-light-gray: #f7f9f9;
 
   --blue-hover: #1da1f21a;
   --green-hover: #00ba7c1a;
@@ -38,8 +38,7 @@ $feed-aside-inner-width-l: 350px;
 $feed-aside-inner-width-s: 290px;
 $feed-aside-width-s: 320px;
 
-$header-height: 45px;
-$header-height-s: 53px;
+$header-height: 53px;
 
 //utils
 $border: 1px solid var(--extra-light-gray);

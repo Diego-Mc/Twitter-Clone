@@ -1,6 +1,6 @@
 .search-bar {
   position: relative;
-  height: 42px;
+  height: 44px;
   width: $feed-aside-inner-width-s;
   margin-left: auto;
   svg {
@@ -25,6 +25,9 @@
     border: 1px solid transparent;
     &::placeholder {
       color: var(--dark-gray);
+    }
+    &:focus-visible {
+      outline: none;
     }
   }
 

@@ -31,13 +31,8 @@
     grid-template-rows: min-content 1fr min-content;
     grid-template-areas: 'header' 'content' 'sidebar';
 
-    .main-content {
-      margin-block: $header-height-s;
-    }
-
     .main-header {
       grid-template-columns: minmax(0, $main-content-width);
-      height: $header-height-s;
       .logo-container {
         display: none;
       }
@@ -59,7 +54,7 @@
       border-inline: $border;
       border-top: $border;
       //TODO: add small shadow
-      height: $header-height-s;
+      height: $header-height;
       width: $main-content-width;
       justify-content: space-between;
       .user-preview {
@@ -68,7 +63,7 @@
       .tweet-btn {
         position: absolute;
         right: 16px;
-        bottom: $header-height-s;
+        bottom: $header-height;
         width: 56px;
         height: 56px;
       }

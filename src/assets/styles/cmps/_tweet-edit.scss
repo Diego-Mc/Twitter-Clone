@@ -43,3 +43,24 @@
     }
   }
 }
+
+.popup {
+  position: fixed;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.4);
+  inset: 0;
+  .tweet-edit {
+    position: absolute;
+    z-index: 1010;
+    left: 50%;
+    transform: translateX(-50%);
+    top: $header-height;
+    padding: 16px;
+    background-color: white;
+    border-radius: 16px;
+    max-width: 80vw;
+    max-height: 90vh;
+    min-width: 600px;
+    overflow: hidden;
+  }
+}

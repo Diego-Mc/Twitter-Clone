@@ -1,8 +1,11 @@
 import React from 'react'
+import { UserProps } from '../types/models'
 
-interface UserPreviewProps {}
+interface UserPreviewProps {
+  user: UserProps
+}
 
-export const UserPreview: React.FC<UserPreviewProps> = ({}) => {
+export const UserPreview: React.FC<UserPreviewProps> = ({ user }) => {
   return (
     <article className="user-preview">
       <div className="img-container">
@@ -11,17 +14,13 @@ export const UserPreview: React.FC<UserPreviewProps> = ({}) => {
       <div className="preview-content">
         <div className="user-info-container">
           <div className="info">
-            <h5 className="full-name link">Diego Mc</h5>
-            <p className="username">@DiegoMc99</p>
+            <h5 className="full-name link">{user?.fullName}</h5>
+            <p className="username">@{user?.username}</p>
           </div>
           <button className="follow-btn black pill">Follow</button>
         </div>
         <div className="description">
-          <span className="text">
-            good cats being workers | unionized | mascot @JobertTheCat. see also
-            @translatedcats, @thereisnocat_, @tc_notcats. ko-fi tips
-            appreciated!
-          </span>
+          <span className="text">{user?.description}</span>
         </div>
       </div>
     </article>
