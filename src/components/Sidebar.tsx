@@ -49,9 +49,11 @@ const NavButton: React.FC<NavButtonProps> = ({ type, to, end }) => {
   )
 }
 
-interface SidebarProps {}
+interface SidebarProps {
+  onComposeTweet: () => void
+}
 
-export const Sidebar: React.FC<SidebarProps> = ({}) => {
+export const Sidebar: React.FC<SidebarProps> = ({ onComposeTweet }) => {
   const user = useSelector<RootState, UserProps>(({ user }) => user)
 
   return (
@@ -62,7 +64,9 @@ export const Sidebar: React.FC<SidebarProps> = ({}) => {
         <NavButton to="/bookmarks" type="bookmarks" />
         <NavButton to="/profile" type="profile" end />
       </div>
-      <button className="tweet-btn primary pill">
+      <button
+        className="tweet-btn primary pill"
+        onClick={() => onComposeTweet()}>
         <span>Tweet</span>
         <ComposeIcon />
       </button>

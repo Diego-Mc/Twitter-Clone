@@ -50,7 +50,7 @@ async function register(userCred: userCredInterface) {
   if (!userCred.imgUrl)
     userCred.imgUrl =
       'https://abs.twimg.com/sticky/default_profile_images/default_profile_400x400.png'
-  const user = await httpService.post('auth/signup', userCred)
+  const user = await httpService.post('auth/register', userCred)
   // socketService.login(user._id)
   return saveLocalUser(user)
 }

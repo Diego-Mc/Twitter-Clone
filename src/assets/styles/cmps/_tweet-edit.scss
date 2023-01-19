@@ -15,8 +15,26 @@
     font-family: chirp;
     display: flex;
     align-items: center;
-    color: var(--dark-gray);
     padding-block: 12px;
+    height: fit-content;
+    white-space: pre;
+    display: inline-block;
+    max-height: 70vh;
+    overflow: auto;
+    &:focus-visible {
+      outline: none;
+    }
+    &:empty {
+      &:after {
+        content: "What's happening?";
+        color: var(--dark-gray);
+      }
+
+      ~ .options .tweet-btn {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
   }
   .options {
     grid-area: options;
@@ -39,7 +57,6 @@
     .tweet-btn {
       height: 36px;
       padding-block: 0;
-      opacity: 0.5;
     }
   }
 }
@@ -50,6 +67,7 @@
   background-color: rgba(0, 0, 0, 0.4);
   inset: 0;
   .tweet-edit {
+    grid-template-areas: 'close close' 'img content' '. options';
     position: absolute;
     z-index: 1010;
     left: 50%;
@@ -59,8 +77,20 @@
     background-color: white;
     border-radius: 16px;
     max-width: 80vw;
-    max-height: 90vh;
     min-width: 600px;
-    overflow: hidden;
+
+    .content {
+      min-height: 96px;
+    }
+
+    .close-section {
+      grid-area: close;
+      height: 53px;
+      margin-left: -8px;
+      margin-top: -8px;
+      svg {
+        color: var(--dark-gray);
+      }
+    }
   }
 }

@@ -8,6 +8,8 @@ import { initUser } from '../features/user/user.slice'
 import { postService } from '../services/post.service.js'
 import { userService } from '../services/user.service'
 
+import { useGetPostsQuery } from '../features/api/api.slice'
+
 interface HomeProps {}
 
 export const Home: React.FC<HomeProps> = ({}) => {
@@ -20,7 +22,9 @@ export const Home: React.FC<HomeProps> = ({}) => {
       try {
         //get from sessionStorage
         //TODO: change to getLoggedInUser (logic to check session storage vs cookie)
-        const user = await userService.getById('63bc3ad1251c857fc6b1c6fd')
+        const user = await userService.getById(
+          userService.getLoggedInUser()._id
+        )
         if (!isCanceled) dispatch(initUser(user))
       } catch (err) {
         navigate('/login')
@@ -32,18 +36,26 @@ export const Home: React.FC<HomeProps> = ({}) => {
     }
   }, [])
 
-  const [posts, setPosts] = useState(null)
+  // const [posts, setPosts] = useState(null)
 
-  useEffect(() => {
-    let isCanceled = false
-    ;(async () => {
-      const posts = await postService.getFeedPosts()
-      if (!isCanceled) setPosts(posts)
-    })()
-    return () => {
-      isCanceled = true
-    }
-  }, [])
+  // useEffect(() => {
+  //   let isCanceled = false
+  //   ;(async () => {
+  //     const posts = await postService.getFeedPosts()
+  //     if (!isCanceled) setPosts(posts)
+  //   })()
+  //   return () => {
+  //     isCanceled = true
+  //   }
+  // }, [])
+
+  const {
+    data: posts,
+    isLoading,
+    isSuccess,
+    isError,
+    error,
+  } = useGetPostsQuery()
 
   return (
     <main className="home-view">

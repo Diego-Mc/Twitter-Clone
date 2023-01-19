@@ -26,7 +26,7 @@ interface postInterface {
   _id?: string
   text: string
   imgUrl?: string
-  composerId: string
+  composerId?: string
 }
 
 function query(filterBy = { txt: '', userId: '' }) {
@@ -92,5 +92,6 @@ function getEmptyPost() {
   return {
     text: '',
     imgUrl: '',
+    composerId: '',
   }
 }
