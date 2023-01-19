@@ -4,6 +4,7 @@ import { ReactComponent as HeartIcon } from '../assets/icons/heart.svg'
 import { ReactComponent as ShareIcon } from '../assets/icons/share.svg'
 import { useLikePostMutation } from '../features/api/api.slice'
 import { PostProps } from '../types/models'
+import { utilService } from '../services/util.service'
 
 interface PostPreviewProps {
   post: PostProps
@@ -16,6 +17,18 @@ export const PostPreview: React.FC<PostPreviewProps> = ({ post }) => {
     likePost(post._id)
   }
 
+  const generatePostHtml = () => {
+    const hashtags = utilService.getHashtags(post.text)
+    let html = post.text
+    for (const hashtag of hashtags) {
+      html = html.replace(
+        hashtag,
+        `<a class="tag" href="testing!!">${hashtag}</a>`
+      )
+    }
+    return html
+  }
+
   return (
     <article className="post-preview">
       <img src={post.composerImgUrl} alt="" className="user-img" />
@@ -26,7 +39,9 @@ export const PostPreview: React.FC<PostPreviewProps> = ({ post }) => {
         <span className="time link">6h</span>
       </span>
       <div className="post-content">
-        <p className="post-text">{post.text}</p>
+        <p
+          className="post-text"
+          dangerouslySetInnerHTML={{ __html: generatePostHtml() }}></p>
         {post.imgUrl ? (
           <img src={post.imgUrl} alt="" className="post-img" />
         ) : null}

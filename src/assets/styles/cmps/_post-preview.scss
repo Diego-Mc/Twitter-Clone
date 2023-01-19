@@ -28,6 +28,15 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
+
+    .post-text {
+      .tag {
+        color: var(--blue);
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
   }
   .options {
     display: flex;
