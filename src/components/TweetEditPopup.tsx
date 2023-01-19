@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import { TweetEditBase } from './TweetEditBase'
 import { ReactComponent as CloseIcon } from '../assets/icons/close.svg'
 import { PostProps } from '../types/models'
-import { PostPreview } from './PostPreview'
+import { PostPreview, PostPreviewItem } from './PostPreview'
 
 interface PostToReplyProps {
   post: PostProps
@@ -11,7 +11,7 @@ interface PostToReplyProps {
 export const PostToReply: React.FC<PostToReplyProps> = ({ post }) => {
   return (
     <>
-      <PostPreview post={post} />
+      <PostPreviewItem post={post} />
       <article className="replying-info">
         Replying to{' '}
         <a className="mention" href="testing!">
@@ -55,6 +55,7 @@ export const TweetEditPopup: React.FC<TweetEditPopupProps> = ({
         <TweetEditBase
           setFocusRef={setFocusRef}
           onComposeClose={onComposeClose}
+          replyingTo={replyingTo}
         />
       </section>
     </div>

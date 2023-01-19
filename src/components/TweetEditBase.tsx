@@ -7,20 +7,27 @@ import { ReactComponent as LocationIcon } from '../assets/icons/location.svg'
 import { useEffect, useRef, useState } from 'react'
 import { postService } from '../services/post.service'
 import { userService } from '../services/user.service'
-import { useAddPostMutation } from '../features/api/api.slice'
+import {
+  useAddPostMutation,
+  useAddReplyMutation,
+} from '../features/api/api.slice'
+import { PostProps } from '../types/models'
 
 interface TweetEditBaseProps {
   setFocusRef?: (el: HTMLDivElement) => void
   onComposeClose?: () => void
+  replyingTo?: PostProps
 }
 
 export const TweetEditBase: React.FC<TweetEditBaseProps> = ({
   setFocusRef,
   onComposeClose,
+  replyingTo,
 }) => {
   const contentTextRef = useRef<HTMLDivElement | null>(null)
 
   const [addPost] = useAddPostMutation()
+  const [addReply] = useAddReplyMutation()
 
   const setContentRefs = (el: HTMLDivElement) => {
     if (setFocusRef) setFocusRef(el)
@@ -31,10 +38,13 @@ export const TweetEditBase: React.FC<TweetEditBaseProps> = ({
     if (!contentTextRef.current) return
     const tweetText = contentTextRef.current.innerText
     if (!tweetText) return
+
     const post = postService.getEmptyPost()
     post.text = tweetText
     post.composerId = userService.getLoggedInUser()._id
-    addPost({ ...post })
+
+    replyingTo ? addReply({ post, replyingTo }) : addPost({ ...post })
+
     contentTextRef.current.innerText = ''
     if (onComposeClose) onComposeClose()
   }

@@ -14,9 +14,21 @@ export const apiSlice = createApi({
         res.sort((a, b) => b._id.localeCompare(a._id)),
       providesTags: ['Posts'],
     }),
+    getPost: builder.query<PostProps, string>({
+      query: (postId) => `/posts/${postId}`,
+      providesTags: ['Posts'],
+    }),
     addPost: builder.mutation({
       query: (post) => ({
         url: '/posts',
+        method: 'POST',
+        body: post,
+      }),
+      invalidatesTags: ['Posts', 'Tags'],
+    }),
+    addReply: builder.mutation({
+      query: ({ post, replyingTo }) => ({
+        url: `/posts/${replyingTo._id}`,
         method: 'POST',
         body: post,
       }),
@@ -44,8 +56,13 @@ export const apiSlice = createApi({
   }),
 })
 
-export const { useGetPostsQuery, useAddPostMutation, useLikePostMutation } =
-  apiSlice
+export const {
+  useGetPostsQuery,
+  useGetPostQuery,
+  useAddPostMutation,
+  useAddReplyMutation,
+  useLikePostMutation,
+} = apiSlice
 
 export const { useGetTrendsQuery } = apiSlice
 

@@ -19,7 +19,6 @@ import { apiSlice } from './features/api/api.slice'
 
 function App() {
   const [tweetPopup, setTweetPopup] = useState(false)
-  const [replyPopup, setReplyPopup] = useState(false)
 
   const toggleTweetPopup = (force: boolean) => {
     setTweetPopup(force ?? !tweetPopup)
