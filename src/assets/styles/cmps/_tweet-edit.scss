@@ -94,5 +94,49 @@
         color: var(--dark-gray);
       }
     }
+
+    &.reply {
+      grid-template-areas: 'close close' 'post post' 'pipe reply-info' 'img content' '. options';
+
+      .post-preview {
+        grid-area: post;
+        padding: 0 0 4px;
+        border: none;
+        column-gap: 16px;
+        cursor: auto;
+        grid-template-areas:
+          'img header'
+          'img content';
+        .options {
+          display: none;
+        }
+
+        &:hover {
+          background-color: unset;
+        }
+      }
+
+      .replying-info {
+        grid-area: reply-info;
+        padding: 16px 0 16px;
+        color: var(--dark-gray);
+        .mention {
+          color: var(--blue);
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+
+      &::before {
+        content: '';
+        grid-area: pipe;
+        background-color: var(--light-gray);
+        height: calc(100% - 8px);
+        width: 2px;
+        display: block;
+        justify-self: center;
+      }
+    }
   }
 }

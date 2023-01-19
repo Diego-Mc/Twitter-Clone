@@ -11,10 +11,12 @@ import { useAddPostMutation } from '../features/api/api.slice'
 
 interface TweetEditBaseProps {
   setFocusRef?: (el: HTMLDivElement) => void
+  onComposeClose?: () => void
 }
 
 export const TweetEditBase: React.FC<TweetEditBaseProps> = ({
   setFocusRef,
+  onComposeClose,
 }) => {
   const contentTextRef = useRef<HTMLDivElement | null>(null)
 
@@ -34,6 +36,7 @@ export const TweetEditBase: React.FC<TweetEditBaseProps> = ({
     post.composerId = userService.getLoggedInUser()._id
     addPost({ ...post })
     contentTextRef.current.innerText = ''
+    if (onComposeClose) onComposeClose()
   }
 
   return (

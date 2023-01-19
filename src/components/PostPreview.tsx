@@ -1,16 +1,18 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { ReactComponent as CommentIcon } from '../assets/icons/comment.svg'
 import { ReactComponent as HeartIcon } from '../assets/icons/heart.svg'
 import { ReactComponent as ShareIcon } from '../assets/icons/share.svg'
 import { useLikePostMutation } from '../features/api/api.slice'
 import { PostProps } from '../types/models'
 import { utilService } from '../services/util.service'
+import { TweetEditPopup } from './TweetEditPopup'
 
 interface PostPreviewProps {
   post: PostProps
 }
 
 export const PostPreview: React.FC<PostPreviewProps> = ({ post }) => {
+  const [isCommenting, setIsCommenting] = useState(false)
   const [likePost] = useLikePostMutation()
 
   const handleLike = () => {
@@ -30,41 +32,49 @@ export const PostPreview: React.FC<PostPreviewProps> = ({ post }) => {
   }
 
   return (
-    <article className="post-preview">
-      <img src={post.composerImgUrl} alt="" className="user-img" />
-      <span className="header">
-        <span className="full-name link">{post.composerFullName}</span>
-        <span className="username">@{post.composerUsername}</span>
-        <span className="divider">·</span>
-        <span className="time link">6h</span>
-      </span>
-      <div className="post-content">
-        <p
-          className="post-text"
-          dangerouslySetInnerHTML={{ __html: generatePostHtml() }}></p>
-        {post.imgUrl ? (
-          <img src={post.imgUrl} alt="" className="post-img" />
-        ) : null}
-      </div>
-      <div className="options">
-        <div className="icon comment">
-          <div className="icon-wrap sm">
-            <CommentIcon />
-          </div>
-          <span className="amount">{post.replies.length}</span>
+    <>
+      {isCommenting ? (
+        <TweetEditPopup
+          replyingTo={post}
+          onComposeClose={() => setIsCommenting(false)}
+        />
+      ) : null}
+      <article className="post-preview">
+        <img src={post.composerImgUrl} alt="" className="user-img" />
+        <span className="header">
+          <span className="full-name link">{post.composerFullName}</span>
+          <span className="username">@{post.composerUsername}</span>
+          <span className="divider">·</span>
+          <span className="time link">6h</span>
+        </span>
+        <div className="post-content">
+          <p
+            className="post-text"
+            dangerouslySetInnerHTML={{ __html: generatePostHtml() }}></p>
+          {post.imgUrl ? (
+            <img src={post.imgUrl} alt="" className="post-img" />
+          ) : null}
         </div>
-        <div className="icon like" onClick={handleLike}>
-          <div className="icon-wrap sm">
-            <HeartIcon />
+        <div className="options">
+          <div className="icon comment" onClick={() => setIsCommenting(true)}>
+            <div className="icon-wrap sm">
+              <CommentIcon />
+            </div>
+            <span className="amount">{post.replies.length}</span>
           </div>
-          <span className="amount">{Object.keys(post.likes).length}</span>
-        </div>
-        <div className="icon share">
-          <div className="icon-wrap sm">
-            <ShareIcon />
+          <div className="icon like" onClick={handleLike}>
+            <div className="icon-wrap sm">
+              <HeartIcon />
+            </div>
+            <span className="amount">{Object.keys(post.likes).length}</span>
+          </div>
+          <div className="icon share">
+            <div className="icon-wrap sm">
+              <ShareIcon />
+            </div>
           </div>
         </div>
-      </div>
-    </article>
+      </article>
+    </>
   )
 }
