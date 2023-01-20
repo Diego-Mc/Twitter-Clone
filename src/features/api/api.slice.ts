@@ -16,7 +16,11 @@ export const apiSlice = createApi({
     }),
     getPost: builder.query<PostProps, string>({
       query: (postId) => `/posts/${postId}`,
-      providesTags: ['Posts'],
+      providesTags: ['Posts'], //TODO: invalidate specific item
+    }),
+    getPostReplies: builder.query<PostProps[], string>({
+      query: (postId) => `/posts/${postId}/replies`,
+      providesTags: ['Posts'], //TODO: invalidate specific item
     }),
     addPost: builder.mutation({
       query: (post) => ({
@@ -47,11 +51,22 @@ export const apiSlice = createApi({
       query: () => '/tags',
       providesTags: ['Tags'],
     }),
+    getTrendPosts: builder.query<PostProps[], string>({
+      query: (tagName) => `/tags/${tagName}`,
+      // providesTags: ['Posts'],
+    }),
     /* USERS */
     getRandomUsersToFollow: builder.query<UserProps[], void>({
       query: () =>
         `/users/${userService.getLoggedInUser()._id}/random-to-follow`,
       providesTags: ['ToFollow'],
+    }),
+    followUser: builder.mutation({
+      query: (userToFollowId) => ({
+        url: `/users/${userService.getLoggedInUser()._id}/${userToFollowId}`,
+        method: 'PATCH',
+      }),
+      invalidatesTags: ['ToFollow'],
     }),
   }),
 })
@@ -59,11 +74,13 @@ export const apiSlice = createApi({
 export const {
   useGetPostsQuery,
   useGetPostQuery,
+  useGetPostRepliesQuery,
   useAddPostMutation,
   useAddReplyMutation,
   useLikePostMutation,
 } = apiSlice
 
-export const { useGetTrendsQuery } = apiSlice
+export const { useGetTrendsQuery, useGetTrendPostsQuery } = apiSlice
 
-export const { useGetRandomUsersToFollowQuery } = apiSlice
+export const { useGetRandomUsersToFollowQuery, useFollowUserMutation } =
+  apiSlice

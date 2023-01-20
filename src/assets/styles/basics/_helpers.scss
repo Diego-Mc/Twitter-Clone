@@ -4,6 +4,17 @@
   border-radius: 8px;
 }
 
+.mention {
+  color: var(--blue);
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.bold {
+  font-weight: 700;
+}
+
 // flex helpers
 
 .flex {

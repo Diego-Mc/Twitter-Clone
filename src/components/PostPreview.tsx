@@ -1,17 +1,23 @@
-import React, { useState } from 'react'
-import { ReactComponent as CommentIcon } from '../assets/icons/comment.svg'
-import { ReactComponent as HeartIcon } from '../assets/icons/heart.svg'
-import { ReactComponent as ShareIcon } from '../assets/icons/share.svg'
+import React, { MouseEventHandler, useState } from 'react'
+
 import { ReactComponent as CommentFilledIcon } from '../assets/icons/comment_filled.svg'
 import { useGetPostQuery, useLikePostMutation } from '../features/api/api.slice'
-import { PostProps } from '../types/models'
+import { PostProps, UserProps } from '../types/models'
 import { utilService } from '../services/util.service'
 import { TweetEditPopup } from './TweetEditPopup'
+import { userService } from '../services/user.service'
+import { useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { RootState } from '../features/store'
+import { Mention } from './Mention'
+import { PostActions } from './PostActions'
+import { postService } from '../services/post.service'
 
-interface PostPreviewItemProps {
+export interface PostPreviewItemProps {
   post: PostProps
   msg?: {
     type: string
+    location: string
     info: {
       username: string | undefined
       fullName: string | undefined
@@ -23,12 +29,7 @@ export const PostPreviewItem: React.FC<PostPreviewItemProps> = ({
   post,
   msg,
 }) => {
-  const [isCommenting, setIsCommenting] = useState(false)
-  const [likePost] = useLikePostMutation()
-
-  const handleLike = () => {
-    likePost(post._id)
-  }
+  const navigate = useNavigate()
 
   const generatePostHtml = () => {
     const hashtags = utilService.getHashtags(post.text)
@@ -44,18 +45,20 @@ export const PostPreviewItem: React.FC<PostPreviewItemProps> = ({
 
   return (
     <>
-      {isCommenting ? (
-        <TweetEditPopup
-          replyingTo={post}
-          onComposeClose={() => setIsCommenting(false)}
-        />
-      ) : null}
-      <article className={`post-preview ${msg ? 'with-msg' : null}`}>
+      <article
+        className={`post-preview ${msg ? `with-msg ${msg.location}` : null}`}
+        onClick={() => navigate(`/post/${post._id}`)}>
         {msg ? (
-          <>
-            <CommentFilledIcon className="group-icon" />
-            <p className="group-msg">{post.composerFullName} replied</p>
-          </>
+          msg.location === 'top' ? (
+            <>
+              <CommentFilledIcon className="group-icon" />
+              <p className="group-msg">{msg.info.fullName} replied</p>
+            </>
+          ) : (
+            <p className="group-msg">
+              Replying to <Mention username={msg.info.username as string} />
+            </p>
+          )
         ) : null}
         <img src={post.composerImgUrl} alt="" className="user-img" />
         <span className="header">
@@ -67,30 +70,14 @@ export const PostPreviewItem: React.FC<PostPreviewItemProps> = ({
         <div className="post-content">
           <p
             className="post-text"
-            dangerouslySetInnerHTML={{ __html: generatePostHtml() }}></p>
+            dangerouslySetInnerHTML={{
+              __html: postService.generatePostHtml(post),
+            }}></p>
           {post.imgUrl ? (
             <img src={post.imgUrl} alt="" className="post-img" />
           ) : null}
         </div>
-        <div className="options">
-          <div className="icon comment" onClick={() => setIsCommenting(true)}>
-            <div className="icon-wrap sm">
-              <CommentIcon />
-            </div>
-            <span className="amount">{post.replies.length}</span>
-          </div>
-          <div className="icon like" onClick={handleLike}>
-            <div className="icon-wrap sm">
-              <HeartIcon />
-            </div>
-            <span className="amount">{Object.keys(post.likes).length}</span>
-          </div>
-          <div className="icon share">
-            <div className="icon-wrap sm">
-              <ShareIcon />
-            </div>
-          </div>
-        </div>
+        <PostActions post={post} />
       </article>
     </>
   )
@@ -98,14 +85,28 @@ export const PostPreviewItem: React.FC<PostPreviewItemProps> = ({
 
 interface PostPreviewProps {
   post: PostProps
+  msgLocation: string
 }
 
-export const PostPreview: React.FC<PostPreviewProps> = ({ post }) => {
+export const PostPreview: React.FC<PostPreviewProps> = ({
+  post,
+  msgLocation,
+}) => {
   if (!post.repliedTo) return <PostPreviewItem post={post} />
+  const user = useSelector<RootState, UserProps>((state) => state.user)
 
   const { data: repliedToPost } = useGetPostQuery(post.repliedTo)
-  const replyMsgData = {
+  const topMsgData = {
     type: 'reply',
+    location: 'top',
+    info: {
+      username: user.username,
+      fullName: user.fullName,
+    },
+  }
+  const bottomMsgData = {
+    type: 'reply',
+    location: 'bottom',
     info: {
       username: repliedToPost?.composerUsername,
       fullName: repliedToPost?.composerFullName,
@@ -114,9 +115,15 @@ export const PostPreview: React.FC<PostPreviewProps> = ({ post }) => {
   return (
     <section className="post-group">
       {repliedToPost ? (
-        <PostPreviewItem post={repliedToPost} msg={replyMsgData} />
+        <PostPreviewItem
+          post={repliedToPost}
+          msg={msgLocation === 'top' ? topMsgData : undefined}
+        />
       ) : null}
-      <PostPreviewItem post={post} />
+      <PostPreviewItem
+        post={post}
+        msg={msgLocation === 'bottom' ? bottomMsgData : undefined}
+      />
     </section>
   )
 }

@@ -27,6 +27,8 @@ export type PostProps = {
   composerImgUrl: string
   text: string
   imgUrl: string
-  likes: Map<string, boolean>
+  likes: {
+    [key: string]: boolean
+  }
   replies: string[]
 }

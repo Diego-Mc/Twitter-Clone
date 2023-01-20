@@ -3,6 +3,7 @@ import { TweetEditBase } from './TweetEditBase'
 import { ReactComponent as CloseIcon } from '../assets/icons/close.svg'
 import { PostProps } from '../types/models'
 import { PostPreview, PostPreviewItem } from './PostPreview'
+import { Mention } from './Mention'
 
 interface PostToReplyProps {
   post: PostProps
@@ -13,10 +14,7 @@ export const PostToReply: React.FC<PostToReplyProps> = ({ post }) => {
     <>
       <PostPreviewItem post={post} />
       <article className="replying-info">
-        Replying to{' '}
-        <a className="mention" href="testing!">
-          @{post.composerUsername}
-        </a>
+        Replying to <Mention username={post.composerUsername} />
       </article>
     </>
   )

@@ -51,7 +51,7 @@ export const TweetEditBase: React.FC<TweetEditBaseProps> = ({
 
   return (
     <>
-      <img src="default-user-img.png" alt="" className="user-img" />
+      <img src="/default-user-img.png" alt="" className="user-img" />
       <div
         className="content"
         contentEditable={true}

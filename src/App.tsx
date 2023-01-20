@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Provider, useDispatch, useSelector } from 'react-redux'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { FeedAside } from './components/FeedAside'
@@ -16,13 +16,26 @@ import { Profile } from './views/Profile'
 import { Search } from './views/Search'
 import { ApiProvider } from '@reduxjs/toolkit/dist/query/react'
 import { apiSlice } from './features/api/api.slice'
+import { EventBus } from './services/eventbus.service'
+import { PostProps } from './types/models'
 
 function App() {
   const [tweetPopup, setTweetPopup] = useState(false)
+  const [commentPost, setCommentPost] = useState<PostProps | null>(null)
 
   const toggleTweetPopup = (force: boolean) => {
     setTweetPopup(force ?? !tweetPopup)
   }
+
+  const toggleCommentPopup = (force: boolean) => {
+    if (!force) setCommentPost(null)
+  }
+
+  useEffect(() => {
+    const cb = (post: PostProps) => setCommentPost(post)
+    EventBus.$on('comment', cb)
+    return EventBus.$off('comment', cb)
+  }, [])
 
   return (
     <BrowserRouter>
@@ -31,6 +44,14 @@ function App() {
           {tweetPopup ? (
             <TweetEditPopup onComposeClose={() => toggleTweetPopup(false)} />
           ) : null}
+
+          {commentPost ? (
+            <TweetEditPopup
+              replyingTo={commentPost}
+              onComposeClose={() => toggleCommentPopup(false)}
+            />
+          ) : null}
+
           <Header />
           <Sidebar onComposeTweet={() => toggleTweetPopup(true)} />
           <div className="main-content">

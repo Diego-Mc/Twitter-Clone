@@ -18,7 +18,7 @@ export const Profile: React.FC<ProfileProps> = ({}) => {
 
         <section className="details">
           <section className="header">
-            <img src="default-user-img.png" alt="" className="user-img" />
+            <img src="/default-user-img.png" alt="" className="user-img" />
             <button className="pill white setup-btn">Set up profile</button>
           </section>
 
@@ -65,7 +65,7 @@ export const Profile: React.FC<ProfileProps> = ({}) => {
       <section className="open-tab">
         <WhoToFollow />
         {/* Add to whotofollow option to show description & change title if needed */}
-        <PostList />
+        {/* <PostList /> */}
       </section>
     </section>
   )

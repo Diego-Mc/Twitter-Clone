@@ -120,12 +120,6 @@
         grid-area: reply-info;
         padding: 16px 0 16px;
         color: var(--dark-gray);
-        .mention {
-          color: var(--blue);
-          &:hover {
-            text-decoration: underline;
-          }
-        }
       }
 
       &::before {
