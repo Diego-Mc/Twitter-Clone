@@ -44,12 +44,16 @@
     display: flex;
     grid-area: options;
     align-items: flex-end;
-    gap: 48px;
     height: 32px;
     font-size: rem(13px);
     color: var(--dark-gray);
     margin-left: -7px;
+    .icon-container {
+      min-width: 80px;
+      flex: 1;
+    }
     .icon {
+      width: max-content;
       height: 20px;
       display: flex;
       align-items: center;
@@ -79,6 +83,12 @@
         color: var(--blue);
         .icon-wrap {
           background-color: var(--blue-hover);
+        }
+      }
+      &.bookmark:hover {
+        color: var(--dark-gray);
+        .icon-wrap {
+          background-color: var(--gray-hover);
         }
       }
     }

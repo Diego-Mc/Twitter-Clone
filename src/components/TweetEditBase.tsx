@@ -10,6 +10,7 @@ import { userService } from '../services/user.service'
 import {
   useAddPostMutation,
   useAddReplyMutation,
+  useGetLoggedInUserQuery,
 } from '../features/api/api.slice'
 import { PostProps } from '../types/models'
 
@@ -25,6 +26,7 @@ export const TweetEditBase: React.FC<TweetEditBaseProps> = ({
   replyingTo,
 }) => {
   const contentTextRef = useRef<HTMLDivElement | null>(null)
+  const { data: user } = useGetLoggedInUserQuery()
 
   const [addPost] = useAddPostMutation()
   const [addReply] = useAddReplyMutation()
@@ -37,11 +39,11 @@ export const TweetEditBase: React.FC<TweetEditBaseProps> = ({
   const handleTweetPost = () => {
     if (!contentTextRef.current) return
     const tweetText = contentTextRef.current.innerText
-    if (!tweetText) return
+    if (!tweetText || !user) return
 
     const post = postService.getEmptyPost()
     post.text = tweetText
-    post.composerId = userService.getLoggedInUser()._id
+    post.composerId = user._id as string
 
     replyingTo ? addReply({ post, replyingTo }) : addPost({ ...post })
 

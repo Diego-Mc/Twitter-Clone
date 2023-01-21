@@ -10,18 +10,22 @@ import { PostProps } from '../types/models'
 interface ExploreProps {}
 
 export const Explore: React.FC<ExploreProps> = ({}) => {
-  // const { data: trends, isSuccess } = useGetTrendsQuery()
-  const { data } = useGetTrendPostsQuery('ya')
-  // const posts = useRef<Array<PostProps[]>>([])
-
-  // if (isSuccess) {
-  console.log(data)
-  // }
+  const { data: trends, isSuccess } = useGetTrendsQuery()
+  const { data } = useGetTrendPostsQuery(trends)
 
   return (
     <section className="explore-view">
-      {/* <Trends /> */}
-      {/* <PostList /> */}
+      <Trends />
+      {data
+        ? data.map((trendPosts: Array<PostProps>) =>
+            trendPosts ? (
+              <PostList posts={trendPosts} key={JSON.stringify(trendPosts)} />
+            ) : null
+          )
+        : null}
     </section>
   )
 }
+
+// TODO: add to response tag headers & use them as keys
+// TODO: add lodash to remove duplicates and even limit each section to 3-4 posts in backend

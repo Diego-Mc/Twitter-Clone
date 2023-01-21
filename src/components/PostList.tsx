@@ -9,9 +9,11 @@ interface PostListProps {
 export const PostList: React.FC<PostListProps> = ({ posts }) => {
   return (
     <section className="post-list">
-      {posts.map((post) => (
-        <PostPreview post={post} key={post._id} />
-      ))}
+      {posts.map((post) =>
+        post ? (
+          <PostPreview post={post} key={post._id} msgLocation="bottom" />
+        ) : null
+      )}
     </section>
   )
 }

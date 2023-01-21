@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { PostList } from '../components/PostList'
 import { TweetEdit } from '../components/TweetEdit'
@@ -16,25 +16,32 @@ export const Home: React.FC<HomeProps> = ({}) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  useEffect(() => {
-    let isCanceled = false
-    ;(async () => {
-      try {
-        //get from sessionStorage
-        //TODO: change to getLoggedInUser (logic to check session storage vs cookie)
-        const user = await userService.getById(
-          userService.getLoggedInUser()._id
-        )
-        if (!isCanceled) dispatch(initUser(user))
-      } catch (err) {
-        navigate('/login')
-      }
-    })()
+  // userService.register({
+  //   email: 'dd15@gmail.com',
+  //   fullName: 'Diego Confdfgdftreras',
+  //   username: 'diego_orfdgdiginal',
+  //   password: '123456',
+  // })
 
-    return () => {
-      isCanceled = true
-    }
-  }, [])
+  // useEffect(() => {
+  //   let isCanceled = false
+  //   ;(async () => {
+  //     try {
+  //       //get from sessionStorage
+  //       //TODO: change to getLoggedInUser (logic to check session storage vs cookie)
+  //       const user = await userService.getById(
+  //         userService.getLoggedInUser()._id
+  //       )
+  //       if (!isCanceled) dispatch(initUser(user))
+  //     } catch (err) {
+  //       navigate('/login')
+  //     }
+  //   })()
+
+  //   return () => {
+  //     isCanceled = true
+  //   }
+  // }, [])
 
   // const [posts, setPosts] = useState(null)
 

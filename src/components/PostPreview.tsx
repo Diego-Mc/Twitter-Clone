@@ -1,13 +1,16 @@
 import React, { MouseEventHandler, useState } from 'react'
 
 import { ReactComponent as CommentFilledIcon } from '../assets/icons/comment_filled.svg'
-import { useGetPostQuery, useLikePostMutation } from '../features/api/api.slice'
+import {
+  useGetLoggedInUserQuery,
+  useGetPostQuery,
+  useLikePostMutation,
+} from '../features/api/api.slice'
 import { PostProps, UserProps } from '../types/models'
 import { utilService } from '../services/util.service'
 import { TweetEditPopup } from './TweetEditPopup'
 import { userService } from '../services/user.service'
 import { useNavigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
 import { RootState } from '../features/store'
 import { Mention } from './Mention'
 import { PostActions } from './PostActions'
@@ -93,15 +96,16 @@ export const PostPreview: React.FC<PostPreviewProps> = ({
   msgLocation,
 }) => {
   if (!post.repliedTo) return <PostPreviewItem post={post} />
-  const user = useSelector<RootState, UserProps>((state) => state.user)
+  const { data: user } = useGetLoggedInUserQuery()
+  //TODO: continuew HERE - why user?
 
   const { data: repliedToPost } = useGetPostQuery(post.repliedTo)
   const topMsgData = {
     type: 'reply',
     location: 'top',
     info: {
-      username: user.username,
-      fullName: user.fullName,
+      username: user?.username,
+      fullName: user?.fullName,
     },
   }
   const bottomMsgData = {

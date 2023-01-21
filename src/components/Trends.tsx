@@ -1,4 +1,5 @@
 import React from 'react'
+import { createSearchParams, useNavigate } from 'react-router-dom'
 import { useGetTrendsQuery } from '../features/api/api.slice'
 import { TagProps } from '../types/models'
 
@@ -7,8 +8,16 @@ interface TrendPreviewProps {
 }
 
 export const TrendPreview: React.FC<TrendPreviewProps> = ({ tag }) => {
+  const navigate = useNavigate()
+
+  const handleTrendSelect = () =>
+    navigate({
+      pathname: '/search',
+      search: `?${createSearchParams({ search: tag.tagName })}`,
+    })
+
   return (
-    <article className="trend-preview">
+    <article className="trend-preview" onClick={handleTrendSelect}>
       <small className="tag">Trending</small>
       <h6 className="trend-name">{tag.tagName}</h6>
       <small className="tweet-count">

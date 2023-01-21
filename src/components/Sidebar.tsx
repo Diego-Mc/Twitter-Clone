@@ -10,9 +10,9 @@ import { ReactComponent as BookmarkIcon } from '../assets/icons/bookmark.svg'
 import { ReactComponent as BookmarkIconFilled } from '../assets/icons/bookmark_filled.svg'
 import { ReactComponent as ComposeIcon } from '../assets/icons/compose.svg'
 import { UserPreview } from './UserPreview'
-import { useSelector } from 'react-redux'
 import { UserProps } from '../types/models'
 import { RootState } from '../features/store'
+import { useGetLoggedInUserQuery } from '../features/api/api.slice'
 
 interface NavButtonProps {
   type: string
@@ -54,23 +54,33 @@ interface SidebarProps {
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({ onComposeTweet }) => {
-  const user = useSelector<RootState, UserProps>(({ user }) => user)
+  const { data: user } = useGetLoggedInUserQuery()
 
   return (
     <section className="sidebar">
-      <div className="nav-btns">
-        <NavButton to="/" type="home" />
-        <NavButton to="/explore" type="explore" />
-        <NavButton to="/bookmarks" type="bookmarks" />
-        <NavButton to="/profile" type="profile" end />
-      </div>
-      <button
-        className="tweet-btn primary pill"
-        onClick={() => onComposeTweet()}>
-        <span>Tweet</span>
-        <ComposeIcon />
-      </button>
-      <UserPreview user={user} />
+      {user ? (
+        <>
+          <div className="nav-btns">
+            <NavButton to="/" type="home" />
+            <NavButton to="/explore" type="explore" />
+            <NavButton to="/bookmarks" type="bookmarks" />
+            <NavButton to="/profile" type="profile" end />
+          </div>
+          <button
+            className="tweet-btn primary pill"
+            onClick={() => onComposeTweet()}>
+            <span>Tweet</span>
+            <ComposeIcon />
+          </button>
+          <UserPreview user={user} />
+        </>
+      ) : (
+        <>
+          <div className="nav-btns">
+            <NavButton to="/explore" type="explore" />
+          </div>
+        </>
+      )}
     </section>
   )
 }
