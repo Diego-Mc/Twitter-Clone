@@ -12,8 +12,11 @@ import { QueryReturnValue } from '@reduxjs/toolkit/dist/query/baseQueryTypes'
 
 export const apiSlice = createApi({
   reducerPath: 'api',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3001/api' }),
-  tagTypes: ['Posts', 'Tags', 'ToFollow', 'Users'],
+  baseQuery: fetchBaseQuery({
+    baseUrl: 'http://localhost:3001/api',
+    credentials: 'include',
+  }),
+  tagTypes: ['Posts', 'Tags', 'ToFollow', 'Users', 'LoggedInUser'],
   endpoints: (builder) => ({
     getPosts: builder.query<any, string | void>({
       queryFn: async (query = undefined, queryApi, extraOptions, baseQuery) => {
@@ -81,7 +84,7 @@ export const apiSlice = createApi({
         url: `/posts/${postId}/bookmark`,
         method: 'PATCH',
       }),
-      invalidatesTags: ['Users'],
+      invalidatesTags: ['LoggedInUser'],
     }),
     getBookmarksFromUser: builder.query<any, UserProps>({
       // query: (userId) => `/posts/profile/bookmarks/${userId}`,
@@ -116,7 +119,7 @@ export const apiSlice = createApi({
     /* USERS */
     getLoggedInUser: builder.query<UserProps, void>({
       query: () => `/users/logged-in`,
-      providesTags: ['Users'],
+      providesTags: ['LoggedInUser'],
     }),
     getUser: builder.query<UserProps, void>({
       query: (userId) => `/users/${userId}`,
@@ -132,6 +135,23 @@ export const apiSlice = createApi({
         method: 'PATCH',
       }),
       invalidatesTags: ['ToFollow'],
+    }),
+
+    /* AUTH */
+    register: builder.mutation({
+      query: (userCred) => ({
+        url: `/auth/register`,
+        method: 'POST',
+        body: userCred,
+      }),
+      invalidatesTags: ['LoggedInUser'],
+    }),
+    logout: builder.mutation<void, void>({
+      query: () => ({
+        url: `/auth/logout`,
+        method: 'POST',
+      }),
+      invalidatesTags: ['LoggedInUser'],
     }),
   }),
 })
@@ -158,3 +178,5 @@ export const {
   useGetRandomUsersToFollowQuery,
   useFollowUserMutation,
 } = apiSlice
+
+export const { useRegisterMutation, useLogoutMutation } = apiSlice

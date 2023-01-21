@@ -1,5 +1,5 @@
-import React from 'react'
-import { NavLink } from 'react-router-dom'
+import React, { useState } from 'react'
+import { NavLink, useNavigate } from 'react-router-dom'
 import { ReactComponent as HomeIcon } from '../assets/icons/home.svg'
 import { ReactComponent as HomeIconFilled } from '../assets/icons/home_filled.svg'
 import { ReactComponent as ExploreIcon } from '../assets/icons/explore.svg'
@@ -12,7 +12,10 @@ import { ReactComponent as ComposeIcon } from '../assets/icons/compose.svg'
 import { UserPreview } from './UserPreview'
 import { UserProps } from '../types/models'
 import { RootState } from '../features/store'
-import { useGetLoggedInUserQuery } from '../features/api/api.slice'
+import {
+  useGetLoggedInUserQuery,
+  useLogoutMutation,
+} from '../features/api/api.slice'
 
 interface NavButtonProps {
   type: string
@@ -55,6 +58,11 @@ interface SidebarProps {
 
 export const Sidebar: React.FC<SidebarProps> = ({ onComposeTweet }) => {
   const { data: user } = useGetLoggedInUserQuery()
+  const [userOptionsPopup, setUserOptionsPopup] = useState(true)
+
+  const toggleUserOptionsPopup = (force: boolean | undefined = undefined) => {
+    setUserOptionsPopup(force ?? !userOptionsPopup)
+  }
 
   return (
     <section className="sidebar">
@@ -72,7 +80,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ onComposeTweet }) => {
             <span>Tweet</span>
             <ComposeIcon />
           </button>
-          <UserPreview user={user} />
+          <div
+            className="user-options-wrapper"
+            onClick={() => toggleUserOptionsPopup()}>
+            <UserPreview user={user} />
+            {userOptionsPopup ? (
+              <OptionsPopup handleClose={() => toggleUserOptionsPopup(false)} />
+            ) : null}
+          </div>
         </>
       ) : (
         <>
@@ -82,5 +97,30 @@ export const Sidebar: React.FC<SidebarProps> = ({ onComposeTweet }) => {
         </>
       )}
     </section>
+  )
+}
+
+interface OptionsPopupProps {
+  handleClose: () => void
+}
+
+export const OptionsPopup: React.FC<OptionsPopupProps> = ({ handleClose }) => {
+  const { data: user } = useGetLoggedInUserQuery()
+  const [logout] = useLogoutMutation()
+  const navigate = useNavigate()
+  return (
+    <>
+      <div className="bg-close-popup" onClick={handleClose}></div>
+      <section className="options-popup">
+        <article className="option" onClick={() => navigate('/profile/tweets')}>
+          View Profile page
+        </article>
+        {user ? (
+          <article className="option" onClick={() => logout()}>
+            Log out @{user.username}
+          </article>
+        ) : null}
+      </section>
+    </>
   )
 }

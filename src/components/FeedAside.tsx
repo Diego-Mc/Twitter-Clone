@@ -1,5 +1,6 @@
 import React from 'react'
 import { useGetLoggedInUserQuery } from '../features/api/api.slice'
+import { LoginBlock } from './LoginBlock'
 import { SearchBar } from './SearchBar'
 import { Trends } from './Trends'
 import { WhoToFollow } from './WhoToFollow'
@@ -11,8 +12,13 @@ export const FeedAside: React.FC<FeedAsideProps> = ({}) => {
 
   return (
     <aside className="feed-aside">
-      <Trends />
-      {user ? <WhoToFollow /> : null}
+      {user ? (
+        <>
+          <Trends />
+          <WhoToFollow />
+        </>
+      ) : null}
+      {!user ? <LoginBlock /> : null}
     </aside>
   )
 }

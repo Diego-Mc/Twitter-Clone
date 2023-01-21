@@ -1,0 +1,123 @@
+.popup {
+  position: fixed;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.4);
+  inset: 0;
+  .auth-card {
+    position: absolute;
+    z-index: 1010;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    padding: 16px 16px 0;
+    background-color: white;
+    border-radius: 16px;
+    max-width: 80vw;
+    min-width: 600px;
+    min-height: 400px;
+    max-height: 90vh;
+    height: 650px;
+    display: flex;
+    flex-direction: column;
+
+    .form-section {
+      padding-inline: 80px;
+      flex-grow: 1;
+      max-width: 600px;
+      display: flex;
+      flex-direction: column;
+      h2 {
+        font-size: 32px;
+        line-height: 36px;
+        margin-block: 20px;
+      }
+      .inputs {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        margin-top: 12px;
+        .input-wrapper {
+          height: 58px;
+          width: 100%;
+          display: block;
+          position: relative;
+          border-radius: 4px;
+          border: $border;
+          border-color: var(--light-gray);
+          .placeholder {
+            position: absolute;
+            user-select: none;
+            top: 0;
+            padding-top: 16px;
+            z-index: 100;
+            font-size: rem(17px);
+            line-height: 24px;
+            color: var(--dark-gray);
+            padding-inline: 8px;
+            transition: -webkit-transform 150ms cubic-bezier(0.4, 0, 0.2, 1) 0s,
+              transform 150ms cubic-bezier(0.4, 0, 0.2, 1) 0s,
+              color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0s,
+              font-size 150ms cubic-bezier(0.4, 0, 0.2, 1) 0s,
+              padding-top 150ms cubic-bezier(0.4, 0, 0.2, 1) 0s;
+          }
+          input {
+            border-radius: 4px;
+            position: absolute;
+            inset: 0;
+            border: none;
+            padding-inline: 8px;
+            margin-top: 16px;
+            padding-block: 12px 8px;
+            line-height: 24px;
+            font-size: 17px;
+            color: var(--black);
+            &:focus-visible {
+              outline: none;
+            }
+          }
+
+          &:has(input:focus, input:not(:placeholder-shown)) {
+            .placeholder {
+              padding-top: 8px;
+              font-size: small;
+              line-height: 16px;
+            }
+          }
+          &:has(input:focus) {
+            box-shadow: 0 0 0 1px var(--blue);
+            border-color: var(--blue);
+            .placeholder {
+              color: var(--blue);
+            }
+          }
+        }
+      }
+
+      .auth-btn {
+        width: 100%;
+        border-radius: 999px;
+        min-width: 52px;
+        min-height: 52px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        background-color: var(--black);
+        opacity: 0.5;
+        color: var(--white);
+        font-size: 17px;
+        margin-top: auto;
+        margin-bottom: 24px;
+      }
+    }
+
+    .close-section {
+      height: 53px;
+      margin-left: -8px;
+      margin-top: -8px;
+      svg {
+        color: var(--dark-gray);
+      }
+    }
+  }
+}
