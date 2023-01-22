@@ -4,7 +4,7 @@ import { ReactComponent as PollIcon } from '../assets/icons/poll.svg'
 import { ReactComponent as EmojiIcon } from '../assets/icons/emoji.svg'
 import { ReactComponent as DateIcon } from '../assets/icons/date.svg'
 import { ReactComponent as LocationIcon } from '../assets/icons/location.svg'
-import { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { postService } from '../services/post.service'
 import { userService } from '../services/user.service'
 import {
@@ -13,6 +13,7 @@ import {
   useGetLoggedInUserQuery,
 } from '../features/api/api.slice'
 import { PostProps } from '../types/models'
+import { uploadImg } from '../services/upload.service'
 
 interface TweetEditBaseProps {
   setFocusRef?: (el: HTMLDivElement) => void
@@ -26,6 +27,8 @@ export const TweetEditBase: React.FC<TweetEditBaseProps> = ({
   replyingTo,
 }) => {
   const contentTextRef = useRef<HTMLDivElement | null>(null)
+  const imgUploadRef = useRef<HTMLInputElement | null>(null)
+  const [imgUrl, setImgUrl] = useState<null | any>(null)
   const { data: user } = useGetLoggedInUserQuery()
 
   const [addPost] = useAddPostMutation()
@@ -43,6 +46,8 @@ export const TweetEditBase: React.FC<TweetEditBaseProps> = ({
 
     const post = postService.getEmptyPost()
     post.text = tweetText
+    console.log(imgUrl?.url)
+    if (imgUrl) post.imgUrl = imgUrl.url
     post.composerId = user._id as string
 
     replyingTo ? addReply({ post, replyingTo }) : addPost({ ...post })
@@ -51,16 +56,63 @@ export const TweetEditBase: React.FC<TweetEditBaseProps> = ({
     if (onComposeClose) onComposeClose()
   }
 
+  const handleUpload = async (ev: any) => {
+    //TODO: check size and type
+    const imgUrl = await uploadImg(ev.target.files)
+    setImgUrl(imgUrl)
+  }
+
+  const handleDragEnter = (ev: any) => {
+    ev.preventDefault()
+    contentTextRef.current?.classList.add('dragover')
+  }
+
+  const handleDragLeave = (ev: any) => {
+    ev.preventDefault()
+    contentTextRef.current?.classList.remove('dragover')
+  }
+
+  const handleDrop = async (ev: any) => {
+    ev.preventDefault()
+    contentTextRef.current?.classList.remove('dragover')
+    console.log(JSON.stringify(ev.dataTransfer.files[0].name))
+    //TODO: check size and type
+    const imgUrl = await uploadImg(ev.dataTransfer.files)
+    setImgUrl(imgUrl)
+  }
+
   return (
     <>
       <img src="/default-user-img.png" alt="" className="user-img" />
       <div
+        onDragEnter={handleDragEnter}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
         className="content"
         contentEditable={true}
         ref={setContentRefs}></div>
       <div className="options">
         <div className="icons">
-          <div className="icon-wrap blue">
+          <div
+            className="icon-wrap blue"
+            onClick={() => imgUploadRef?.current?.click()}>
+            <form
+              style={{
+                position: 'fixed',
+                pointerEvents: 'none',
+                opacity: 0,
+              }}>
+              <input
+                onChange={handleUpload}
+                type="file"
+                ref={imgUploadRef}
+                style={{
+                  position: 'fixed',
+                  pointerEvents: 'none',
+                  opacity: 0,
+                }}
+              />
+            </form>
             <ImgIcon />
           </div>
           <div className="icon-wrap blue">

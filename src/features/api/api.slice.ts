@@ -31,10 +31,14 @@ export const apiSlice = createApi({
         data?.sort((a: PostProps, b: PostProps) => b._id.localeCompare(a._id))
         return { data }
       },
+      providesTags: (res) =>
+        res
+          ? [res.map(({ _id }: any) => ({ type: 'Posts', _id })), 'Posts']
+          : ['Posts'],
     }),
     getPost: builder.query<PostProps, string>({
       query: (postId) => `/posts/${postId}`,
-      providesTags: ['Posts'], //TODO: invalidate specific item
+      providesTags: (res, err, arg) => [{ type: 'Posts', _id: arg }],
     }),
     getPostReplies: builder.query<PostProps[], string>({
       query: (postId) => `/posts/${postId}/replies`,
@@ -62,7 +66,18 @@ export const apiSlice = createApi({
         method: 'POST',
         body: post,
       }),
-      invalidatesTags: ['Posts', 'Tags'],
+      async onQueryStarted(args, { dispatch, queryFulfilled }) {
+        try {
+          const { data: updatedPost } = await queryFulfilled
+          const patchResult = dispatch(
+            apiSlice.util.updateQueryData('getPosts', undefined, (posts) => {
+              posts.unshift(updatedPost)
+            })
+          )
+        } catch (err) {
+          console.log('error adding post', err)
+        }
+      },
     }),
     addReply: builder.mutation({
       query: ({ post, replyingTo }) => ({
@@ -70,21 +85,76 @@ export const apiSlice = createApi({
         method: 'POST',
         body: post,
       }),
-      invalidatesTags: ['Posts', 'Tags'],
+      async onQueryStarted(args, { dispatch, queryFulfilled }) {
+        try {
+          const { data: updatedReply } = await queryFulfilled
+          const patchResult = dispatch(
+            apiSlice.util.updateQueryData('getPosts', undefined, (posts) => {
+              posts.unshift(updatedReply)
+            })
+          )
+        } catch (err) {
+          console.log('error adding reply', err)
+        }
+      },
     }),
     likePost: builder.mutation({
       query: (postId) => ({
         url: `/posts/${postId}/like`,
         method: 'PATCH',
       }),
-      invalidatesTags: ['Posts'],
+      // invalidatesTags: (res, error, arg) => [{ type: 'Posts', _id: arg }],
+      async onQueryStarted(args, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          apiSlice.util.updateQueryData(
+            'getPosts',
+            undefined,
+            (posts: PostProps[]) => {
+              const userId = userService.getLoggedInUser()._id
+              const filteredPosts = posts.filter((post) => post._id === args)
+              if (filteredPosts.length === 0) return
+              const isLiked = filteredPosts[0].likes[userId]
+              filteredPosts.forEach((post) => (post.likes[userId] = !isLiked))
+            }
+          )
+        )
+        dispatch(
+          apiSlice.util.updateQueryData('getPost', args, (post) => {
+            const userId = userService.getLoggedInUser()._id
+            post.likes[userId] = !post.likes[userId]
+          })
+        )
+        try {
+          const { data: updatedReply } = await queryFulfilled
+        } catch (err) {
+          console.log('error adding reply', err)
+        }
+      },
     }),
     bookmarkPost: builder.mutation({
       query: (postId) => ({
         url: `/posts/${postId}/bookmark`,
         method: 'PATCH',
       }),
-      invalidatesTags: ['LoggedInUser'],
+      // invalidatesTags: ['LoggedInUser'],
+      async onQueryStarted(args, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          apiSlice.util.updateQueryData(
+            'getLoggedInUser',
+            undefined,
+            (user: UserProps) => {
+              const bookmarkIdx = user.bookmarks.indexOf(args)
+              if (bookmarkIdx < 0) user.bookmarks.push(args)
+              else user.bookmarks.splice(bookmarkIdx, 1)
+            }
+          )
+        )
+        try {
+          const { data: updatedReply } = await queryFulfilled
+        } catch (err) {
+          console.log('error adding reply', err)
+        }
+      },
     }),
     getBookmarksFromUser: builder.query<any, UserProps>({
       // query: (userId) => `/posts/profile/bookmarks/${userId}`,
@@ -152,6 +222,10 @@ export const apiSlice = createApi({
         method: 'POST',
         body: userCred,
       }),
+      transformResponse: (res: { token: string; user: { _id: string } }) => {
+        sessionStorage.setItem('loggedInUser', JSON.stringify(res.user))
+        return res
+      },
       invalidatesTags: ['LoggedInUser'],
     }),
     logout: builder.mutation<void, void>({
