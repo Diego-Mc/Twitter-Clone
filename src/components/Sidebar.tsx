@@ -58,7 +58,7 @@ interface SidebarProps {
 
 export const Sidebar: React.FC<SidebarProps> = ({ onComposeTweet }) => {
   const { data: user } = useGetLoggedInUserQuery()
-  const [userOptionsPopup, setUserOptionsPopup] = useState(true)
+  const [userOptionsPopup, setUserOptionsPopup] = useState(false)
 
   const toggleUserOptionsPopup = (force: boolean | undefined = undefined) => {
     setUserOptionsPopup(force ?? !userOptionsPopup)

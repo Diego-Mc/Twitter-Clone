@@ -146,6 +146,14 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ['LoggedInUser'],
     }),
+    login: builder.mutation({
+      query: (userCred) => ({
+        url: `/auth/login`,
+        method: 'POST',
+        body: userCred,
+      }),
+      invalidatesTags: ['LoggedInUser'],
+    }),
     logout: builder.mutation<void, void>({
       query: () => ({
         url: `/auth/logout`,
@@ -179,4 +187,5 @@ export const {
   useFollowUserMutation,
 } = apiSlice
 
-export const { useRegisterMutation, useLogoutMutation } = apiSlice
+export const { useRegisterMutation, useLoginMutation, useLogoutMutation } =
+  apiSlice
