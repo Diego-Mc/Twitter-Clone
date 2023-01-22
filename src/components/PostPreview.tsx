@@ -49,38 +49,48 @@ export const PostPreviewItem: React.FC<PostPreviewItemProps> = ({
   return (
     <>
       <article
-        className={`post-preview ${msg ? `with-msg ${msg.location}` : null}`}
+        className="post-preview"
         onClick={() => navigate(`/post/${post._id}`)}>
         {msg ? (
           msg.location === 'top' ? (
-            <>
+            <div className="msg-top">
               <CommentFilledIcon className="group-icon" />
               <p className="group-msg">{msg.info.fullName} replied</p>
-            </>
+            </div>
           ) : (
-            <p className="group-msg">
+            <p className="group-msg msg-bottom">
               Replying to <Mention username={msg.info.username as string} />
             </p>
           )
-        ) : null}
-        <img src={post.composerImgUrl} alt="" className="user-img" />
-        <span className="header">
-          <span className="full-name link">{post.composerFullName}</span>
-          <span className="username">@{post.composerUsername}</span>
-          <span className="divider">·</span>
-          <span className="time link">6h</span>
-        </span>
-        <div className="post-content">
-          <p
-            className="post-text"
-            dangerouslySetInnerHTML={{
-              __html: postService.generatePostHtml(post),
-            }}></p>
-          {post.imgUrl ? (
-            <img src={post.imgUrl} alt="" className="post-img" />
-          ) : null}
-        </div>
-        <PostActions post={post} />
+        ) : (
+          <>
+            <div className="pipe pipe-top"></div>
+            <div className="empty"></div>
+          </>
+        )}
+        <section className="left-wrapper">
+          <img src={post.composerImgUrl} alt="" className="user-img" />
+          <div className="pipe"></div>
+        </section>
+        <section className="right-wrapper">
+          <span className="header">
+            <span className="full-name link">{post.composerFullName}</span>
+            <span className="username">@{post.composerUsername}</span>
+            <span className="divider">·</span>
+            <span className="time link">6h</span>
+          </span>
+          <div className="post-content">
+            <p
+              className="post-text"
+              dangerouslySetInnerHTML={{
+                __html: postService.generatePostHtml(post),
+              }}></p>
+            {post.imgUrl ? (
+              <img src={post.imgUrl} alt="" className="post-img" />
+            ) : null}
+          </div>
+          <PostActions post={post} />
+        </section>
       </article>
     </>
   )

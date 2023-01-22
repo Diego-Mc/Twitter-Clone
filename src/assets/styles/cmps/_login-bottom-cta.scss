@@ -1,0 +1,86 @@
+.login-bottom-cta {
+  position: fixed;
+  bottom: 0;
+  height: 72px;
+  inset-inline: 0;
+  background-color: var(--blue);
+  color: var(--white);
+  display: grid;
+  grid-template-columns: 1fr $sidebar-width-xs $main-content-width $feed-aside-width-s 1fr;
+  grid-template-areas: '. . content content .';
+  .content-wrapper {
+    grid-area: content;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    .text {
+      display: none;
+      flex-direction: column;
+      width: max-content;
+      .title {
+        font-size: rem(23px);
+      }
+      small {
+        font-size: rem(15px);
+      }
+    }
+    .ctas {
+      flex: 1;
+      display: flex;
+      justify-content: flex-end;
+      .auth-btn {
+        flex: 1;
+        font-size: rem(15px);
+        font-weight: 700;
+        background-color: var(--white);
+        line-height: 20px;
+        color: var(--black);
+        margin-left: 12px;
+        margin-right: 12px;
+        border-radius: 99999px;
+        padding: 0 16px;
+        min-height: 36px;
+        min-width: 36px;
+        border: $border;
+        border-color: #ffffff59;
+      }
+
+      .login-btn {
+        background-color: transparent;
+        color: var(--white);
+      }
+    }
+  }
+  @include for-mobile-layout {
+    grid-template-columns: 1fr minmax(0, $main-content-width) 1fr;
+    grid-template-areas: '. content .';
+  }
+
+  @media screen and (max-width: $main-content-width) {
+  }
+
+  @media screen and (min-width: 840px) {
+    .content-wrapper {
+      .text {
+        display: flex;
+      }
+      .ctas {
+        .auth-btn {
+          flex: unset;
+          margin-right: 0;
+        }
+      }
+    }
+  }
+  @media screen and (min-width: 1008px) {
+    grid-template-columns: 1fr $sidebar-width-s $main-content-width $feed-aside-width-s 1fr;
+  }
+  @include for-normal-layout {
+    grid-template-columns: 1fr $sidebar-width-s $main-content-width $feed-aside-width-l 1fr;
+  }
+  @include for-wide-layout {
+    grid-template-columns: 1fr $sidebar-width-l $main-content-width $feed-aside-width-l 1fr;
+  }
+}

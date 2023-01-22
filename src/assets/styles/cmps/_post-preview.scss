@@ -3,43 +3,74 @@
   padding: 12px 16px;
   display: grid;
   grid-template-columns: 48px 1fr;
-  grid-template-areas: 'img header' 'img content' 'img options';
   column-gap: 12px;
   cursor: pointer;
   line-height: 20px;
-  .user-img {
-    grid-area: img;
-    border-radius: 50%;
-  }
-  .post-img {
-    border-radius: 16px;
-  }
-  .header {
-    grid-area: header;
-    display: flex;
-    gap: 4px;
-    color: var(--dark-gray);
 
-    .full-name {
-      color: var(--black);
-      font-weight: 700;
+  .pipe-top {
+    height: 12px;
+    background-color: var(--light-gray);
+    margin-bottom: 4px;
+    width: 2px;
+    display: block;
+    justify-self: center;
+    align-self: end;
+    margin-top: -12px;
+  }
+
+  .left-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .user-img {
+      grid-area: img;
+      border-radius: 50%;
+    }
+    .pipe {
+      background-color: var(--light-gray);
+      margin-top: 4px;
+      height: calc(100% + 12px);
+      width: 2px;
+      display: block;
+      margin-bottom: -12px;
     }
   }
-  .post-content {
-    display: flex;
-    grid-area: content;
-    flex-direction: column;
-    gap: 12px;
 
-    .post-text {
-      .tag {
-        color: var(--blue);
-        &:hover {
-          text-decoration: underline;
+  .right-wrapper {
+    display: flex;
+    flex-direction: column;
+    .header {
+      display: flex;
+      gap: 4px;
+      color: var(--dark-gray);
+      margin-bottom: 2px;
+
+      .full-name {
+        color: var(--black);
+        font-weight: 700;
+      }
+    }
+
+    .post-content {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+
+      .post-text {
+        .tag {
+          color: var(--blue);
+          &:hover {
+            text-decoration: underline;
+          }
         }
+      }
+
+      .post-img {
+        border-radius: 16px;
       }
     }
   }
+
   .options {
     display: flex;
     grid-area: options;
@@ -98,29 +129,33 @@
     background-color: var(--extra-extra-light-gray);
   }
 
-  &.with-msg.top {
-    grid-template-areas: 'group-icon group-msg' 'img header' 'img content' 'pipe options';
-    align-items: center;
+  .msg-top {
     color: var(--dark-gray);
-
+    grid-template-columns: 48px 1fr;
+    column-gap: 12px;
+    width: 100%;
+    grid-column: span 2;
+    display: grid;
+    align-items: center;
     .group-msg {
       transform: translateY(-4px);
-      grid-area: group-msg;
       font-size: rem(13px);
       font-weight: 700;
     }
     .group-icon {
       transform: translateY(-4px);
-      grid-area: group-icon;
       fill: currentColor;
       width: 16px;
       height: 16px;
       justify-self: end;
     }
   }
+
   &.with-msg.bottom {
-    grid-template-areas: 'img header' 'img group-msg' 'pipe content' 'pipe options';
     // align-items: center;
+    grid-column: span 2;
+    align-items: center;
+    color: var(--dark-gray);
 
     .group-msg {
       // transform: translateY(-4px);
@@ -141,38 +176,8 @@
 
 .post-group {
   .post-preview:not(:last-child) {
-    grid-template-areas: 'group-icon group-msg' 'img header' 'img content' 'pipe options';
-    &.with-msg.bottom {
-      grid-template-areas: 'img header' 'img group-msg' 'pipe content' 'pipe options';
-    }
     border: none;
-    &:before {
-      content: '';
-      grid-area: pipe;
-      background-color: var(--light-gray);
-      margin-top: 4px;
-      height: calc(100% + 12px);
-      width: 2px;
-      display: block;
-      justify-self: center;
-      align-self: start;
-    }
   }
   .post-preview:not(:first-child) {
-    grid-template-areas: 'upper-pipe .' 'img header' 'img content' 'pipe options';
-    &.with-msg.bottom {
-      grid-template-areas: 'upper-pipe .' 'img header' 'img group-msg' 'pipe content' 'pipe options';
-    }
-    &:after {
-      content: '';
-      grid-area: upper-pipe;
-      background-color: var(--light-gray);
-      margin-bottom: 4px;
-      height: calc(100% + 8px);
-      width: 2px;
-      display: block;
-      justify-self: center;
-      align-self: end;
-    }
   }
 }

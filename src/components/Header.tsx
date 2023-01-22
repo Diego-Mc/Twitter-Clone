@@ -14,7 +14,7 @@ export const Header: React.FC<HeaderProps> = ({}) => {
         <LogoIcon />
       </div>
       <div className="main-view">
-        <h1 className="view-title">Home</h1>
+        <h1 className="view-title">NOTE: app is still WIP</h1>
         <div className="icon-wrap">
           <SparkIcon />
         </div>

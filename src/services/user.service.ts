@@ -18,6 +18,7 @@ export const userService = {
   saveLocalUser,
   remove, //TODO: add remove functionality to backend
   update, //TODO: add update functionality to backend
+  isLoggedIn,
 }
 
 // window.userService = userService
@@ -101,4 +102,9 @@ function getLoggedInUser() {
   const sessionUser = sessionStorage.getItem(STORAGE_KEY_LOGGED_IN_USER)
   if (!sessionUser) throw new Error('No logged in user in sessionStorage')
   return JSON.parse(sessionUser)
+}
+
+function isLoggedIn() {
+  const sessionUser = sessionStorage.getItem(STORAGE_KEY_LOGGED_IN_USER)
+  return !!sessionUser
 }

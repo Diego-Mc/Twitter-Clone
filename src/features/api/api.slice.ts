@@ -13,12 +13,15 @@ import { QueryReturnValue } from '@reduxjs/toolkit/dist/query/baseQueryTypes'
 export const apiSlice = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:3001/api',
+    baseUrl:
+      process.env.NODE_ENV === 'production'
+        ? '/api'
+        : 'http://localhost:3001/api',
     credentials: 'include',
   }),
   tagTypes: ['Posts', 'Tags', 'ToFollow', 'Users', 'LoggedInUser'],
   endpoints: (builder) => ({
-    getPosts: builder.query<any, string | void>({
+    getPosts: builder.query<any, { [key: string]: string } | void>({
       queryFn: async (query = undefined, queryApi, extraOptions, baseQuery) => {
         let path = '/posts'
         if (query) path += `?${createSearchParams(query)}`
@@ -214,6 +217,10 @@ export const apiSlice = createApi({
         method: 'POST',
         body: userCred,
       }),
+      transformResponse: (res: { token: string; user: { _id: string } }) => {
+        sessionStorage.setItem('loggedInUser', JSON.stringify(res.user))
+        return res
+      },
       invalidatesTags: ['LoggedInUser'],
     }),
     login: builder.mutation({
@@ -228,11 +235,15 @@ export const apiSlice = createApi({
       },
       invalidatesTags: ['LoggedInUser'],
     }),
-    logout: builder.mutation<void, void>({
+    logout: builder.mutation<string, void>({
       query: () => ({
         url: `/auth/logout`,
         method: 'POST',
       }),
+      transformResponse: (res: { msg: string }) => {
+        sessionStorage.removeItem('loggedInUser')
+        return res.msg
+      },
       invalidatesTags: ['LoggedInUser'],
     }),
   }),

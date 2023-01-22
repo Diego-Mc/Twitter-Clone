@@ -11,7 +11,7 @@ export const PostList: React.FC<PostListProps> = ({ posts }) => {
     <section className="post-list">
       {posts.map((post) =>
         post ? (
-          <PostPreview post={post} key={post._id} msgLocation="bottom" />
+          <PostPreview post={post} key={post._id} msgLocation="top" />
         ) : null
       )}
     </section>

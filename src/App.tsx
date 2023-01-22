@@ -25,6 +25,7 @@ import { EventBus } from './services/eventbus.service'
 import { PostProps } from './types/models'
 import { LoginPopup } from './components/LoginPopup'
 import { RegisterPopup } from './components/RegisterPopup'
+import { LoginBottomCTA } from './components/LoginBottomCTA'
 
 function App() {
   const [loginPopup, setLoginPopup] = useState(false)
@@ -83,12 +84,15 @@ function App() {
 
         <Header />
         <Sidebar onComposeTweet={() => toggleTweetPopup(true)} />
+        {!userService.isLoggedIn() ? <LoginBottomCTA /> : null}
         <div className="main-content">
           <Routes>
-            {!user ? (
+            {!userService.isLoggedIn() ? (
               <>
                 <Route path="*" element={<Navigate to="/explore" replace />} />
                 <Route path="/explore" element={<Explore />} />
+                <Route path="/search" element={<Search />} />
+                <Route path="/post/:postId" element={<PostDetails />} />
               </>
             ) : (
               <>
