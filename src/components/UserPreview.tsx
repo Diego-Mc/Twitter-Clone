@@ -18,7 +18,7 @@ export const UserPreview: React.FC<UserPreviewProps> = ({ user }) => {
 
   const openProfile = (ev: React.MouseEvent) => {
     ev.stopPropagation()
-    navigate('/profile/tweets')
+    navigate(`/profile/${user._id}`)
   }
 
   return (

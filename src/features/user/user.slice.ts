@@ -7,7 +7,7 @@ const initialState: UserProps = {
   username: '',
   description: '',
   followers: [],
-  following: [],
+  followings: [],
   imgUrl: '',
   coverUrl: '',
   bookmarks: [],

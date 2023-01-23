@@ -34,16 +34,9 @@ export const PostPreviewItem: React.FC<PostPreviewItemProps> = ({
 }) => {
   const navigate = useNavigate()
 
-  const generatePostHtml = () => {
-    const hashtags = utilService.getHashtags(post.text)
-    let html = post.text
-    for (const hashtag of hashtags) {
-      html = html.replace(
-        hashtag,
-        `<a class="tag" href="testing!!">${hashtag}</a>`
-      )
-    }
-    return html
+  const openProfile = (ev: React.MouseEvent) => {
+    ev.stopPropagation()
+    navigate(`/profile/${post.userId}`)
   }
 
   return (
@@ -74,7 +67,9 @@ export const PostPreviewItem: React.FC<PostPreviewItemProps> = ({
         </section>
         <section className="right-wrapper">
           <span className="header">
-            <span className="full-name link">{post.composerFullName}</span>
+            <span className="full-name link" onClick={openProfile}>
+              {post.composerFullName}
+            </span>
             <span className="username">@{post.composerUsername}</span>
             <span className="divider">·</span>
             <span className="time link">6h</span>

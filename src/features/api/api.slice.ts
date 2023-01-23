@@ -292,11 +292,12 @@ export const { useGetTrendsQuery, useGetTrendPostsQuery } = apiSlice
 
 export const {
   useGetLoggedInUserQuery,
+  useGetUserQuery,
   useGetRandomUsersToFollowQuery,
   useFollowUserMutation,
   useUploadProfilePicMutation,
   useUploadCoverPicMutation,
-  useUpdateDescriptionMutation
+  useUpdateDescriptionMutation,
 } = apiSlice
 
 export const { useRegisterMutation, useLoginMutation, useLogoutMutation } =

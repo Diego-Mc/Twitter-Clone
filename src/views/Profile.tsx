@@ -2,22 +2,28 @@ import React from 'react'
 import { PostList } from '../components/PostList'
 import { WhoToFollow } from '../components/WhoToFollow'
 import { ReactComponent as CalendarIcon } from '../assets/icons/calendar.svg'
-import { Outlet } from 'react-router-dom'
+import { Outlet, useParams } from 'react-router-dom'
 import {
   useGetLoggedInUserQuery,
   useGetUserLikedPostsQuery,
   useGetUserMediaPostsQuery,
   useGetUserPostsAndRepliesQuery,
   useGetUserPostsQuery,
+  useGetUserQuery,
 } from '../features/api/api.slice'
 import { useProfileTab } from '../hooks/profile'
 import { EventBus } from '../services/eventbus.service'
+import { userService } from '../services/user.service'
 
 interface ProfileProps {}
 
 export const Profile: React.FC<ProfileProps> = ({}) => {
   const [register] = useProfileTab()
-  const { data: user } = useGetLoggedInUserQuery()
+  // const { data: user } = useGetLoggedInUserQuery()
+  const params = useParams()
+  const { data: user } = useGetUserQuery(
+    params?.userId || userService.getLoggedInUser()._id
+  )
 
   return (
     <section className="profile-view">

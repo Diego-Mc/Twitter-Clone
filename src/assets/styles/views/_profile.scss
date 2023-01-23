@@ -4,8 +4,13 @@
       display: flex;
       aspect-ratio: 6/2;
       background-color: var(--light-gray);
+      position: relative;
       img {
         object-fit: cover;
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
       }
     }
     .details {
