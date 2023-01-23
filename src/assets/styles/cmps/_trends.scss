@@ -24,8 +24,10 @@
       margin-block: 2px 4px;
     }
 
-    &:hover {
-      background-color: var(--extra-light-gray);
+    @media (hover: hover) {
+      &:hover {
+        background-color: var(--extra-light-gray);
+      }
     }
   }
 }

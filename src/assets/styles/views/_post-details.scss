@@ -4,9 +4,11 @@
       display: flex;
       flex-direction: column;
 
-      &:hover {
-        background-color: unset;
-        cursor: auto;
+      @media (hover: hover) {
+        &:hover {
+          background-color: unset;
+          cursor: auto;
+        }
       }
       .composer-details {
         display: flex;

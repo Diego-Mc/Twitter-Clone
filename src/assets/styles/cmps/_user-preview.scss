@@ -42,8 +42,10 @@
     }
     .follow-btn {
       grid-area: follow;
-      &:hover {
-        background-color: var(--black-hover);
+      @media (hover: hover) {
+        &:hover {
+          background-color: var(--black-hover);
+        }
       }
     }
   }
@@ -52,8 +54,9 @@
     display: none;
     padding-top: 7px;
   }
-
-  &:hover {
-    background-color: var(--extra-light-gray);
+  @media (hover: hover) {
+    &:hover {
+      background-color: var(--extra-light-gray);
+    }
   }
 }

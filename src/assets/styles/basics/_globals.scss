@@ -20,8 +20,10 @@
   }
 
   transition: background-color 0.2s;
-  &:hover {
-    background-color: var(--extra-light-gray);
+  @media (hover: hover) {
+    &:hover {
+      background-color: var(--extra-light-gray);
+    }
   }
 
   .sm {
@@ -34,8 +36,10 @@
 
 .link {
   cursor: pointer;
-  &:hover {
-    text-decoration: underline;
+  @media (hover: hover) {
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }
 

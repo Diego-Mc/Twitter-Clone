@@ -41,10 +41,12 @@
         transition: background-color 0.2s;
         position: absolute;
       }
-      &:hover::before {
-        inset: 0;
-        background-color: rgba(15, 20, 25, 0.1);
-        border-radius: 5rem;
+      @media (hover: hover) {
+        &:hover::before {
+          inset: 0;
+          background-color: rgba(15, 20, 25, 0.1);
+          border-radius: 5rem;
+        }
       }
     }
   }
@@ -70,8 +72,10 @@
       fill: currentColor;
     }
 
-    &:hover {
-      background-color: rgba(26, 140, 216);
+    @media (hover: hover) {
+      &:hover {
+        background-color: rgba(26, 140, 216);
+      }
     }
   }
 
@@ -99,9 +103,10 @@
         width: 40px;
         height: 40px;
       }
-
-      &:hover {
-        border-radius: 5rem;
+      @media (hover: hover) {
+        &:hover {
+          border-radius: 5rem;
+        }
       }
     }
 
@@ -134,8 +139,10 @@
         line-height: 20px;
         cursor: pointer;
         transition: 0.2s ease;
-        &:hover {
-          background-color: var(--extra-extra-light-gray);
+        @media (hover: hover) {
+          &:hover {
+            background-color: var(--extra-extra-light-gray);
+          }
         }
       }
     }

@@ -8,8 +8,10 @@
     padding-block: 4px;
     line-height: 39px;
     cursor: pointer;
-    &:hover {
-      background-color: var(--extra-extra-light-gray);
+    @media (hover: hover) {
+      &:hover {
+        background-color: var(--extra-extra-light-gray);
+      }
     }
   }
 }

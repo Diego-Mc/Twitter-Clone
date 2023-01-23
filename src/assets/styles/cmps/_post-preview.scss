@@ -64,8 +64,10 @@
     .post-text {
       .tag {
         color: var(--blue);
-        &:hover {
-          text-decoration: underline;
+        @media (hover: hover) {
+          &:hover {
+            text-decoration: underline;
+          }
         }
       }
     }
@@ -102,35 +104,39 @@
       &.like.selected {
         color: var(--red);
       }
-      &.comment:hover {
-        color: var(--green);
-        .icon-wrap {
-          background-color: var(--green-hover);
+      @media (hover: hover) {
+        &.comment:hover {
+          color: var(--green);
+          .icon-wrap {
+            background-color: var(--green-hover);
+          }
         }
-      }
-      &.like:hover {
-        color: var(--red);
-        .icon-wrap {
-          background-color: var(--red-hover);
+        &.like:hover {
+          color: var(--red);
+          .icon-wrap {
+            background-color: var(--red-hover);
+          }
         }
-      }
-      &.share:hover {
-        color: var(--blue);
-        .icon-wrap {
-          background-color: var(--blue-hover);
+        &.share:hover {
+          color: var(--blue);
+          .icon-wrap {
+            background-color: var(--blue-hover);
+          }
         }
-      }
-      &.bookmark:hover {
-        color: var(--dark-gray);
-        .icon-wrap {
-          background-color: var(--gray-hover);
+        &.bookmark:hover {
+          color: var(--dark-gray);
+          .icon-wrap {
+            background-color: var(--gray-hover);
+          }
         }
       }
     }
   }
 
-  &:hover {
-    background-color: var(--extra-extra-light-gray);
+  @media (hover: hover) {
+    &:hover {
+      background-color: var(--extra-extra-light-gray);
+    }
   }
 
   .msg-top {

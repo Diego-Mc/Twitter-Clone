@@ -102,8 +102,10 @@
       }
 
       transition: background-color 0.2s;
-      &:hover {
-        background-color: var(--extra-light-gray);
+      @media (hover: hover) {
+        &:hover {
+          background-color: var(--extra-light-gray);
+        }
       }
     }
     input {

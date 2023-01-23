@@ -56,6 +56,16 @@ export const Header: React.FC<HeaderProps> = ({}) => {
             <SearchBar />
           </div>
         </>
+      ) : routeName === 'post' ? (
+        <>
+          <div className="main-view">
+            <BackIconBtn />
+            <div className="heading">
+              <h1 className="view-title">Thread</h1>
+            </div>
+          </div>
+          <SearchBar />
+        </>
       ) : (
         <>
           <div className="main-view">

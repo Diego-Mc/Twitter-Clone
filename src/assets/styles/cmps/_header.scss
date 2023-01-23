@@ -27,8 +27,10 @@
     }
 
     transition: background-color 0.2s;
-    &:hover {
-      background-color: rgba(29, 155, 240, 0.1);
+    @media (hover: hover) {
+      &:hover {
+        background-color: rgba(29, 155, 240, 0.1);
+      }
     }
   }
 
@@ -76,7 +78,8 @@
     }
   }
 
-  &.profile {
+  &.profile,
+  &.post {
     .main-view {
       justify-content: flex-start;
       gap: 24px;

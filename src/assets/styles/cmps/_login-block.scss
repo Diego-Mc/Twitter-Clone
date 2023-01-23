@@ -30,8 +30,10 @@
       align-items: center;
       border-radius: 4rem;
       transition: 0.2s ease;
-      &:hover {
-        background-color: var(--extra-light-gray);
+      @media (hover: hover) {
+        &:hover {
+          background-color: var(--extra-light-gray);
+        }
       }
     }
   }

@@ -55,8 +55,10 @@
       align-items: center;
 
       .icon-wrap {
-        &:hover {
-          background-color: var(--blue-hover);
+        @media (hover: hover) {
+          &:hover {
+            background-color: var(--blue-hover);
+          }
         }
       }
     }
@@ -116,8 +118,10 @@
           display: none;
         }
 
-        &:hover {
-          background-color: unset;
+        @media (hover: hover) {
+          &:hover {
+            background-color: unset;
+          }
         }
       }
 
