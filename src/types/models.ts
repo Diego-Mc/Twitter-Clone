@@ -8,8 +8,9 @@ export type UserProps = {
   imgUrl: string
   coverUrl: string
   followers: string[]
-  following: string[]
+  followings: string[]
   bookmarks: string[]
+  createdAt?: Date
 }
 
 export type TagProps = {

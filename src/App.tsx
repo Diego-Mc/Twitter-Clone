@@ -26,10 +26,12 @@ import { PostProps } from './types/models'
 import { LoginPopup } from './components/LoginPopup'
 import { RegisterPopup } from './components/RegisterPopup'
 import { LoginBottomCTA } from './components/LoginBottomCTA'
+import { SetupProfilePopup } from './components/SetupProfilePopup'
 
 function App() {
   const [loginPopup, setLoginPopup] = useState(false)
   const [registerPopup, setRegisterPopup] = useState(false)
+  const [setupProfilePopup, setSetupProfilePopup] = useState(false)
   const [tweetPopup, setTweetPopup] = useState(false)
   const [commentPost, setCommentPost] = useState<PostProps | null>(null)
   const { data: user } = useGetLoggedInUserQuery()
@@ -60,6 +62,12 @@ function App() {
     return EventBus.$off('register-select', cb)
   }, [])
 
+  useEffect(() => {
+    const cb = () => setSetupProfilePopup(true)
+    EventBus.$on('setup-profile', cb)
+    return EventBus.$off('setup-profile', cb)
+  }, [])
+
   return (
     <BrowserRouter>
       <div className="main-app">
@@ -69,6 +77,12 @@ function App() {
 
         {loginPopup ? (
           <LoginPopup onComposeClose={() => setLoginPopup(false)} />
+        ) : null}
+
+        {setupProfilePopup ? (
+          <SetupProfilePopup
+            onComposeClose={() => setSetupProfilePopup(false)}
+          />
         ) : null}
 
         {tweetPopup ? (

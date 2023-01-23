@@ -3,6 +3,10 @@
     .cover {
       display: flex;
       aspect-ratio: 6/2;
+      background-color: var(--light-gray);
+      img {
+        object-fit: cover;
+      }
     }
     .details {
       padding: 12px 16px;
@@ -38,6 +42,13 @@
 
         .username {
           margin-bottom: 18px;
+        }
+
+        .description {
+          margin-bottom: 12px;
+          line-height: 20px;
+          font-size: rem(15px);
+          color: var(--black);
         }
 
         .date-info {

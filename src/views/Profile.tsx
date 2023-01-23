@@ -2,13 +2,7 @@ import React from 'react'
 import { PostList } from '../components/PostList'
 import { WhoToFollow } from '../components/WhoToFollow'
 import { ReactComponent as CalendarIcon } from '../assets/icons/calendar.svg'
-import {
-  matchRoutes,
-  Outlet,
-  useLocation,
-  useNavigate,
-  useParams,
-} from 'react-router-dom'
+import { Outlet } from 'react-router-dom'
 import {
   useGetLoggedInUserQuery,
   useGetUserLikedPostsQuery,
@@ -16,64 +10,84 @@ import {
   useGetUserPostsAndRepliesQuery,
   useGetUserPostsQuery,
 } from '../features/api/api.slice'
-import { UserProps } from '../types/models'
 import { useProfileTab } from '../hooks/profile'
+import { EventBus } from '../services/eventbus.service'
 
 interface ProfileProps {}
 
 export const Profile: React.FC<ProfileProps> = ({}) => {
   const [register] = useProfileTab()
+  const { data: user } = useGetLoggedInUserQuery()
 
   return (
     <section className="profile-view">
-      <section className="profile-header">
-        <section className="cover">
-          <img src="/cover-example.jpeg" alt="cover" />
-          {/* <div className="placeholder">
+      {user ? (
+        <>
+          <section className="profile-header">
+            <section className="cover">
+              {user.coverUrl ? <img src={user.coverUrl} /> : null}
+              {/* <div className="placeholder">
           Conditionally put this instead of img if none exist
         </div> */}
-        </section>
+            </section>
 
-        <section className="details">
-          <section className="header">
-            <img src="/default-user-img.png" alt="" className="user-img" />
-            <button className="pill white setup-btn">Set up profile</button>
+            <section className="details">
+              <section className="header">
+                <img src={user.imgUrl} className="user-img" />
+                <button
+                  className="pill white setup-btn"
+                  onClick={() => EventBus.$emit('setup-profile')}>
+                  Set up profile
+                </button>
+              </section>
+
+              <section className="info">
+                <h3 className="full-name">{user.fullName}</h3>
+                <p className="username">@{user.username}</p>
+                {user.description ? (
+                  <p className="description">{user.description}</p>
+                ) : null}
+                {user.createdAt ? (
+                  <p className="date-info">
+                    <>
+                      <CalendarIcon className="icon" />
+                      Joined{' '}
+                      {new Date(user.createdAt).toLocaleString('default', {
+                        month: 'long',
+                        year: 'numeric',
+                      })}
+                    </>
+                  </p>
+                ) : null}
+                <span className="metadata">
+                  <small>
+                    <span className="bold">{user.followings.length}</span>
+                    Following
+                  </small>
+                  <small>
+                    <span className="bold">{user.followers.length}</span>
+                    Followers
+                  </small>
+                </span>
+              </section>
+            </section>
           </section>
 
-          <section className="info">
-            <h3 className="full-name">Diego Mc</h3>
-            <p className="username">@DiegoMc99</p>
-            <p className="date-info">
-              <CalendarIcon className="icon" />
-              Joined October 2022
-            </p>
-            <span className="metadata">
-              <small>
-                <span className="bold">32</span>
-                Following
-              </small>
-              <small>
-                <span className="bold">1</span>
-                Followers
-              </small>
-            </span>
+          <section className="profile-tabs">
+            {register('tweets', 'Tweets')}
+            {register('replies', 'Tweets & replies')}
+            {register('media', 'Media')}
+            {register('likes', 'Likes')}
           </section>
-        </section>
-      </section>
 
-      <section className="profile-tabs">
-        {register('tweets', 'Tweets')}
-        {register('replies', 'Tweets & replies')}
-        {register('media', 'Media')}
-        {register('likes', 'Likes')}
-      </section>
-
-      <section className="open-tab">
-        <WhoToFollow />
-        {/* Add to whotofollow option to show description & change title if needed */}
-        {/* <PostList /> */}
-        <Outlet />
-      </section>
+          <section className="open-tab">
+            <WhoToFollow />
+            {/* Add to whotofollow option to show description & change title if needed */}
+            {/* <PostList /> */}
+            <Outlet />
+          </section>
+        </>
+      ) : null}
     </section>
   )
 }

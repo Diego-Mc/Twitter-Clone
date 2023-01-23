@@ -24,7 +24,7 @@ export const UserPreview: React.FC<UserPreviewProps> = ({ user }) => {
   return (
     <article className="user-preview">
       <div className="img-container">
-        <img src="/default-user-img.png" alt="" className="user-img" />
+        <img src={user.imgUrl} alt="" className="user-img" />
       </div>
       <div className="preview-content">
         <div className="user-info-container">

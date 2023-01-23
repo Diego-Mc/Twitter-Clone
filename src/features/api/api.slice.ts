@@ -209,6 +209,30 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ['ToFollow'],
     }),
+    uploadProfilePic: builder.mutation({
+      query: (url) => ({
+        url: `/users/upload/profile-img`,
+        method: 'PATCH',
+        body: { imgUrl: url },
+      }),
+      invalidatesTags: ['LoggedInUser'],
+    }),
+    uploadCoverPic: builder.mutation({
+      query: (url) => ({
+        url: `/users/upload/cover-img`,
+        method: 'PATCH',
+        body: { imgUrl: url },
+      }),
+      invalidatesTags: ['LoggedInUser'],
+    }),
+    updateDescription: builder.mutation({
+      query: (description) => ({
+        url: `/users/update/description`,
+        method: 'PATCH',
+        body: { description },
+      }),
+      invalidatesTags: ['LoggedInUser'],
+    }),
 
     /* AUTH */
     register: builder.mutation({
@@ -270,6 +294,9 @@ export const {
   useGetLoggedInUserQuery,
   useGetRandomUsersToFollowQuery,
   useFollowUserMutation,
+  useUploadProfilePicMutation,
+  useUploadCoverPicMutation,
+  useUpdateDescriptionMutation
 } = apiSlice
 
 export const { useRegisterMutation, useLoginMutation, useLogoutMutation } =

@@ -1,10 +1,9 @@
 import { useLocation, useNavigate } from 'react-router-dom'
 
 export const useProfileTab = () => {
+  const loc = useLocation()
+  const navigate = useNavigate()
   const register: React.FC<string> = (pathname, tabName) => {
-    const loc = useLocation()
-    const navigate = useNavigate()
-
     const isPath = (pathName: string) => {
       return loc.pathname === `/profile/${pathName}`
     }

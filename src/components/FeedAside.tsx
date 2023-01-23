@@ -18,6 +18,8 @@ export const FeedAside: React.FC<FeedAsideProps> = ({}) => {
       {user ? (
         routeName === 'explore' ? (
           <WhoToFollow />
+        ) : routeName === 'profile' ? (
+          <Trends />
         ) : (
           <>
             <Trends />
