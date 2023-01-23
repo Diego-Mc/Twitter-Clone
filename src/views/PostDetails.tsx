@@ -20,27 +20,27 @@ import { PostActions } from '../components/PostActions'
 
 export const MainPost: React.FC<PostPreviewItemProps> = ({ post, msg }) => {
   return (
-    <article
-      className={`post-preview main ${
-        msg ? `with-msg ${msg.location}` : null
-      }`}>
+    <article className="post-preview main">
       {msg ? (
-        msg.location === 'top' ? (
-          <>
-            <CommentFilledIcon className="group-icon" />
-            <p className="group-msg">{msg.info?.fullName} replied</p>
-          </>
-        ) : (
-          <p className="group-msg">
-            Replying to <Mention username={msg.info?.username as string} />
-          </p>
-        )
+        <>
+          <div className="pipe pipe-top"></div>
+          <div className="empty"></div>
+        </>
       ) : null}
-      <img src={post.composerImgUrl} alt="" className="user-img" />
-      <span className="header">
-        <span className="full-name link">{post.composerFullName}</span>
-        <span className="username">@{post.composerUsername}</span>
-      </span>
+      <section className="composer-details">
+        <img src={post.composerImgUrl} alt="" className="user-img" />
+        <span className="header">
+          <span className="full-name link">{post.composerFullName}</span>
+          <span className="username">@{post.composerUsername}</span>
+        </span>
+      </section>
+
+      {msg ? (
+        <p className="group-msg msg-bottom">
+          Replying to <Mention username={msg.info.username as string} />
+        </p>
+      ) : null}
+
       <div className="post-content">
         <p
           className="post-text"
@@ -95,9 +95,11 @@ export const PostDetails: React.FC<PostDetailsProps> = ({}) => {
   return (
     <section className="post-details">
       <section className="post-group main">
-        {repliedToPost ? <PostPreviewItem post={repliedToPost} /> : null}
+        {repliedToPost && post?.repliedTo ? (
+          <PostPreviewItem post={repliedToPost} />
+        ) : null}
         {post ? (
-          bottomMsgData ? (
+          bottomMsgData && post?.repliedTo ? (
             <MainPost post={post} msg={bottomMsgData} />
           ) : (
             <MainPost post={post} />
@@ -105,7 +107,11 @@ export const PostDetails: React.FC<PostDetailsProps> = ({}) => {
         ) : null}
       </section>
       <TweetEdit />
-      {replies ? <PostList posts={replies} /> : null}{' '}
+      {replies
+        ? replies.map((reply) => (
+            <PostPreviewItem key={reply._id} post={reply} />
+          ))
+        : null}
       {/* TODO: show as singulars */}
     </section>
   )

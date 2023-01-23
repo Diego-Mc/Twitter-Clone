@@ -1,41 +1,21 @@
 .post-details {
   .post-group.main {
     .post-preview.main {
+      display: flex;
+      flex-direction: column;
+
       &:hover {
         background-color: unset;
         cursor: auto;
       }
-      grid-template-areas:
-        'img header'
-        'group-msg group-msg'
-        'content content'
-        'time-bar time-bar'
-        'stats stats'
-        'options options';
-      &:not(:first-child).with-msg.bottom {
-        grid-template-areas:
-          'upper-pipe .'
-          'img header'
-          'group-msg group-msg'
-          'content content'
-          'time-bar time-bar'
-          'stats stats'
-          'options options';
-      }
-      &:not(:first-child) {
-        grid-template-areas:
-          'upper-pipe .'
-          'img header'
-          'group-msg group-msg'
-          'content content'
-          'time-bar time-bar'
-          'stats stats'
-          'options options';
-      }
-      .header {
-        flex-direction: column;
-        gap: 2px;
-        justify-content: center;
+      .composer-details {
+        display: flex;
+        column-gap: 12px;
+        .header {
+          flex-direction: column;
+          gap: 2px;
+          justify-content: center;
+        }
       }
       .group-msg {
         padding-top: 12px;
@@ -60,8 +40,12 @@
       }
       .options {
         justify-content: space-evenly;
-        .icon .amount {
-          display: none;
+        .icon-container {
+          display: flex;
+          justify-content: center;
+          .icon .amount {
+            display: none;
+          }
         }
       }
     }

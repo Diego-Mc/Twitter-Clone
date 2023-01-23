@@ -14,7 +14,7 @@ export const useProfileTab = () => {
         <label
           className="tab"
           htmlFor={pathname}
-          onClick={() => navigate(pathname)}>
+          onClick={() => navigate(pathname, { replace: true })}>
           <span className="text">{tabName}</span>
         </label>
       </>

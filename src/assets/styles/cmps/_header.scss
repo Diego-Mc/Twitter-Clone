@@ -50,4 +50,47 @@
   .search-bar {
     margin-right: 12px;
   }
+
+  .heading {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    align-items: flex-start;
+    justify-content: center;
+    .view-title {
+      line-height: 24px;
+      padding-block: 2px;
+    }
+    small {
+      font-size: rem(13px);
+      color: var(--dark-gray);
+      line-height: 16px;
+    }
+  }
+
+  //FIXES FOR LOCATION CHANGE:
+  &.explore {
+    .search-bar {
+      width: 100%;
+      margin-right: 0;
+    }
+  }
+
+  &.profile {
+    .main-view {
+      justify-content: flex-start;
+      gap: 24px;
+    }
+  }
+
+  &.search {
+    .search-bar {
+      width: 100%;
+      margin-right: 0;
+    }
+    .main-view {
+      justify-content: flex-start;
+      gap: 24px;
+    }
+  }
 }

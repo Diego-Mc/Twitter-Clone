@@ -9,7 +9,6 @@ interface SearchProps {}
 export const Search: React.FC<SearchProps> = ({}) => {
   const [searchParams, setSearchParams] = useSearchParams()
   const [params] = useGetParams(searchParams)
-  console.log(params)
   const { data: posts } = useGetPostsQuery(params)
 
   return (

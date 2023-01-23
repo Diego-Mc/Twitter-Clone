@@ -1,5 +1,7 @@
 import React from 'react'
+import { useLocation } from 'react-router-dom'
 import { useGetLoggedInUserQuery } from '../features/api/api.slice'
+import { useGetRouteName } from '../hooks/useGetRouteName'
 import { LoginBlock } from './LoginBlock'
 import { SearchBar } from './SearchBar'
 import { Trends } from './Trends'
@@ -9,16 +11,22 @@ interface FeedAsideProps {}
 
 export const FeedAside: React.FC<FeedAsideProps> = ({}) => {
   const { data: user } = useGetLoggedInUserQuery()
+  const routeName = useGetRouteName()
 
   return (
-    <aside className="feed-aside">
+    <aside className={`feed-aside ${routeName}`}>
       {user ? (
-        <>
-          <Trends />
+        routeName === 'explore' ? (
           <WhoToFollow />
-        </>
-      ) : null}
-      {!user ? <LoginBlock /> : null}
+        ) : (
+          <>
+            <Trends />
+            <WhoToFollow />
+          </>
+        )
+      ) : (
+        <LoginBlock />
+      )}
     </aside>
   )
 }
