@@ -2,18 +2,17 @@ import React from 'react'
 import { PostList } from '../components/PostList'
 import { WhoToFollow } from '../components/WhoToFollow'
 import { ReactComponent as CalendarIcon } from '../assets/icons/calendar.svg'
-import { Outlet, useParams } from 'react-router-dom'
+import { createSearchParams, Outlet, useParams } from 'react-router-dom'
 import {
   useGetLoggedInUserQuery,
-  useGetUserLikedPostsQuery,
-  useGetUserMediaPostsQuery,
-  useGetUserPostsAndRepliesQuery,
-  useGetUserPostsQuery,
+  useGetPostQuery,
+  useGetPostsQuery,
   useGetUserQuery,
 } from '../features/api/api.slice'
 import { useProfileTab } from '../hooks/profile'
 import { EventBus } from '../services/eventbus.service'
 import { userService } from '../services/user.service'
+import { PostProps } from '../types/models'
 
 interface ProfileProps {}
 
@@ -99,27 +98,51 @@ export const Profile: React.FC<ProfileProps> = ({}) => {
 }
 
 export const TweetsSection: React.FC = () => {
-  const { data: user } = useGetLoggedInUserQuery()
-  const { data: tweets } = useGetUserPostsQuery(user?._id as string)
+  const params = useParams()
+  const { data: user } = useGetUserQuery(
+    params?.userId || userService.getLoggedInUser()._id
+  )
+  if (!user?._id) return null
+  const criteria = { user: user._id, filter: 'tweets' }
+  const query = createSearchParams(criteria).toString()
+  const { data: tweets } = useGetPostsQuery(query)
   return tweets ? <PostList posts={tweets} /> : null
 }
 
 export const TweetsWithRepliesSection: React.FC = () => {
-  const { data: user } = useGetLoggedInUserQuery()
-  const { data: tweets } = useGetUserPostsAndRepliesQuery(user?._id as string)
+  const params = useParams()
+  const { data: user } = useGetUserQuery(
+    params?.userId || userService.getLoggedInUser()._id
+  )
+  if (!user?._id) return null
+  const criteria = { user: user._id, filter: 'replies' }
+  const query = createSearchParams(criteria).toString()
+  const { data: tweets } = useGetPostsQuery(query)
   return tweets ? <PostList posts={tweets} /> : null
 }
 
 export const MediaTweets: React.FC = () => {
-  const { data: user } = useGetLoggedInUserQuery()
-  const { data: tweets } = useGetUserMediaPostsQuery(user?._id as string)
+  const params = useParams()
+  const { data: user } = useGetUserQuery(
+    params?.userId || userService.getLoggedInUser()._id
+  )
+  if (!user?._id) return null
+  const criteria = { user: user._id, filter: 'media' }
+  const query = createSearchParams(criteria).toString()
+  const { data: tweets } = useGetPostsQuery(query)
 
   //TODO: media not working - fix backend (currently checking for existence but needs to check for length/regex for url)
   return tweets ? <PostList posts={tweets} /> : null
 }
 
 export const LikedTweets: React.FC = () => {
-  const { data: user } = useGetLoggedInUserQuery()
-  const { data: tweets } = useGetUserLikedPostsQuery(user?._id as string)
+  const params = useParams()
+  const { data: user } = useGetUserQuery(
+    params?.userId || userService.getLoggedInUser()._id
+  )
+  if (!user?._id) return null
+  const criteria = { user: user._id, filter: 'likes' }
+  const query = createSearchParams(criteria).toString()
+  const { data: tweets } = useGetPostsQuery(query)
   return tweets ? <PostList posts={tweets} /> : null
 }

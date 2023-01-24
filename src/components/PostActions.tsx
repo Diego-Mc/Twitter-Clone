@@ -15,6 +15,13 @@ import { userService } from '../services/user.service'
 import { PostProps, UserProps } from '../types/models'
 import { TweetEditPopup } from './TweetEditPopup'
 import { RootState } from '../features/store'
+import {
+  createSearchParams,
+  useLocation,
+  useParams,
+  useSearchParams,
+} from 'react-router-dom'
+import { useGetRouteName } from '../hooks/useGetRouteName'
 
 interface PostActionsProps {
   post: PostProps
@@ -24,13 +31,35 @@ export const PostActions: React.FC<PostActionsProps> = ({ post }) => {
   const [likePost] = useLikePostMutation()
   const [bookmarkPost] = useBookmarkPostMutation()
   const { data: user } = useGetLoggedInUserQuery()
+  const route = useGetRouteName()
+  const params = useParams()
+  const location = useLocation()
 
   const isLiked = user !== undefined && post.likes[user._id as string]
+  const [searchParams] = useSearchParams()
+
   const isBookmarked = user?.bookmarks.includes(post._id)
 
   const handleLike = (ev: React.MouseEvent) => {
     ev.stopPropagation()
-    likePost(post._id)
+    // console.log('dffdsfs', params, location.pathname.split('/')[3])
+    let searchObj: any = undefined
+    if (route === 'search') searchObj = searchParams.toString()
+    else if (route === 'profile') {
+      if (params.userId) {
+        const filter = location.pathname.split('/')[3]
+        const user = params.userId
+        searchObj = { user, filter }
+      } else {
+        const filter = location.pathname.split('/')[3]
+        const user = params.userId
+        searchObj = { user, filter }
+      }
+      if (searchObj.user === undefined) delete searchObj.user
+      searchObj = createSearchParams(searchObj).toString()
+    }
+
+    likePost({ post, params: searchObj, user })
   }
 
   const handleComment = (ev: React.MouseEvent) => {

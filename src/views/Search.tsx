@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { PostList } from '../components/PostList'
 import { useGetPostsQuery } from '../features/api/api.slice'
@@ -8,8 +8,7 @@ interface SearchProps {}
 
 export const Search: React.FC<SearchProps> = ({}) => {
   const [searchParams, setSearchParams] = useSearchParams()
-  const [params] = useGetParams(searchParams)
-  const { data: posts } = useGetPostsQuery(params)
+  const { data: posts } = useGetPostsQuery(searchParams.toString())
 
   return (
     <section className="search-view">

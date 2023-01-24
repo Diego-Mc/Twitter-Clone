@@ -29,7 +29,7 @@ export const UserPreview: React.FC<UserPreviewProps> = ({ user }) => {
       <div className="preview-content">
         <div className="user-info-container">
           <div className="info">
-            <h5 className="full-name link" onClick={openProfile}>
+            <h5 className="full-name link trunc" onClick={openProfile}>
               {user?.fullName}
             </h5>
             <p className="username">@{user?.username}</p>

@@ -47,6 +47,12 @@
   }
 }
 
+.trunc {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .input-wrapper {
   height: 58px;
   width: 100%;

@@ -21,10 +21,10 @@ export const apiSlice = createApi({
   }),
   tagTypes: ['Posts', 'Tags', 'ToFollow', 'Users', 'LoggedInUser'],
   endpoints: (builder) => ({
-    getPosts: builder.query<any, { [key: string]: string } | void>({
+    getPosts: builder.query<any, string | void>({
       queryFn: async (query = undefined, queryApi, extraOptions, baseQuery) => {
         let path = '/posts'
-        if (query) path += `?${createSearchParams(query)}`
+        if (query) path += `?${query}`
         const result = (await baseQuery(path)) as QueryReturnValue<
           PostProps[],
           FetchBaseQueryError,
@@ -36,32 +36,26 @@ export const apiSlice = createApi({
       },
       providesTags: (res) =>
         res
-          ? [res.map(({ _id }: any) => ({ type: 'Posts', _id })), 'Posts']
-          : ['Posts'],
+          ? [
+              ...res.map(
+                ({ _id }: any) => ({ type: 'Posts', id: _id } as const)
+              ),
+              { type: 'Posts', id: 'LIST' },
+            ]
+          : [{ type: 'Posts', id: 'LIST' }],
     }),
+    //NOTE: I can use "LIST" for home feed, and "EXPLORE" for explore feed etc. this way I get more control over what to refetch
     getPost: builder.query<PostProps, string>({
       query: (postId) => `/posts/${postId}`,
-      providesTags: (res, err, arg) => [{ type: 'Posts', _id: arg }],
+      providesTags: (res, err, postId) => [{ type: 'Posts', id: postId }],
     }),
+    //NOTE: I can use "selectFromResult" from getPosts instead of calling getPost
     getPostReplies: builder.query<PostProps[], string>({
       query: (postId) => `/posts/${postId}/replies`,
-      providesTags: ['Posts'], //TODO: invalidate specific item
-    }),
-    getUserPosts: builder.query<PostProps[], string>({
-      query: (userId) => `/posts/profile/${userId}`,
-      providesTags: ['Posts'], //TODO: invalidate specific item
-    }),
-    getUserPostsAndReplies: builder.query<PostProps[], string>({
-      query: (userId) => `/posts/profile/all/${userId}`,
-      providesTags: ['Posts'], //TODO: invalidate specific item
-    }),
-    getUserMediaPosts: builder.query<PostProps[], string>({
-      query: (userId) => `/posts/profile/media/${userId}`,
-      providesTags: ['Posts'], //TODO: invalidate specific item
-    }),
-    getUserLikedPosts: builder.query<PostProps[], string>({
-      query: (userId) => `/posts/profile/likes/${userId}`,
-      providesTags: ['Posts'], //TODO: invalidate specific item
+      providesTags: (res, err, postId) =>
+        res
+          ? [...res.map(({ _id }) => ({ type: 'Posts', id: _id } as const))]
+          : [{ type: 'Posts', id: postId }],
     }),
     addPost: builder.mutation({
       query: (post) => ({
@@ -69,16 +63,19 @@ export const apiSlice = createApi({
         method: 'POST',
         body: post,
       }),
-      async onQueryStarted(args, { dispatch, queryFulfilled }) {
+      async onQueryStarted(post, { dispatch, queryFulfilled }) {
         try {
           const { data: updatedPost } = await queryFulfilled
-          const patchResult = dispatch(
+          dispatch(
             apiSlice.util.updateQueryData('getPosts', undefined, (posts) => {
               posts.unshift(updatedPost)
             })
           )
         } catch (err) {
-          console.log('error adding post', err)
+          console.log('error adding post, invalidating {Posts - LIST}', err)
+          dispatch(
+            apiSlice.util.invalidateTags([{ type: 'Posts', id: 'LIST' }])
+          )
         }
       },
     }),
@@ -88,49 +85,97 @@ export const apiSlice = createApi({
         method: 'POST',
         body: post,
       }),
-      async onQueryStarted(args, { dispatch, queryFulfilled }) {
+      async onQueryStarted({ post, replyingTo }, { dispatch, queryFulfilled }) {
         try {
           const { data: updatedReply } = await queryFulfilled
-          const patchResult = dispatch(
+          dispatch(
             apiSlice.util.updateQueryData('getPosts', undefined, (posts) => {
               posts.unshift(updatedReply)
             })
           )
+          dispatch(
+            apiSlice.util.updateQueryData(
+              'getPostReplies',
+              replyingTo._id,
+              (replies) => {
+                replies.push(updatedReply)
+              }
+            )
+          )
         } catch (err) {
-          console.log('error adding reply', err)
+          console.log('error adding reply, invalidating {Posts - LIST}', err)
+          dispatch(
+            apiSlice.util.invalidateTags([
+              { type: 'Posts', id: replyingTo._id },
+            ])
+          )
         }
       },
     }),
     likePost: builder.mutation({
-      query: (postId) => ({
-        url: `/posts/${postId}/like`,
+      query: ({ post, params, user }) => ({
+        url: `/posts/${post._id}/like`,
         method: 'PATCH',
       }),
-      // invalidatesTags: (res, error, arg) => [{ type: 'Posts', _id: arg }],
-      async onQueryStarted(args, { dispatch, queryFulfilled }) {
-        const patchResult = dispatch(
+      async onQueryStarted(
+        { post, params, user },
+        { dispatch, queryFulfilled }
+      ) {
+        const findAndUpdate = (posts: PostProps[]) => {
+          const userId = userService.getLoggedInUser()._id
+          const updatedPost = posts.find(({ _id }) => _id === post._id)
+          if (!updatedPost) return
+          updatedPost.likes[userId] = !updatedPost.likes[userId]
+        }
+
+        const update = (post: PostProps) => {
+          const userId = userService.getLoggedInUser()._id
+          post.likes[userId] = !post.likes[userId]
+        }
+
+        dispatch(
+          apiSlice.util.updateQueryData('getPosts', params, findAndUpdate)
+        )
+        dispatch(
           apiSlice.util.updateQueryData(
-            'getPosts',
+            'getTrendPosts',
             undefined,
-            (posts: PostProps[]) => {
+            (trendSections) => {
               const userId = userService.getLoggedInUser()._id
-              const filteredPosts = posts.filter((post) => post._id === args)
-              if (filteredPosts.length === 0) return
-              const isLiked = filteredPosts[0].likes[userId]
-              filteredPosts.forEach((post) => (post.likes[userId] = !isLiked))
+              trendSections.forEach(
+                (section: { title: string; posts: PostProps[] }) => {
+                  const updatedPost = section.posts.find(
+                    (p) => p?._id === post._id
+                  )
+                  if (!updatedPost) return
+                  updatedPost.likes[userId] = !updatedPost.likes[userId]
+                }
+              )
             }
           )
         )
         dispatch(
-          apiSlice.util.updateQueryData('getPost', args, (post) => {
-            const userId = userService.getLoggedInUser()._id
-            post.likes[userId] = !post.likes[userId]
-          })
+          apiSlice.util.updateQueryData(
+            'getBookmarksFromUser',
+            user,
+            findAndUpdate
+          )
         )
+        dispatch(
+          apiSlice.util.updateQueryData(
+            'getPostReplies',
+            post.repliedTo,
+            findAndUpdate
+          )
+        )
+        dispatch(apiSlice.util.updateQueryData('getPost', post._id, update))
         try {
-          const { data: updatedReply } = await queryFulfilled
+          await queryFulfilled
         } catch (err) {
-          console.log('error adding reply', err)
+          console.log('error liking post, invalidating {Posts - post._id}', err)
+          dispatch(
+            apiSlice.util.invalidateTags([{ type: 'Posts', id: post._id }])
+          )
         }
       },
     }),
@@ -139,29 +184,30 @@ export const apiSlice = createApi({
         url: `/posts/${postId}/bookmark`,
         method: 'PATCH',
       }),
-      // invalidatesTags: ['LoggedInUser'],
-      async onQueryStarted(args, { dispatch, queryFulfilled }) {
-        const patchResult = dispatch(
+      async onQueryStarted(postId, { dispatch, queryFulfilled }) {
+        dispatch(
           apiSlice.util.updateQueryData(
             'getLoggedInUser',
             undefined,
             (user: UserProps) => {
-              const bookmarkIdx = user.bookmarks.indexOf(args)
-              if (bookmarkIdx < 0) user.bookmarks.push(args)
+              const bookmarkIdx = user.bookmarks.indexOf(postId)
+              if (bookmarkIdx < 0) user.bookmarks.push(postId)
               else user.bookmarks.splice(bookmarkIdx, 1)
             }
           )
         )
         try {
-          const { data: updatedReply } = await queryFulfilled
+          await queryFulfilled
         } catch (err) {
-          console.log('error adding reply', err)
+          console.log(
+            'error bookmarking post, invalidating {LoggedInUser}',
+            err
+          )
+          dispatch(apiSlice.util.invalidateTags([{ type: 'LoggedInUser' }]))
         }
       },
     }),
     getBookmarksFromUser: builder.query<any, UserProps>({
-      // query: (userId) => `/posts/profile/bookmarks/${userId}`,
-      // providesTags: ['Posts'], //TODO: invalidate specific item
       queryFn: async (user, queryApi, extraOptions, baseQuery) => {
         if (!user) return { data: null }
 
@@ -171,22 +217,52 @@ export const apiSlice = createApi({
         const merged = [...bookmarks?.map((result: any) => result.data)]
         return { data: merged }
       },
+      providesTags: (res, err, user) =>
+        res
+          ? [
+              ...res.map(
+                ({ _id }: any) => ({ type: 'Posts', id: _id } as const)
+              ),
+              { type: 'Posts', id: 'BOOKMARKS' },
+            ]
+          : [{ type: 'Posts', id: 'BOOKMARKS' }],
     }),
     /* TRENDS/TAGS */
     getTrends: builder.query<TagProps[], void>({
       query: () => '/tags',
-      providesTags: ['Tags'],
+      providesTags: (res, err) =>
+        res
+          ? [
+              ...res.map(
+                ({ _id }: any) => ({ type: 'Tags', id: _id } as const)
+              ),
+              { type: 'Tags', id: 'TRENDS' },
+            ]
+          : [{ type: 'Tags', id: 'TRENDS' }],
     }),
     getTrendPosts: builder.query<any, any>({
-      queryFn: async (trends, queryApi, extraOptions, baseQuery) => {
-        if (!trends) return { data: null }
+      queryFn: async (args, queryApi, extraOptions, baseQuery) => {
+        const trends = await baseQuery(`/tags`)
+        if (!trends.data) return { data: 'ERROR' }
 
-        const trendPosts = await Promise.all(
-          trends.map((tag: TagProps) => baseQuery(`tags/${tag.tagName}`))
-        )
-        const merged = [...trendPosts?.map((result: any) => result.data)]
-        return { data: merged }
+        const postsPrms = (trends.data as TagProps[]).map(async (tag) => {
+          const res = await baseQuery(`/tags/${tag.tagName}`)
+          return { title: tag.tagName, posts: res.data }
+        })
+
+        const trendPosts = await Promise.all(postsPrms)
+        return { data: trendPosts }
       },
+      providesTags: (res, err) =>
+        res
+          ? [
+              ...res.map(
+                ({ posts: { _id } }: any) =>
+                  ({ type: 'Posts', id: _id } as const)
+              ),
+              { type: 'Posts', id: 'EXPLORE' },
+            ]
+          : [{ type: 'Posts', id: 'EXPLORE' }],
     }),
 
     /* USERS */
@@ -277,10 +353,6 @@ export const {
   useGetPostsQuery,
   useGetPostQuery,
   useGetPostRepliesQuery,
-  useGetUserPostsQuery,
-  useGetUserPostsAndRepliesQuery,
-  useGetUserMediaPostsQuery,
-  useGetUserLikedPostsQuery,
   useAddPostMutation,
   useAddReplyMutation,
   useLikePostMutation,

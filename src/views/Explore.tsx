@@ -5,23 +5,28 @@ import {
   useGetTrendPostsQuery,
   useGetTrendsQuery,
 } from '../features/api/api.slice'
+import { ReactComponent as ExploreTitleIcon } from '../assets/icons/explore-title.svg'
 import { PostProps } from '../types/models'
 
 interface ExploreProps {}
 
 export const Explore: React.FC<ExploreProps> = ({}) => {
   const { data: trends, isSuccess } = useGetTrendsQuery()
-  const { data } = useGetTrendPostsQuery(trends)
+  const { data: trendSections } = useGetTrendPostsQuery()
 
   return (
     <section className="explore-view">
       <Trends />
-      {data
-        ? data.map((trendPosts: Array<PostProps>) =>
-            trendPosts ? (
-              <PostList posts={trendPosts} key={JSON.stringify(trendPosts)} />
-            ) : null
-          )
+      {trendSections
+        ? trendSections.map(({ title, posts }: any) => (
+            <>
+              <header className="trend-header">
+                <ExploreTitleIcon />
+                <h3 className="title">{title}</h3>
+              </header>
+              <PostList posts={posts} />
+            </>
+          ))
         : null}
     </section>
   )

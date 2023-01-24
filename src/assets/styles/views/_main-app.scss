@@ -173,10 +173,19 @@
       }
 
       .user-preview {
-        width: 100%;
+        max-width: 90%;
         padding: 12px;
         .preview-content {
           display: flex;
+          overflow: hidden;
+          .user-info-container {
+            .info {
+              max-width: 100%;
+              .full-name {
+                max-width: 100%;
+              }
+            }
+          }
         }
         .img-container {
           margin-right: 12px;
