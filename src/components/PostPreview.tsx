@@ -52,12 +52,13 @@ export const PostPreviewItem: React.FC<PostPreviewItemProps> = ({
             </div>
           ) : (
             <p className="group-msg msg-bottom">
-              Replying to <Mention username={msg.info.username as string} />
+              Replying to&nbsp;
+              <Mention username={msg.info.username as string} />
             </p>
           )
         ) : (
           <>
-            <div className="pipe pipe-top"></div>
+            <div className="pipe-top"></div>
             <div className="empty"></div>
           </>
         )}

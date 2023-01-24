@@ -5,7 +5,7 @@
 }
 
 .mention {
-  color: var(--blue);
+  color: var(--blue) !important;
   @media (hover: hover) {
     &:hover {
       text-decoration: underline;

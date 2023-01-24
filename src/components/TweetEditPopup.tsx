@@ -13,9 +13,17 @@ export const PostToReply: React.FC<PostToReplyProps> = ({ post }) => {
   return (
     <>
       <PostPreviewItem post={post} />
-      <article className="replying-info">
-        Replying to <Mention username={post.composerUsername} />
-      </article>
+      <PostPreviewItem
+        post={post}
+        msg={{
+          info: {
+            username: post.composerUsername,
+            fullName: post.composerFullName,
+          },
+          location: 'bottom',
+          type: 'reply',
+        }}
+      />
     </>
   )
 }
@@ -42,14 +50,16 @@ export const TweetEditPopup: React.FC<TweetEditPopupProps> = ({
   return (
     <div className="popup" onClick={(e) => onComposeClose()}>
       <section
-        className={`tweet-edit ${replyingTo ? 'reply' : ''}`}
+        className={`tweet-edit  ${replyingTo ? 'reply' : ''}`}
         onClick={(e) => e.stopPropagation()}>
         <div className="close-section">
           <div className="icon-wrap" onClick={(e) => onComposeClose()}>
             <CloseIcon />
           </div>
         </div>
-        {replyingTo ? <PostToReply post={replyingTo} /> : null}
+        <section className="post-group">
+          {replyingTo ? <PostToReply post={replyingTo} /> : null}
+        </section>
         <TweetEditBase
           setFocusRef={setFocusRef}
           onComposeClose={onComposeClose}

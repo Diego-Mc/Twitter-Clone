@@ -1,8 +1,14 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { PostList } from '../components/PostList'
 import { WhoToFollow } from '../components/WhoToFollow'
 import { ReactComponent as CalendarIcon } from '../assets/icons/calendar.svg'
-import { createSearchParams, Outlet, useParams } from 'react-router-dom'
+import {
+  createSearchParams,
+  Navigate,
+  Outlet,
+  useNavigate,
+  useParams,
+} from 'react-router-dom'
 import {
   useGetLoggedInUserQuery,
   useGetPostQuery,
@@ -18,11 +24,17 @@ interface ProfileProps {}
 
 export const Profile: React.FC<ProfileProps> = ({}) => {
   const [register] = useProfileTab()
-  // const { data: user } = useGetLoggedInUserQuery()
-  const params = useParams()
+  const navigate = useNavigate()
+  let params = useParams()
   const { data: user } = useGetUserQuery(
     params?.userId || userService.getLoggedInUser()._id
   )
+
+  useEffect(() => {
+    if (params?.userId === userService.getLoggedInUser()._id) {
+      navigate('/profile/tweets')
+    }
+  }, [params?.userId])
 
   return (
     <section className="profile-view">
@@ -31,9 +43,6 @@ export const Profile: React.FC<ProfileProps> = ({}) => {
           <section className="profile-header">
             <section className="cover">
               {user.coverUrl ? <img src={user.coverUrl} /> : null}
-              {/* <div className="placeholder">
-          Conditionally put this instead of img if none exist
-        </div> */}
             </section>
 
             <section className="details">

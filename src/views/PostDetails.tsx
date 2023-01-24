@@ -22,10 +22,10 @@ export const MainPost: React.FC<PostPreviewItemProps> = ({ post, msg }) => {
   return (
     <article className="post-preview main">
       {msg ? (
-        <>
+        <section className="pipe-top-section">
           <div className="pipe pipe-top"></div>
           <div className="empty"></div>
-        </>
+        </section>
       ) : null}
       <section className="composer-details">
         <img src={post.composerImgUrl} alt="" className="user-img" />

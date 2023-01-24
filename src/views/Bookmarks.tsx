@@ -12,8 +12,6 @@ export const Bookmarks: React.FC<BookmarksProps> = ({}) => {
   const { data: user } = useGetLoggedInUserQuery()
   const { data: bookmarks } = useGetBookmarksFromUserQuery(user as UserProps)
 
-  console.log(bookmarks)
-
   return (
     <section className="bookmarks-view">
       {bookmarks ? <PostList posts={bookmarks} /> : null}

@@ -10,6 +10,11 @@
           cursor: auto;
         }
       }
+      .pipe-top-section {
+        display: grid;
+        grid-template-columns: 48px 1fr;
+        column-gap: 12px;
+      }
       .composer-details {
         display: flex;
         column-gap: 12px;

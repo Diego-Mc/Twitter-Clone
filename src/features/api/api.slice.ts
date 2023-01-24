@@ -240,7 +240,7 @@ export const apiSlice = createApi({
             ]
           : [{ type: 'Tags', id: 'TRENDS' }],
     }),
-    getTrendPosts: builder.query<any, any>({
+    getTrendPosts: builder.query<any, void>({
       queryFn: async (args, queryApi, extraOptions, baseQuery) => {
         const trends = await baseQuery(`/tags`)
         if (!trends.data) return { data: 'ERROR' }

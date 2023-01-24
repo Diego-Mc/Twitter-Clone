@@ -103,17 +103,21 @@
     }
 
     &.reply {
-      grid-template-areas: 'close close' 'post post' 'pipe reply-info' 'img content' '. options';
+      grid-template-areas: 'close close' 'post-group post-group' 'img content' '. options';
+
+      .post-group {
+        grid-area: post-group;
+      }
 
       .post-preview {
-        grid-area: post;
-        padding: 0 0 4px;
+        .msg-bottom {
+          grid-column: 2;
+        }
+
+        padding-inline: 0;
         border: none;
         column-gap: 16px;
         cursor: auto;
-        grid-template-areas:
-          'img header'
-          'img content';
         .options {
           display: none;
         }
@@ -123,22 +127,24 @@
             background-color: unset;
           }
         }
-      }
 
-      .replying-info {
-        grid-area: reply-info;
-        padding: 16px 0 16px;
-        color: var(--dark-gray);
-      }
-
-      &::before {
-        content: '';
-        grid-area: pipe;
-        background-color: var(--light-gray);
-        height: calc(100% - 8px);
-        width: 2px;
-        display: block;
-        justify-self: center;
+        &:nth-child(2) {
+          > * {
+            display: none;
+          }
+          .msg-bottom {
+            display: flex;
+          }
+          &::before {
+            content: '';
+            background-color: var(--light-gray);
+            margin-top: -12px;
+            height: calc(100% + 20px);
+            width: 2px;
+            display: block;
+            justify-self: center;
+          }
+        }
       }
     }
   }

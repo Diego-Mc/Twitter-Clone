@@ -7,19 +7,6 @@
   cursor: pointer;
   line-height: 20px;
 
-  .pipe-top {
-    height: 12px;
-    background-color: var(--light-gray);
-    margin-bottom: 4px;
-    width: 2px;
-    display: block;
-    justify-self: center;
-    align-self: end;
-    margin-top: -12px;
-
-    opacity: 0;
-  }
-
   .left-wrapper {
     display: flex;
     flex-direction: column;
@@ -35,6 +22,20 @@
 
     opacity: 0;
   }
+
+  .pipe-top {
+    height: 12px;
+    background-color: var(--light-gray);
+    margin-bottom: 4px;
+    width: 2px;
+    display: block;
+    justify-self: center;
+    align-self: end;
+    margin-top: -12px;
+
+    opacity: 0;
+  }
+
   .user-img {
     grid-area: img;
     border-radius: 50%;
@@ -161,7 +162,7 @@
     }
   }
 
-  &.with-msg.bottom {
+  .msg-bottom {
     // align-items: center;
     grid-column: span 2;
     align-items: center;

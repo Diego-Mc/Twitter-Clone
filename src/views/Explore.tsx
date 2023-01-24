@@ -19,13 +19,13 @@ export const Explore: React.FC<ExploreProps> = ({}) => {
       <Trends />
       {trendSections
         ? trendSections.map(({ title, posts }: any) => (
-            <>
+            <section className="trend-section" key={title}>
               <header className="trend-header">
                 <ExploreTitleIcon />
                 <h3 className="title">{title}</h3>
               </header>
               <PostList posts={posts} />
-            </>
+            </section>
           ))
         : null}
     </section>
