@@ -2,6 +2,7 @@ import React from 'react'
 import { createSearchParams, useNavigate } from 'react-router-dom'
 import { useGetTrendsQuery } from '../features/api/api.slice'
 import { TagProps } from '../types/models'
+import { LoadingCircle } from './LoadingCircle'
 
 interface TrendPreviewProps {
   tag: TagProps
@@ -35,9 +36,11 @@ export const Trends: React.FC<TrendsProps> = ({}) => {
     <section className="trends">
       <h3 className="title">Trends for you</h3>
       <div className="trend-list">
-        {trends
-          ? trends.map((t) => <TrendPreview key={t._id} tag={t} />)
-          : null}
+        {trends ? (
+          trends.map((t) => <TrendPreview key={t._id} tag={t} />)
+        ) : (
+          <LoadingCircle />
+        )}
       </div>
     </section>
   )

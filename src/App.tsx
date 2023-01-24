@@ -107,6 +107,19 @@ function App() {
                 <Route path="/explore" element={<Explore />} />
                 <Route path="/search" element={<Search />} />
                 <Route path="/post/:postId" element={<PostDetails />} />
+                <Route
+                  path="/profile/:userId"
+                  element={<Navigate to="tweets" replace />}
+                />
+                <Route path="/profile/:userId" element={<Profile />}>
+                  <Route path="tweets" element={<TweetsSection />} />
+                  <Route
+                    path="replies"
+                    element={<TweetsWithRepliesSection />}
+                  />
+                  <Route path="media" element={<MediaTweets />} />
+                  <Route path="likes" element={<LikedTweets />} />
+                </Route>
               </>
             ) : (
               <>

@@ -17,6 +17,7 @@ import { PostProps } from '../types/models'
 import { Mention } from '../components/Mention'
 import { postService } from '../services/post.service'
 import { PostActions } from '../components/PostActions'
+import { LoadingCircle } from '../components/LoadingCircle'
 
 export const MainPost: React.FC<PostPreviewItemProps> = ({ post, msg }) => {
   return (
@@ -77,9 +78,12 @@ export const PostDetails: React.FC<PostDetailsProps> = ({}) => {
   const { postId } = params
   if (!postId) return <></>
 
-  const { data: post } = useGetPostQuery(postId)
-  const { data: repliedToPost } = useGetPostQuery(post?.repliedTo as string)
-  const { data: replies } = useGetPostRepliesQuery(postId)
+  const { data: post, isLoading: isLoadingPost } = useGetPostQuery(postId)
+  const { data: repliedToPost, isLoading: isLoadingReply } = useGetPostQuery(
+    post?.repliedTo as string
+  )
+  const { data: replies, isLoading: isLoadingReplies } =
+    useGetPostRepliesQuery(postId)
 
   let bottomMsgData
   if (repliedToPost)
@@ -91,6 +95,13 @@ export const PostDetails: React.FC<PostDetailsProps> = ({}) => {
         fullName: repliedToPost.composerFullName,
       },
     }
+
+  if (isLoadingPost && isLoadingReply)
+    return (
+      <section className="post-details">
+        <LoadingCircle />
+      </section>
+    )
 
   return (
     <section className="post-details">
@@ -107,11 +118,11 @@ export const PostDetails: React.FC<PostDetailsProps> = ({}) => {
         ) : null}
       </section>
       <TweetEdit />
-      {replies
-        ? replies.map((reply) => (
-            <PostPreviewItem key={reply._id} post={reply} />
-          ))
-        : null}
+      {replies ? (
+        replies.map((reply) => <PostPreviewItem key={reply._id} post={reply} />)
+      ) : (
+        <LoadingCircle />
+      )}
       {/* TODO: show as singulars */}
     </section>
   )

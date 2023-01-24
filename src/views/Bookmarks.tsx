@@ -1,4 +1,5 @@
 import React from 'react'
+import { LoadingCircle } from '../components/LoadingCircle'
 import { PostList } from '../components/PostList'
 import {
   useGetBookmarksFromUserQuery,
@@ -14,7 +15,7 @@ export const Bookmarks: React.FC<BookmarksProps> = ({}) => {
 
   return (
     <section className="bookmarks-view">
-      {bookmarks ? <PostList posts={bookmarks} /> : null}
+      {bookmarks ? <PostList posts={bookmarks} /> : <LoadingCircle />}
     </section>
   )
 }

@@ -125,11 +125,13 @@ export const apiSlice = createApi({
           const userId = userService.getLoggedInUser()._id
           const updatedPost = posts.find(({ _id }) => _id === post._id)
           if (!updatedPost) return
+          if (!userId) return //TODO: error
           updatedPost.likes[userId] = !updatedPost.likes[userId]
         }
 
         const update = (post: PostProps) => {
           const userId = userService.getLoggedInUser()._id
+          if (!userId) return //TODO: error
           post.likes[userId] = !post.likes[userId]
         }
 
@@ -141,7 +143,8 @@ export const apiSlice = createApi({
             'getTrendPosts',
             undefined,
             (trendSections) => {
-              const userId = userService.getLoggedInUser()._id
+              const userId = userService.getLoggedInUser()?._id
+              if (!userId) return //TODO: error
               trendSections.forEach(
                 (section: { title: string; posts: PostProps[] }) => {
                   const updatedPost = section.posts.find(

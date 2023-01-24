@@ -19,6 +19,7 @@ import { useProfileTab } from '../hooks/profile'
 import { EventBus } from '../services/eventbus.service'
 import { userService } from '../services/user.service'
 import { PostProps } from '../types/models'
+import { LoadingCircle } from '../components/LoadingCircle'
 
 interface ProfileProps {}
 
@@ -26,19 +27,20 @@ export const Profile: React.FC<ProfileProps> = ({}) => {
   const [register] = useProfileTab()
   const navigate = useNavigate()
   let params = useParams()
-  const { data: user } = useGetUserQuery(
-    params?.userId || userService.getLoggedInUser()._id
+  const { data: user, isFetching } = useGetUserQuery(
+    params?.userId || userService.getLoggedInUser()?._id
   )
 
   useEffect(() => {
-    if (params?.userId === userService.getLoggedInUser()._id) {
+    if (params?.userId === userService.getLoggedInUser()?._id) {
       navigate('/profile/tweets')
     }
   }, [params?.userId])
 
   return (
     <section className="profile-view">
-      {user ? (
+      {isFetching ? <LoadingCircle /> : null}
+      {user && !isFetching ? (
         <>
           <section className="profile-header">
             <section className="cover">
@@ -95,7 +97,7 @@ export const Profile: React.FC<ProfileProps> = ({}) => {
           </section>
 
           <section className="open-tab">
-            <WhoToFollow />
+            {userService.getLoggedInUser()?._id ? <WhoToFollow /> : null}
             {/* Add to whotofollow option to show description & change title if needed */}
             {/* <PostList /> */}
             <Outlet />
@@ -109,49 +111,47 @@ export const Profile: React.FC<ProfileProps> = ({}) => {
 export const TweetsSection: React.FC = () => {
   const params = useParams()
   const { data: user } = useGetUserQuery(
-    params?.userId || userService.getLoggedInUser()._id
+    params?.userId || userService.getLoggedInUser()?._id
   )
   if (!user?._id) return null
   const criteria = { user: user._id, filter: 'tweets' }
   const query = createSearchParams(criteria).toString()
   const { data: tweets } = useGetPostsQuery(query)
-  return tweets ? <PostList posts={tweets} /> : null
+  return tweets ? <PostList posts={tweets} /> : <LoadingCircle />
 }
 
 export const TweetsWithRepliesSection: React.FC = () => {
   const params = useParams()
   const { data: user } = useGetUserQuery(
-    params?.userId || userService.getLoggedInUser()._id
+    params?.userId || userService.getLoggedInUser()?._id
   )
   if (!user?._id) return null
   const criteria = { user: user._id, filter: 'replies' }
   const query = createSearchParams(criteria).toString()
   const { data: tweets } = useGetPostsQuery(query)
-  return tweets ? <PostList posts={tweets} /> : null
+  return tweets ? <PostList posts={tweets} /> : <LoadingCircle />
 }
 
 export const MediaTweets: React.FC = () => {
   const params = useParams()
   const { data: user } = useGetUserQuery(
-    params?.userId || userService.getLoggedInUser()._id
+    params?.userId || userService.getLoggedInUser()?._id
   )
   if (!user?._id) return null
   const criteria = { user: user._id, filter: 'media' }
   const query = createSearchParams(criteria).toString()
   const { data: tweets } = useGetPostsQuery(query)
-
-  //TODO: media not working - fix backend (currently checking for existence but needs to check for length/regex for url)
-  return tweets ? <PostList posts={tweets} /> : null
+  return tweets ? <PostList posts={tweets} /> : <LoadingCircle />
 }
 
 export const LikedTweets: React.FC = () => {
   const params = useParams()
   const { data: user } = useGetUserQuery(
-    params?.userId || userService.getLoggedInUser()._id
+    params?.userId || userService.getLoggedInUser()?._id
   )
   if (!user?._id) return null
   const criteria = { user: user._id, filter: 'likes' }
   const query = createSearchParams(criteria).toString()
   const { data: tweets } = useGetPostsQuery(query)
-  return tweets ? <PostList posts={tweets} /> : null
+  return tweets ? <PostList posts={tweets} /> : <LoadingCircle />
 }

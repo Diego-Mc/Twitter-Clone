@@ -100,7 +100,7 @@ function saveLocalUser(user: userInterface) {
 
 function getLoggedInUser() {
   const sessionUser = sessionStorage.getItem(STORAGE_KEY_LOGGED_IN_USER)
-  if (!sessionUser) throw new Error('No logged in user in sessionStorage')
+  if (!sessionUser) return null
   return JSON.parse(sessionUser)
 }
 
