@@ -22,11 +22,6 @@
   }
 
   @include for-mobile-layout {
-    // grid-template-columns:
-    //   minmax($sitePadding, 1fr)
-    //   minmax(auto, $mobile-breakpoint)
-    //   minmax($sitePadding, 1fr);
-    // background-color: orange;
     grid-template-columns: minmax(0, $main-content-width);
     grid-template-rows: min-content 1fr min-content;
     grid-template-areas: 'header' 'content' 'sidebar';
@@ -136,6 +131,11 @@
     .main-header {
       grid-template-columns: $sidebar-width-l $main-content-width $feed-aside-width-l;
 
+      .logo-wrapper {
+        justify-content: flex-start;
+        padding-left: 0;
+      }
+
       .logo-container {
         transform: translateX(calc(24px - 50% + 15px));
         margin-inline: unset;
@@ -173,7 +173,8 @@
       }
 
       .user-preview {
-        max-width: 90%;
+        max-width: 100%;
+        margin-right: -6px;
         padding: 12px;
         .preview-content {
           display: flex;

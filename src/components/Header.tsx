@@ -17,8 +17,10 @@ export const Header: React.FC<HeaderProps> = ({}) => {
 
   return (
     <header className={`main-header ${routeName}`}>
-      <div className="logo-container" onClick={() => navigate('/')}>
-        <LogoIcon />
+      <div className="logo-wrapper">
+        <div className="logo-container" onClick={() => navigate('/')}>
+          <LogoIcon />
+        </div>
       </div>
       {routeName === 'explore' ? (
         <>
