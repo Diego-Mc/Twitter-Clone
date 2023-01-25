@@ -14,6 +14,7 @@ import {
 } from '../features/api/api.slice'
 import { PostProps } from '../types/models'
 import { uploadImg } from '../services/upload.service'
+import GifPicker, { TenorImage } from 'gif-picker-react'
 
 interface TweetEditBaseProps {
   setFocusRef?: (el: HTMLDivElement) => void
@@ -28,7 +29,8 @@ export const TweetEditBase: React.FC<TweetEditBaseProps> = ({
 }) => {
   const contentTextRef = useRef<HTMLDivElement | null>(null)
   const imgUploadRef = useRef<HTMLInputElement | null>(null)
-  const [imgUrl, setImgUrl] = useState<null | any>(null)
+  const [imgUrl, setImgUrl] = useState<null | string>(null)
+  const [gifPopup, setGifPopup] = useState(false)
   const { data: user } = useGetLoggedInUserQuery()
 
   const [addPost] = useAddPostMutation()
@@ -46,8 +48,8 @@ export const TweetEditBase: React.FC<TweetEditBaseProps> = ({
 
     const post = postService.getEmptyPost()
     post.text = tweetText
-    console.log(imgUrl?.url)
-    if (imgUrl) post.imgUrl = imgUrl.url
+    console.log(imgUrl)
+    if (imgUrl) post.imgUrl = imgUrl
     post.composerId = user._id as string
 
     replyingTo ? addReply({ post, replyingTo }) : addPost({ ...post })
@@ -59,7 +61,7 @@ export const TweetEditBase: React.FC<TweetEditBaseProps> = ({
   const handleUpload = async (ev: any) => {
     //TODO: check size and type
     const imgUrl = await uploadImg(ev.target.files)
-    setImgUrl(imgUrl)
+    setImgUrl(imgUrl.url)
   }
 
   const handleDragEnter = (ev: any) => {
@@ -78,7 +80,21 @@ export const TweetEditBase: React.FC<TweetEditBaseProps> = ({
     console.log(JSON.stringify(ev.dataTransfer.files[0].name))
     //TODO: check size and type
     const imgUrl = await uploadImg(ev.dataTransfer.files)
-    setImgUrl(imgUrl)
+    setImgUrl(imgUrl.url)
+  }
+
+  const handleGifIconClick = () => {
+    setGifPopup(true)
+  }
+
+  const closeGifPopup = (ev: React.MouseEvent) => {
+    ev.stopPropagation()
+    setGifPopup(false)
+  }
+
+  const handleGifSelect = (gifObj: TenorImage) => {
+    setImgUrl(gifObj.url)
+    setGifPopup(false)
   }
 
   return (
@@ -115,19 +131,35 @@ export const TweetEditBase: React.FC<TweetEditBaseProps> = ({
             </form>
             <ImgIcon />
           </div>
-          <div className="icon-wrap blue">
+          <div className="icon-wrap blue" onClick={handleGifIconClick}>
             <GifIcon />
+            {gifPopup ? (
+              <>
+                <div
+                  className="gif-picker-wrapper"
+                  onClick={closeGifPopup}></div>
+                <div
+                  className="wrapper-stop-propagation"
+                  onClick={(e) => e.stopPropagation()}>
+                  <GifPicker
+                    onGifClick={handleGifSelect}
+                    tenorApiKey={import.meta.env.VITE_GIF_KEY}
+                  />
+                </div>
+              </>
+            ) : null}
           </div>
-          <div className="icon-wrap blue">
+
+          <div className="icon-wrap blue disabled" title="[WIP]">
             <PollIcon />
           </div>
-          <div className="icon-wrap blue">
+          <div className="icon-wrap blue disabled" title="[WIP]">
             <EmojiIcon />
           </div>
-          <div className="icon-wrap blue">
+          <div className="icon-wrap blue disabled" title="[WIP]">
             <DateIcon />
           </div>
-          <div className="icon-wrap blue">
+          <div className="icon-wrap blue disabled" title="[WIP]">
             <LocationIcon />
           </div>
         </div>

@@ -1,5 +1,11 @@
 import React, { useState } from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
+import {
+  Link,
+  NavLink,
+  useLocation,
+  useNavigate,
+  useParams,
+} from 'react-router-dom'
 import { ReactComponent as HomeIcon } from '../assets/icons/home.svg'
 import { ReactComponent as HomeIconFilled } from '../assets/icons/home_filled.svg'
 import { ReactComponent as ExploreIcon } from '../assets/icons/explore.svg'
@@ -16,14 +22,27 @@ import {
   useGetLoggedInUserQuery,
   useLogoutMutation,
 } from '../features/api/api.slice'
+import { useGetRouteName } from '../hooks/useGetRouteName'
 
 interface NavButtonProps {
   type: string
   to: string
-  end?: boolean
+  disableOnParams?: boolean
 }
 
-const NavButton: React.FC<NavButtonProps> = ({ type, to, end }) => {
+const NavButton: React.FC<NavButtonProps> = ({
+  type,
+  to,
+  disableOnParams = false,
+}) => {
+  const routeName = useGetRouteName()
+
+  const params = useLocation()
+
+  const force = disableOnParams
+    ? !params.pathname.split('/')[3] && routeName === type
+    : routeName === type
+
   const icons = {
     home: <HomeIcon />,
     explore: <ExploreIcon />,
@@ -41,14 +60,10 @@ const NavButton: React.FC<NavButtonProps> = ({ type, to, end }) => {
   }
 
   return (
-    <NavLink to={to} className="btn nav-btn" end={end}>
-      {({ isActive }) => (
-        <>
-          {getIcon(isActive)}
-          <p className={isActive ? 'active' : ''}>{type}</p>
-        </>
-      )}
-    </NavLink>
+    <Link to={to} className="btn nav-btn">
+      {getIcon(force)}
+      <p className={force ? 'active' : ''}>{type}</p>
+    </Link>
   )
 }
 
@@ -72,7 +87,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ onComposeTweet }) => {
             <NavButton to="/" type="home" />
             <NavButton to="/explore" type="explore" />
             <NavButton to="/bookmarks" type="bookmarks" />
-            <NavButton to="/profile" type="profile" end />
+            <NavButton to="/profile" type="profile" disableOnParams={true} />
           </div>
           <button
             className="tweet-btn primary pill"

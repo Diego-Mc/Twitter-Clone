@@ -23,10 +23,10 @@
     overflow: auto;
     &:focus-visible {
       outline: none;
-      cursor: auto !important;
+      cursor: text;
     }
     &:empty {
-      cursor: pointer;
+      cursor: text;
       &:after {
         content: "What's happening?";
         color: var(--dark-gray);
@@ -148,4 +148,17 @@
       }
     }
   }
+}
+
+// EXTRAS (OPTION BTNS)
+.gif-picker-wrapper {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+}
+
+.wrapper-stop-propagation {
+  position: absolute;
+  transform: translateY(calc(50% + 10px));
+  z-index: 10001;
 }
