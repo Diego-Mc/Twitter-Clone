@@ -83,7 +83,7 @@
     transform: translateX(-50%);
     top: $header-height;
     padding: 16px;
-    background-color: white;
+    background-color: var(--white);
     border-radius: 16px;
     max-width: 80vw;
     min-width: 600px;
@@ -147,6 +147,16 @@
         }
       }
     }
+    @media screen and (max-width: 760px) {
+      grid-template-areas: 'close close' 'img content' '. options';
+      left: 0;
+      right: 0;
+      transform: unset;
+      top: 0;
+      border-radius: 0;
+      max-width: 100%;
+      min-width: 300px;
+    }
   }
 }
 
@@ -161,4 +171,8 @@
   position: absolute;
   transform: translateY(calc(50% + 10px));
   z-index: 10001;
+
+  @media screen and (max-width: 760px) {
+    transform: translate(calc(50% - 10px), calc(50% + 10px));
+  }
 }

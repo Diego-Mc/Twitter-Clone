@@ -8,6 +8,7 @@
   display: grid;
   grid-template-columns: 1fr $sidebar-width-xs $main-content-width $feed-aside-width-s 1fr;
   grid-template-areas: '. . content content .';
+  z-index: 990;
   .content-wrapper {
     grid-area: content;
     display: flex;

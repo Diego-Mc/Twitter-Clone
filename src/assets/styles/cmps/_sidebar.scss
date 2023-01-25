@@ -2,6 +2,8 @@
   position: fixed;
   top: $header-height;
   height: calc(100% - $header-height);
+  z-index: 100;
+  background-color: var(--white);
 
   display: flex;
   flex-direction: column;
