@@ -1,5 +1,4 @@
 import React from 'react'
-import { useLocation } from 'react-router-dom'
 import { useGetLoggedInUserQuery } from '../features/api/api.slice'
 import { useGetRouteName } from '../hooks/useGetRouteName'
 import { LoginBlock } from './LoginBlock'

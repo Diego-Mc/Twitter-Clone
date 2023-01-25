@@ -1,5 +1,5 @@
 import React from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { PostList } from '../components/PostList'
 import {
   PostPreview,
@@ -18,8 +18,19 @@ import { Mention } from '../components/Mention'
 import { postService } from '../services/post.service'
 import { PostActions } from '../components/PostActions'
 import { LoadingCircle } from '../components/LoadingCircle'
+import { renderToString } from 'react-dom/server'
+import { utilService } from '../services/util.service'
+import { useFormatPost } from '../hooks/useFormatPost'
 
 export const MainPost: React.FC<PostPreviewItemProps> = ({ post, msg }) => {
+  const [formatPost] = useFormatPost()
+  const navigate = useNavigate()
+
+  const goto = (url: string, ev?: React.MouseEvent) => {
+    if (ev) ev.stopPropagation()
+    navigate(url)
+  }
+
   return (
     <article className="post-preview main">
       {msg ? (
@@ -31,7 +42,11 @@ export const MainPost: React.FC<PostPreviewItemProps> = ({ post, msg }) => {
       <section className="composer-details">
         <img src={post.composerImgUrl} alt="" className="user-img" />
         <span className="header">
-          <span className="full-name link">{post.composerFullName}</span>
+          <span
+            className="full-name link"
+            onClick={(ev) => goto(`/profile/${post.userId}`, ev)}>
+            {post.composerFullName}
+          </span>
           <span className="username">@{post.composerUsername}</span>
         </span>
       </section>
@@ -43,11 +58,7 @@ export const MainPost: React.FC<PostPreviewItemProps> = ({ post, msg }) => {
       ) : null}
 
       <div className="post-content">
-        <p
-          className="post-text"
-          dangerouslySetInnerHTML={{
-            __html: postService.generatePostHtml(post),
-          }}></p>
+        <p className="post-text">{formatPost(post)}</p>
         {post.imgUrl ? (
           <img src={post.imgUrl} alt="" className="post-img" />
         ) : null}

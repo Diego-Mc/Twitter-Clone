@@ -43,6 +43,7 @@ export const PostActions: React.FC<PostActionsProps> = ({ post }) => {
   const handleLike = (ev: React.MouseEvent) => {
     ev.stopPropagation()
     // console.log('dffdsfs', params, location.pathname.split('/')[3])
+    //TODO: what's going on here??
     let searchObj: any = undefined
     if (route === 'search') searchObj = searchParams.toString()
     else if (route === 'profile') {

@@ -1,4 +1,4 @@
-import React, { MouseEventHandler, useState } from 'react'
+import React, { MouseEventHandler, useRef, useState } from 'react'
 
 import { ReactComponent as CommentFilledIcon } from '../assets/icons/comment_filled.svg'
 import {
@@ -10,11 +10,14 @@ import { PostProps, UserProps } from '../types/models'
 import { utilService } from '../services/util.service'
 import { TweetEditPopup } from './TweetEditPopup'
 import { userService } from '../services/user.service'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { RootState } from '../features/store'
 import { Mention } from './Mention'
 import { PostActions } from './PostActions'
 import { postService } from '../services/post.service'
+import { renderToStaticMarkup } from 'react-dom/server'
+import { ReactDOM } from 'react'
+import { useFormatPost } from '../hooks/useFormatPost'
 
 export interface PostPreviewItemProps {
   post: PostProps
@@ -41,6 +44,8 @@ export const PostPreviewItem: React.FC<PostPreviewItemProps> = ({
     if (ev) ev.stopPropagation()
     navigate(url)
   }
+
+  const [formatPost] = useFormatPost()
 
   return (
     <>
@@ -84,11 +89,7 @@ export const PostPreviewItem: React.FC<PostPreviewItemProps> = ({
             <span className="time link">6h</span>
           </span>
           <div className="post-content">
-            <p
-              className="post-text"
-              dangerouslySetInnerHTML={{
-                __html: postService.generatePostHtml(post),
-              }}></p>
+            <p className="post-text">{formatPost(post)}</p>
             {post.imgUrl ? (
               <img src={post.imgUrl} alt="" className="post-img" />
             ) : null}
