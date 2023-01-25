@@ -10,6 +10,7 @@ import {
   useParams,
 } from 'react-router-dom'
 import {
+  useFollowUserMutation,
   useGetLoggedInUserQuery,
   useGetPostQuery,
   useGetPostsQuery,
@@ -26,6 +27,7 @@ interface ProfileProps {}
 export const Profile: React.FC<ProfileProps> = ({}) => {
   const [register] = useProfileTab()
   const navigate = useNavigate()
+  const [followUser] = useFollowUserMutation()
   let params = useParams()
   const { data: user, isFetching } = useGetUserQuery(
     params?.userId || userService.getLoggedInUser()?._id
@@ -36,6 +38,10 @@ export const Profile: React.FC<ProfileProps> = ({}) => {
       navigate('/profile/tweets', { replace: true })
     }
   }, [params?.userId])
+
+  const handleFollow = () => {
+    followUser(user?._id)
+  }
 
   return (
     <section className="profile-view">
@@ -50,11 +56,27 @@ export const Profile: React.FC<ProfileProps> = ({}) => {
             <section className="details">
               <section className="header">
                 <img src={user.imgUrl} className="user-img" />
-                <button
-                  className="pill white setup-btn"
-                  onClick={() => EventBus.$emit('setup-profile')}>
-                  Set up profile
-                </button>
+                {user._id === userService.getLoggedInUser()._id ? (
+                  <button
+                    className="pill white setup-btn"
+                    onClick={() => EventBus.$emit('setup-profile')}>
+                    Set up profile
+                  </button>
+                ) : user.followers.includes(
+                    userService.getLoggedInUser()._id
+                  ) ? (
+                  <button
+                    className="pill white setup-btn"
+                    onClick={handleFollow}>
+                    Following
+                  </button>
+                ) : (
+                  <button
+                    className="follow-btn black pill"
+                    onClick={handleFollow}>
+                    Follow
+                  </button>
+                )}
               </section>
 
               <section className="info">

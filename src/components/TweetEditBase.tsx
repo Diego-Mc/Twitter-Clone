@@ -60,7 +60,7 @@ export const TweetEditBase: React.FC<TweetEditBaseProps> = ({
 
   const handleUpload = async (ev: any) => {
     //TODO: check size and type
-    const imgUrl = await uploadImg(ev.target.files)
+    const imgUrl = await uploadImg(ev.target.files[0])
     setImgUrl(imgUrl.url)
   }
 
@@ -79,7 +79,7 @@ export const TweetEditBase: React.FC<TweetEditBaseProps> = ({
     contentTextRef.current?.classList.remove('dragover')
     console.log(JSON.stringify(ev.dataTransfer.files[0].name))
     //TODO: check size and type
-    const imgUrl = await uploadImg(ev.dataTransfer.files)
+    const imgUrl = await uploadImg(ev.dataTransfer.files[0])
     setImgUrl(imgUrl.url)
   }
 
@@ -99,7 +99,7 @@ export const TweetEditBase: React.FC<TweetEditBaseProps> = ({
 
   return (
     <>
-      <img src="/default-user-img.png" alt="" className="user-img" />
+      <img src={user?.imgUrl || '/default-user-img.png'} className="user-img" />
       <div
         onDragEnter={handleDragEnter}
         onDragLeave={handleDragLeave}

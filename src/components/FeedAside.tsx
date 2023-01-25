@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom'
 import { useGetLoggedInUserQuery } from '../features/api/api.slice'
 import { useGetRouteName } from '../hooks/useGetRouteName'
 import { LoginBlock } from './LoginBlock'
+import { RandomRegister } from './random-register-block'
 import { SearchBar } from './SearchBar'
 import { Trends } from './Trends'
 import { WhoToFollow } from './WhoToFollow'
@@ -27,7 +28,10 @@ export const FeedAside: React.FC<FeedAsideProps> = ({}) => {
           </>
         )
       ) : (
-        <LoginBlock />
+        <>
+          <LoginBlock />
+          <RandomRegister />
+        </>
       )}
     </aside>
   )

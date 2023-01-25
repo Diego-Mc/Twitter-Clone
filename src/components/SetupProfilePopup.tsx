@@ -163,7 +163,7 @@ export const SetupProfilePopup: React.FC<SetupProfilePopupProps> = ({
   const handleUpload = async (ev: any) => {
     //TODO: check size and type
     setScreenCounter((prev) => prev + 1)
-    const imgUrl = await uploadImg(ev.target.files)
+    const imgUrl = await uploadImg(ev.target.files[0])
     setImgUrl(imgUrl)
   }
 
@@ -183,7 +183,7 @@ export const SetupProfilePopup: React.FC<SetupProfilePopupProps> = ({
     console.log(JSON.stringify(ev.dataTransfer.files[0].name))
     //TODO: check size and type
     setScreenCounter((prev) => prev + 1)
-    const imgUrl = await uploadImg(ev.dataTransfer.files)
+    const imgUrl = await uploadImg(ev.dataTransfer.files[0])
     setImgUrl(imgUrl)
   }
 

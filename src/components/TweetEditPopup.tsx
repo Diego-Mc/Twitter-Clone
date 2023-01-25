@@ -7,13 +7,18 @@ import { Mention } from './Mention'
 
 interface PostToReplyProps {
   post: PostProps
+  onComposeClose?: () => void
 }
 
-export const PostToReply: React.FC<PostToReplyProps> = ({ post }) => {
+export const PostToReply: React.FC<PostToReplyProps> = ({
+  post,
+  onComposeClose,
+}) => {
   return (
     <>
-      <PostPreviewItem post={post} />
+      <PostPreviewItem onComposeClose={onComposeClose} post={post} />
       <PostPreviewItem
+        onComposeClose={onComposeClose}
         post={post}
         msg={{
           info: {
@@ -58,7 +63,9 @@ export const TweetEditPopup: React.FC<TweetEditPopupProps> = ({
           </div>
         </div>
         <section className="post-group">
-          {replyingTo ? <PostToReply post={replyingTo} /> : null}
+          {replyingTo ? (
+            <PostToReply post={replyingTo} onComposeClose={onComposeClose} />
+          ) : null}
         </section>
         <TweetEditBase
           setFocusRef={setFocusRef}

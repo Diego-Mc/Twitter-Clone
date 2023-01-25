@@ -273,9 +273,12 @@ export const apiSlice = createApi({
       query: () => `/users/logged-in`,
       providesTags: ['LoggedInUser'],
     }),
-    getUser: builder.query<UserProps, void>({
+    getUser: builder.query<UserProps, string>({
       query: (userId) => `/users/${userId}`,
       providesTags: ['Users'],
+    }),
+    getUserId: builder.query<string, string>({
+      query: (username) => `/users/get-id/${username}`,
     }),
     getRandomUsersToFollow: builder.query<UserProps[], void>({
       query: () => `/users/random-to-follow`,
@@ -368,6 +371,7 @@ export const { useGetTrendsQuery, useGetTrendPostsQuery } = apiSlice
 export const {
   useGetLoggedInUserQuery,
   useGetUserQuery,
+  useGetUserIdQuery,
   useGetRandomUsersToFollowQuery,
   useFollowUserMutation,
   useUploadProfilePicMutation,

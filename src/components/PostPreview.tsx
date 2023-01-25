@@ -26,24 +26,27 @@ export interface PostPreviewItemProps {
       fullName: string | undefined
     }
   }
+  onComposeClose?: () => void
 }
 
 export const PostPreviewItem: React.FC<PostPreviewItemProps> = ({
   post,
   msg,
+  onComposeClose,
 }) => {
   const navigate = useNavigate()
 
-  const openProfile = (ev: React.MouseEvent) => {
-    ev.stopPropagation()
-    navigate(`/profile/${post.userId}`)
+  const goto = (url: string, ev?: React.MouseEvent) => {
+    if (onComposeClose) onComposeClose()
+    if (ev) ev.stopPropagation()
+    navigate(url)
   }
 
   return (
     <>
       <article
         className="post-preview"
-        onClick={() => navigate(`/post/${post._id}`)}>
+        onClick={() => goto(`/post/${post._id}`)}>
         {msg ? (
           msg.location === 'top' ? (
             <div className="msg-top ">
@@ -53,7 +56,10 @@ export const PostPreviewItem: React.FC<PostPreviewItemProps> = ({
           ) : (
             <p className="group-msg msg-bottom trunc">
               Replying to&nbsp;
-              <Mention username={msg.info.username as string} />
+              <Mention
+                username={msg.info.username as string}
+                onNavigate={onComposeClose}
+              />
             </p>
           )
         ) : (
@@ -68,7 +74,9 @@ export const PostPreviewItem: React.FC<PostPreviewItemProps> = ({
         </section>
         <section className="right-wrapper ">
           <span className="header trunc">
-            <span className="full-name link trunc" onClick={openProfile}>
+            <span
+              className="full-name link trunc"
+              onClick={(ev) => goto(`/profile/${post.userId}`, ev)}>
               {post.composerFullName}
             </span>
             <span className="username trunc">@{post.composerUsername}</span>

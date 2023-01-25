@@ -11,9 +11,8 @@ export const UserPreview: React.FC<UserPreviewProps> = ({ user }) => {
   const [followUser] = useFollowUserMutation()
   const navigate = useNavigate()
 
-  const handleFollow = async () => {
-    const res = await followUser(user._id)
-    console.log(res)
+  const handleFollow = () => {
+    followUser(user._id)
   }
 
   const openProfile = (ev: React.MouseEvent) => {
