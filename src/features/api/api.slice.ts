@@ -286,7 +286,7 @@ export const apiSlice = createApi({
         url: `/users/${userToFollowId}/follow`,
         method: 'PATCH',
       }),
-      invalidatesTags: ['ToFollow'],
+      invalidatesTags: ['ToFollow', 'Users'],
     }),
     uploadProfilePic: builder.mutation({
       query: (url) => ({

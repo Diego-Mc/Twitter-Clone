@@ -33,7 +33,7 @@ export const Profile: React.FC<ProfileProps> = ({}) => {
 
   useEffect(() => {
     if (params?.userId === userService.getLoggedInUser()?._id) {
-      navigate('/profile/tweets')
+      navigate('/profile/tweets', { replace: true })
     }
   }, [params?.userId])
 

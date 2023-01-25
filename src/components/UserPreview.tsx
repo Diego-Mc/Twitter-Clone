@@ -32,7 +32,7 @@ export const UserPreview: React.FC<UserPreviewProps> = ({ user }) => {
             <h5 className="full-name link trunc" onClick={openProfile}>
               {user?.fullName}
             </h5>
-            <p className="username">@{user?.username}</p>
+            <p className="username trunc">@{user?.username}</p>
           </div>
           <button className="follow-btn black pill" onClick={handleFollow}>
             Follow

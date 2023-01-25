@@ -20,7 +20,7 @@ export const TrendPreview: React.FC<TrendPreviewProps> = ({ tag }) => {
   return (
     <article className="trend-preview" onClick={handleTrendSelect}>
       <small className="tag">Trending</small>
-      <h6 className="trend-name">{tag.tagName}</h6>
+      <h6 className="trend-name trunc">{tag.tagName}</h6>
       <small className="tweet-count">
         {Object.keys(tag.posts).length} Tweets
       </small>

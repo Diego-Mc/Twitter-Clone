@@ -46,12 +46,12 @@ export const PostPreviewItem: React.FC<PostPreviewItemProps> = ({
         onClick={() => navigate(`/post/${post._id}`)}>
         {msg ? (
           msg.location === 'top' ? (
-            <div className="msg-top">
+            <div className="msg-top ">
               <CommentFilledIcon className="group-icon" />
-              <p className="group-msg">{msg.info.fullName} replied</p>
+              <p className="group-msg trunc">{msg.info.fullName} replied</p>
             </div>
           ) : (
-            <p className="group-msg msg-bottom">
+            <p className="group-msg msg-bottom trunc">
               Replying to&nbsp;
               <Mention username={msg.info.username as string} />
             </p>
@@ -66,12 +66,12 @@ export const PostPreviewItem: React.FC<PostPreviewItemProps> = ({
           <img src={post.composerImgUrl} alt="" className="user-img" />
           <div className="pipe"></div>
         </section>
-        <section className="right-wrapper">
-          <span className="header">
-            <span className="full-name link" onClick={openProfile}>
+        <section className="right-wrapper ">
+          <span className="header trunc">
+            <span className="full-name link trunc" onClick={openProfile}>
               {post.composerFullName}
             </span>
-            <span className="username">@{post.composerUsername}</span>
+            <span className="username trunc">@{post.composerUsername}</span>
             <span className="divider">·</span>
             <span className="time link">6h</span>
           </span>

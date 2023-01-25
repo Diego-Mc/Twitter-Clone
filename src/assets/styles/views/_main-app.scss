@@ -28,7 +28,7 @@
 
     .main-header {
       grid-template-columns: minmax(0, $main-content-width);
-      .logo-container {
+      .logo-wrapper {
         display: none;
       }
     }
@@ -37,7 +37,7 @@
       display: none;
     }
     .main-header {
-      .search-bar {
+      & > .search-bar {
         display: none;
       }
     }
