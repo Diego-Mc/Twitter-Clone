@@ -22,6 +22,7 @@ import {
   useSearchParams,
 } from 'react-router-dom'
 import { useGetRouteName } from '../hooks/useGetRouteName'
+import { toast } from 'react-hot-toast'
 
 interface PostActionsProps {
   post: PostProps
@@ -72,8 +73,16 @@ export const PostActions: React.FC<PostActionsProps> = ({ post }) => {
     EventBus.$emit('comment', post)
   }
 
-  const handleShare = (ev: React.MouseEvent) => {
+  const handleShare = async (ev: React.MouseEvent) => {
     ev.stopPropagation()
+    const postUrl = window.location.origin + '/post/' + post._id
+    const copyPrms = navigator.clipboard.writeText(postUrl)
+    toast.promise(copyPrms, {
+      loading: 'Copying...',
+      success: 'Copied',
+      error: 'Unable to copy',
+    })
+    await copyPrms
   }
 
   const handleBookmark = (ev: React.MouseEvent) => {

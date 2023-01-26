@@ -24,6 +24,7 @@ import { RegisterPopup } from './components/RegisterPopup'
 import { LoginBottomCTA } from './components/LoginBottomCTA'
 import { SetupProfilePopup } from './components/SetupProfilePopup'
 import { usePrefetchImmediately } from './hooks/usePrefetchImmediately'
+import { Toaster } from 'react-hot-toast'
 
 function App() {
   const [loginPopup, setLoginPopup] = useState(false)
@@ -68,6 +69,8 @@ function App() {
   return (
     <BrowserRouter>
       <div className="main-app">
+        <Toaster />
+
         {registerPopup ? (
           <RegisterPopup onComposeClose={() => setRegisterPopup(false)} />
         ) : null}

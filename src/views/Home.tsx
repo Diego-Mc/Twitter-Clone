@@ -14,7 +14,7 @@ export const Home: React.FC<HomeProps> = ({}) => {
   return (
     <main className="home-view">
       <TweetEdit />
-      <section className="show-more">Show 35 Tweets</section>
+      {/* <section className="show-more">Show 35 Tweets</section> //TODO: add this one day... */}
       {posts ? <PostList posts={posts} /> : <LoadingCircle />}
     </main>
   )

@@ -167,10 +167,14 @@
 }
 
 // EXTRAS (OPTION BTNS)
+
 .gif-picker-wrapper {
   position: fixed;
   inset: 0;
   z-index: 10000;
+  @media screen and (max-width: 760px) {
+    background-color: rgba(0, 0, 0, 0.4);
+  }
 }
 
 .wrapper-stop-propagation {
@@ -179,6 +183,9 @@
   z-index: 10001;
 
   @media screen and (max-width: 760px) {
-    transform: translate(calc(50% - 10px), calc(50% + 10px));
+    position: fixed;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
   }
 }

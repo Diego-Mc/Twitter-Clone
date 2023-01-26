@@ -15,6 +15,7 @@ import {
 import { PostProps } from '../types/models'
 import { uploadImg } from '../services/upload.service'
 import GifPicker, { TenorImage } from 'gif-picker-react'
+import { toast } from 'react-hot-toast'
 
 interface TweetEditBaseProps {
   setFocusRef?: (el: HTMLDivElement) => void
@@ -41,7 +42,7 @@ export const TweetEditBase: React.FC<TweetEditBaseProps> = ({
     contentTextRef.current = el
   }
 
-  const handleTweetPost = () => {
+  const handleTweetPost = async () => {
     if (!contentTextRef.current) return
     const tweetText = contentTextRef.current.innerText
     if (!tweetText || !user) return
@@ -51,10 +52,22 @@ export const TweetEditBase: React.FC<TweetEditBaseProps> = ({
     if (imgUrl) post.imgUrl = imgUrl
     post.composerId = user._id as string
 
-    replyingTo ? addReply({ post, replyingTo }) : addPost({ post })
-
     contentTextRef.current.innerText = ''
     if (onComposeClose) onComposeClose()
+
+    let toastId: string
+
+    if (replyingTo) {
+      const addReplyPrms = addReply({ post, replyingTo }).unwrap()
+      toastId = toast.loading('Uploading...')
+      await addReplyPrms
+    } else {
+      const addReplyPrms = addPost({ post }).unwrap()
+      toastId = toast.loading('Uploading...')
+      await addReplyPrms
+    }
+
+    toast.dismiss(toastId)
   }
 
   const handleUpload = async (ev: any) => {

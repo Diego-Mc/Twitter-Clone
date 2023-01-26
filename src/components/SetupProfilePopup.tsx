@@ -11,6 +11,7 @@ import {
 } from '../features/api/api.slice'
 import { UserProps } from '../types/models'
 import { userService } from '../services/user.service'
+import { toast } from 'react-hot-toast'
 
 interface uploadPicStageProps {
   uploadAreaRef: React.MutableRefObject<HTMLDivElement | null>
@@ -156,16 +157,24 @@ export const SetupProfilePopup: React.FC<SetupProfilePopupProps> = ({
   const { data: user } = useGetUserQuery(userService.getLoggedInUser()?._id)
   const [description, setDescription] = useState(user?.description || '')
 
-  const setImgUrl = ({ url }: { url: string }) => {
-    if (screenCounter === 0) uploadProfilePic(url)
-    if (screenCounter === 1) uploadCoverPic(url)
+  const setImgUrl = ({ url }: { url?: string } = {}) => {
+    if (screenCounter === 0) url && uploadProfilePic(url)
+    if (screenCounter === 1) url && uploadCoverPic(url)
   }
 
   const handleUpload = async (ev: any) => {
     //TODO: check size and type
+    if (!ev.target.files[0]) return
     setScreenCounter((prev) => prev + 1)
-    const imgUrl = await uploadImg(ev.target.files[0])
-    setImgUrl(imgUrl)
+    const imgUrl = uploadImg(ev.target.files[0])
+
+    toast.promise(imgUrl, {
+      loading: 'Uploading...',
+      success: 'Successfully uploaded',
+      error: 'Unable to upload',
+    })
+
+    setImgUrl(await imgUrl)
   }
 
   const handleDragEnter = (ev: any) => {
@@ -181,17 +190,29 @@ export const SetupProfilePopup: React.FC<SetupProfilePopupProps> = ({
   const handleDrop = async (ev: any) => {
     ev.preventDefault()
     uploadAreaRef.current?.classList.remove('dragover')
-    console.log(JSON.stringify(ev.dataTransfer.files[0].name))
+    if (!ev.dataTransfer.files[0]) return
     //TODO: check size and type
     setScreenCounter((prev) => prev + 1)
-    const imgUrl = await uploadImg(ev.dataTransfer.files[0])
-    setImgUrl(imgUrl)
+    const imgUrl = uploadImg(ev.dataTransfer.files[0])
+
+    toast.promise(imgUrl, {
+      loading: 'Uploading...',
+      success: 'Successfully uploaded',
+      error: 'Unable to upload',
+    })
+
+    setImgUrl(await imgUrl)
   }
 
   const handleDescriptionSubmit = () => {
-    console.log(description, 'dfsff')
+    const descriptionPrms = updateDescription(description).unwrap()
 
-    updateDescription(description)
+    toast.promise(descriptionPrms, {
+      loading: 'Updating description...',
+      success: 'Successfully updated',
+      error: 'Unable to update description',
+    })
+
     setScreenCounter((prev) => prev + 1)
   }
 
