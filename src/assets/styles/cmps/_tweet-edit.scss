@@ -9,32 +9,55 @@
   .user-img {
     grid-area: img;
   }
-  .content {
+  .content-area {
     grid-area: content;
-    font-size: rem(20px);
-    font-family: chirp;
-    display: flex;
-    align-items: center;
-    padding-block: 12px;
-    height: fit-content;
-    white-space: pre;
-    display: inline-block;
-    max-height: 70vh;
-    overflow: auto;
-    &:focus-visible {
-      outline: none;
-      cursor: text;
-    }
-    &:empty {
-      cursor: text;
-      &:after {
-        content: "What's happening?";
-        color: var(--dark-gray);
+    cursor: text;
+    .content {
+      font-size: rem(20px);
+      font-family: chirp;
+      display: flex;
+      align-items: center;
+      padding-block: 12px;
+      height: fit-content;
+      // white-space: pre;
+      display: inline-block;
+      max-height: 70vh;
+      overflow: auto;
+      &:focus-visible {
+        outline: none;
       }
+      &:empty {
+        &:after {
+          content: "What's happening?";
+          color: var(--dark-gray);
+        }
+      }
+    }
 
-      ~ .options .tweet-btn {
-        opacity: 0.5;
-        cursor: not-allowed;
+    .content-img {
+      max-height: 30vh;
+      object-fit: contain;
+      object-position: top left;
+      width: 100%;
+      max-width: 100%;
+      position: relative;
+      .icon-wrap {
+        position: absolute;
+        top: 0;
+        left: 0;
+        margin: 8px;
+        z-index: 10;
+        color: var(--white);
+        background-color: rgba(0, 0, 0, 0.4);
+        @media (hover: hover) {
+          &:hover {
+            background-color: var(--black-hover);
+          }
+        }
+      }
+      img {
+        border-radius: 16px;
+        width: fit-content;
       }
     }
 
@@ -66,6 +89,10 @@
     .tweet-btn {
       height: 36px;
       padding-block: 0;
+      &.disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
     }
   }
 

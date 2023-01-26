@@ -4,6 +4,7 @@ import { ReactComponent as PollIcon } from '../assets/icons/poll.svg'
 import { ReactComponent as EmojiIcon } from '../assets/icons/emoji.svg'
 import { ReactComponent as DateIcon } from '../assets/icons/date.svg'
 import { ReactComponent as LocationIcon } from '../assets/icons/location.svg'
+import { ReactComponent as CloseIcon } from '../assets/icons/close.svg'
 import React, { useRef, useState } from 'react'
 import { postService } from '../services/post.service'
 import { userService } from '../services/user.service'
@@ -33,6 +34,7 @@ export const TweetEditBase: React.FC<TweetEditBaseProps> = ({
   const [imgUrl, setImgUrl] = useState<null | string>(null)
   const [gifPopup, setGifPopup] = useState(false)
   const { data: user } = useGetUserQuery(userService.getLoggedInUser()?._id)
+  const [content, setContent] = useState('')
 
   const [addPost] = useAddPostMutation()
   const [addReply] = useAddReplyMutation()
@@ -53,6 +55,8 @@ export const TweetEditBase: React.FC<TweetEditBaseProps> = ({
     post.composerId = user._id as string
 
     contentTextRef.current.innerText = ''
+    setContent('')
+    setImgUrl(null)
     if (onComposeClose) onComposeClose()
 
     let toastId: string
@@ -72,8 +76,17 @@ export const TweetEditBase: React.FC<TweetEditBaseProps> = ({
 
   const handleUpload = async (ev: any) => {
     //TODO: check size and type
-    const imgUrl = await uploadImg(ev.target.files[0])
-    setImgUrl(imgUrl.url)
+    console.log(ev.target.files[0])
+
+    const imgUrl = uploadImg(ev.target.files[0])
+
+    toast.promise(imgUrl, {
+      loading: 'Uploading...',
+      success: 'Successfully uploaded',
+      error: 'Unable to upload',
+    })
+
+    setImgUrl((await imgUrl).url)
   }
 
   const handleDragEnter = (ev: any) => {
@@ -91,8 +104,20 @@ export const TweetEditBase: React.FC<TweetEditBaseProps> = ({
     contentTextRef.current?.classList.remove('dragover')
     console.log(JSON.stringify(ev.dataTransfer.files[0].name))
     //TODO: check size and type
-    const imgUrl = await uploadImg(ev.dataTransfer.files[0])
-    setImgUrl(imgUrl.url)
+
+    const imgUrl = uploadImg(ev.dataTransfer.files[0])
+
+    toast.promise(imgUrl, {
+      loading: 'Uploading...',
+      success: 'Successfully uploaded',
+      error: 'Unable to upload',
+    })
+
+    setImgUrl((await imgUrl).url)
+  }
+
+  const handleContentUpdate = (ev: any) => {
+    setContent((p) => ev.target.innerText.trim())
   }
 
   const handleGifIconClick = () => {
@@ -112,13 +137,25 @@ export const TweetEditBase: React.FC<TweetEditBaseProps> = ({
   return (
     <>
       <img src={user?.imgUrl || '/default-user-img.png'} className="user-img" />
-      <div
-        onDragEnter={handleDragEnter}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
-        className="content"
-        contentEditable={true}
-        ref={setContentRefs}></div>
+      <div className="content-area">
+        <div
+          onDragEnter={handleDragEnter}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+          onKeyUp={handleContentUpdate}
+          className="content"
+          contentEditable={true}
+          ref={setContentRefs}></div>
+        {imgUrl ? (
+          <div className="content-img">
+            <div className="icon-wrap" onClick={() => setImgUrl(null)}>
+              <CloseIcon />
+            </div>
+            <img src={imgUrl} alt="" className="content-img" />
+          </div>
+        ) : null}
+      </div>
+
       <div className="options">
         <div className="icons">
           <div
@@ -175,7 +212,9 @@ export const TweetEditBase: React.FC<TweetEditBaseProps> = ({
             <LocationIcon />
           </div>
         </div>
-        <button className="tweet-btn primary pill" onClick={handleTweetPost}>
+        <button
+          className={'tweet-btn primary pill ' + (content ? '' : 'disabled')}
+          onClick={handleTweetPost}>
           Tweet
         </button>
       </div>
