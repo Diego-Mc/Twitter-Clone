@@ -48,21 +48,45 @@
         border-color: #ffffff59;
       }
 
-      .login-btn {
+      .clear-btn {
         background-color: transparent;
         color: var(--white);
+      }
+
+      .random {
+        flex-grow: 2;
       }
     }
   }
   @include for-mobile-layout {
     grid-template-columns: 1fr minmax(0, $main-content-width) 1fr;
     grid-template-areas: '. content .';
+    height: calc(114px);
+    .content-wrapper .ctas {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      margin-inline: 12px;
+      gap: 16px;
+      .auth-btn {
+        margin: 0;
+      }
+      .random {
+        grid-column: span 2;
+        order: -1;
+      }
+    }
   }
 
   @media screen and (max-width: $main-content-width) {
   }
 
   @media screen and (min-width: 840px) {
+  }
+  @media screen and (min-width: 1008px) {
+    grid-template-columns: 1fr $sidebar-width-s $main-content-width $feed-aside-width-s 1fr;
+  }
+  @include for-normal-layout {
+    grid-template-columns: 1fr $sidebar-width-s $main-content-width $feed-aside-width-l 1fr;
     .content-wrapper {
       .text {
         display: flex;
@@ -74,12 +98,6 @@
         }
       }
     }
-  }
-  @media screen and (min-width: 1008px) {
-    grid-template-columns: 1fr $sidebar-width-s $main-content-width $feed-aside-width-s 1fr;
-  }
-  @include for-normal-layout {
-    grid-template-columns: 1fr $sidebar-width-s $main-content-width $feed-aside-width-l 1fr;
   }
   @include for-wide-layout {
     grid-template-columns: 1fr $sidebar-width-l $main-content-width $feed-aside-width-l 1fr;
