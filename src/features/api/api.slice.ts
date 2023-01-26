@@ -21,16 +21,12 @@ export const apiSlice = createApi({
   }),
   tagTypes: ['Posts', 'Tags', 'ToFollow', 'Users', 'LoggedInUser'],
   endpoints: (builder) => ({
-    getPosts: builder.query<any, string | void>({
+    getPosts: builder.query<PostProps[], string | void>({
       queryFn: async (query = undefined, queryApi, extraOptions, baseQuery) => {
         let path = '/posts'
         if (query) path += `?${query}`
-        const result = (await baseQuery(path)) as QueryReturnValue<
-          PostProps[],
-          FetchBaseQueryError,
-          FetchBaseQueryMeta
-        >
-        const data = result.data
+        const result = await baseQuery(path)
+        const data = result.data as PostProps[]
         data?.sort((a: PostProps, b: PostProps) => b._id.localeCompare(a._id))
         return { data }
       },
@@ -46,7 +42,20 @@ export const apiSlice = createApi({
     }),
     //NOTE: I can use "LIST" for home feed, and "EXPLORE" for explore feed etc. this way I get more control over what to refetch
     getPost: builder.query<PostProps, string>({
-      query: (postId) => `/posts/${postId}`,
+      // query: (postId) => `/posts/${postId}`,
+      queryFn: async (postId, queryApi, extraOptions, baseQuery) => {
+        if (!postId)
+          return {
+            error: {
+              statusText: 'Not found',
+              status: 404,
+              data: 'Invalid postId',
+            },
+          }
+        const result = await baseQuery(`/posts/${postId}`)
+        const data = result.data as PostProps
+        return { data }
+      },
       providesTags: (res, err, postId) => [{ type: 'Posts', id: postId }],
     }),
     //NOTE: I can use "selectFromResult" from getPosts instead of calling getPost
@@ -185,8 +194,8 @@ export const apiSlice = createApi({
       async onQueryStarted(postId, { dispatch, queryFulfilled }) {
         dispatch(
           apiSlice.util.updateQueryData(
-            'getLoggedInUser',
-            undefined,
+            'getUser',
+            userService.getLoggedInUser()?._id,
             (user: UserProps) => {
               const bookmarkIdx = user.bookmarks.indexOf(postId)
               if (bookmarkIdx < 0) user.bookmarks.push(postId)
@@ -289,7 +298,26 @@ export const apiSlice = createApi({
       transformErrorResponse: (err) => {},
     }),
     getUser: builder.query<UserProps, string>({
-      query: (userId) => `/users/${userId}`,
+      queryFn: async (userId, queryApi, extraOptions, baseQuery) => {
+        if (userId === undefined)
+          return {
+            error: {
+              status: 404,
+              statusText: 'User not found.',
+              data: 'Invalid userId provided.',
+            },
+          }
+        const user = await baseQuery(`/users/${userId}`)
+        if (!user.data)
+          return {
+            error: {
+              status: 404,
+              statusText: 'User not found.',
+              data: 'User does not exist.',
+            },
+          }
+        return { data: user.data as UserProps }
+      },
       providesTags: ['Users'],
     }),
     getUserId: builder.query<string, string>({

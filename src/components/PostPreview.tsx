@@ -1,22 +1,10 @@
-import React, { MouseEventHandler, useRef, useState } from 'react'
-
+import React from 'react'
 import { ReactComponent as CommentFilledIcon } from '../assets/icons/comment_filled.svg'
-import {
-  useGetLoggedInUserQuery,
-  useGetPostQuery,
-  useLikePostMutation,
-} from '../features/api/api.slice'
-import { PostProps, UserProps } from '../types/models'
-import { utilService } from '../services/util.service'
-import { TweetEditPopup } from './TweetEditPopup'
-import { userService } from '../services/user.service'
-import { Link, useNavigate } from 'react-router-dom'
-import { RootState } from '../features/store'
+import { useGetPostQuery } from '../features/api/api.slice'
+import { PostProps } from '../types/models'
+import { useNavigate } from 'react-router-dom'
 import { Mention } from './Mention'
 import { PostActions } from './PostActions'
-import { postService } from '../services/post.service'
-import { renderToStaticMarkup } from 'react-dom/server'
-import { ReactDOM } from 'react'
 import { useFormatPost } from '../hooks/useFormatPost'
 import TimeAgo from 'timeago-react'
 
@@ -114,31 +102,28 @@ export const PostPreview: React.FC<PostPreviewProps> = ({
   msgLocation,
 }) => {
   if (!post.repliedTo) return <PostPreviewItem post={post} />
-  const { data: user } = useGetLoggedInUserQuery()
-  //TODO: continuew HERE - why user?
-
-  const { data: repliedToPost } = useGetPostQuery(post.repliedTo)
+  const { data: originalPost } = useGetPostQuery(post.repliedTo)
   const topMsgData = {
     type: 'reply',
     location: 'top',
     info: {
-      username: user?.username,
-      fullName: user?.fullName,
+      username: post?.composerUsername,
+      fullName: post?.composerFullName,
     },
   }
   const bottomMsgData = {
     type: 'reply',
     location: 'bottom',
     info: {
-      username: repliedToPost?.composerUsername,
-      fullName: repliedToPost?.composerFullName,
+      username: originalPost?.composerUsername,
+      fullName: originalPost?.composerFullName,
     },
   }
   return (
     <section className="post-group">
-      {repliedToPost ? (
+      {originalPost ? (
         <PostPreviewItem
-          post={repliedToPost}
+          post={originalPost}
           msg={msgLocation === 'top' ? topMsgData : undefined}
         />
       ) : null}

@@ -4,23 +4,17 @@ import { ReactComponent as PollIcon } from '../assets/icons/poll.svg'
 import { ReactComponent as EmojiIcon } from '../assets/icons/emoji.svg'
 import { ReactComponent as DateIcon } from '../assets/icons/date.svg'
 import { ReactComponent as LocationIcon } from '../assets/icons/location.svg'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { postService } from '../services/post.service'
 import { userService } from '../services/user.service'
 import {
   useAddPostMutation,
   useAddReplyMutation,
-  useGetLoggedInUserQuery,
+  useGetUserQuery,
 } from '../features/api/api.slice'
 import { PostProps } from '../types/models'
 import { uploadImg } from '../services/upload.service'
 import GifPicker, { TenorImage } from 'gif-picker-react'
-import { useGetRouteName } from '../hooks/useGetRouteName'
-import {
-  createSearchParams,
-  useParams,
-  useSearchParams,
-} from 'react-router-dom'
 
 interface TweetEditBaseProps {
   setFocusRef?: (el: HTMLDivElement) => void
@@ -37,7 +31,7 @@ export const TweetEditBase: React.FC<TweetEditBaseProps> = ({
   const imgUploadRef = useRef<HTMLInputElement | null>(null)
   const [imgUrl, setImgUrl] = useState<null | string>(null)
   const [gifPopup, setGifPopup] = useState(false)
-  const { data: user } = useGetLoggedInUserQuery()
+  const { data: user } = useGetUserQuery(userService.getLoggedInUser()?._id)
 
   const [addPost] = useAddPostMutation()
   const [addReply] = useAddReplyMutation()

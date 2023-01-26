@@ -7,7 +7,7 @@ import { ReactComponent as BookmarkIcon } from '../assets/icons/bookmark.svg'
 import { ReactComponent as BookmarkFilledIcon } from '../assets/icons/bookmark_filled.svg'
 import {
   useBookmarkPostMutation,
-  useGetLoggedInUserQuery,
+  useGetUserQuery,
   useLikePostMutation,
 } from '../features/api/api.slice'
 import { EventBus } from '../services/eventbus.service'
@@ -30,7 +30,7 @@ interface PostActionsProps {
 export const PostActions: React.FC<PostActionsProps> = ({ post }) => {
   const [likePost] = useLikePostMutation()
   const [bookmarkPost] = useBookmarkPostMutation()
-  const { data: user } = useGetLoggedInUserQuery()
+  const { data: user } = useGetUserQuery(userService.getLoggedInUser()?._id)
   const route = useGetRouteName()
   const params = useParams()
   const location = useLocation()

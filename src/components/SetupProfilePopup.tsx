@@ -4,12 +4,13 @@ import { ReactComponent as CameraIcon } from '../assets/icons/camera.svg'
 import { FormInput } from './FormInput'
 import { uploadImg } from '../services/upload.service'
 import {
-  useGetLoggedInUserQuery,
+  useGetUserQuery,
   useUpdateDescriptionMutation,
   useUploadCoverPicMutation,
   useUploadProfilePicMutation,
 } from '../features/api/api.slice'
 import { UserProps } from '../types/models'
+import { userService } from '../services/user.service'
 
 interface uploadPicStageProps {
   uploadAreaRef: React.MutableRefObject<HTMLDivElement | null>
@@ -152,7 +153,7 @@ export const SetupProfilePopup: React.FC<SetupProfilePopupProps> = ({
   const [uploadProfilePic] = useUploadProfilePicMutation()
   const [uploadCoverPic] = useUploadCoverPicMutation()
   const [updateDescription] = useUpdateDescriptionMutation()
-  const { data: user } = useGetLoggedInUserQuery()
+  const { data: user } = useGetUserQuery(userService.getLoggedInUser()?._id)
   const [description, setDescription] = useState(user?.description || '')
 
   const setImgUrl = ({ url }: { url: string }) => {

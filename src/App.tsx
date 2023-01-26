@@ -4,8 +4,6 @@ import { FeedAside } from './components/FeedAside'
 import { Header } from './components/Header'
 import { Sidebar } from './components/Sidebar'
 import { TweetEditPopup } from './components/TweetEditPopup'
-import { RootState, store } from './features/store'
-import { initUser } from './features/user/user.slice'
 import { userService } from './services/user.service'
 import { Bookmarks } from './views/Bookmarks'
 import { Explore } from './views/Explore'
@@ -19,8 +17,6 @@ import {
   TweetsWithRepliesSection,
 } from './views/Profile'
 import { Search } from './views/Search'
-import { ApiProvider } from '@reduxjs/toolkit/dist/query/react'
-import { apiSlice, useGetLoggedInUserQuery } from './features/api/api.slice'
 import { EventBus } from './services/eventbus.service'
 import { PostProps } from './types/models'
 import { LoginPopup } from './components/LoginPopup'
@@ -35,7 +31,6 @@ function App() {
   const [setupProfilePopup, setSetupProfilePopup] = useState(false)
   const [tweetPopup, setTweetPopup] = useState(false)
   const [commentPost, setCommentPost] = useState<PostProps | null>(null)
-  // const { data: user } = useGetLoggedInUserQuery()
   usePrefetchImmediately('getLoggedInUser', undefined, { force: true })
 
   const toggleTweetPopup = (force: boolean) => {

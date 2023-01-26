@@ -1,11 +1,5 @@
 import React, { useState } from 'react'
-import {
-  Link,
-  NavLink,
-  useLocation,
-  useNavigate,
-  useParams,
-} from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { ReactComponent as HomeIcon } from '../assets/icons/home.svg'
 import { ReactComponent as HomeIconFilled } from '../assets/icons/home_filled.svg'
 import { ReactComponent as ExploreIcon } from '../assets/icons/explore.svg'
@@ -16,13 +10,9 @@ import { ReactComponent as BookmarkIcon } from '../assets/icons/bookmark.svg'
 import { ReactComponent as BookmarkIconFilled } from '../assets/icons/bookmark_filled.svg'
 import { ReactComponent as ComposeIcon } from '../assets/icons/compose.svg'
 import { UserPreview } from './UserPreview'
-import { UserProps } from '../types/models'
-import { RootState } from '../features/store'
-import {
-  useGetLoggedInUserQuery,
-  useLogoutMutation,
-} from '../features/api/api.slice'
+import { useGetUserQuery, useLogoutMutation } from '../features/api/api.slice'
 import { useGetRouteName } from '../hooks/useGetRouteName'
+import { userService } from '../services/user.service'
 
 interface NavButtonProps {
   type: string
@@ -72,7 +62,7 @@ interface SidebarProps {
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({ onComposeTweet }) => {
-  const { data: user } = useGetLoggedInUserQuery()
+  const { data: user } = useGetUserQuery(userService.getLoggedInUser()?._id)
   const [userOptionsPopup, setUserOptionsPopup] = useState(false)
 
   const toggleUserOptionsPopup = (force: boolean | undefined = undefined) => {
@@ -120,7 +110,7 @@ interface OptionsPopupProps {
 }
 
 export const OptionsPopup: React.FC<OptionsPopupProps> = ({ handleClose }) => {
-  const { data: user } = useGetLoggedInUserQuery()
+  const { data: user } = useGetUserQuery(userService.getLoggedInUser()?._id)
   const [logout] = useLogoutMutation()
   const navigate = useNavigate()
   return (
