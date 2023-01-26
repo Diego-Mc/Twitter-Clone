@@ -107,19 +107,25 @@ export const PostDetails: React.FC<PostDetailsProps> = ({}) => {
   const { data: repliedToPost, isLoading: isLoadingReply } = useGetPostQuery(
     post?.repliedTo as string
   )
-  const { data: replies, isLoading: isLoadingReplies } =
-    useGetPostRepliesQuery(postId)
+  const { data: replies } = useGetPostRepliesQuery(postId)
 
-  let bottomMsgData
-  if (repliedToPost)
-    bottomMsgData = {
-      type: 'reply',
-      location: 'bottom',
-      info: {
-        username: repliedToPost.composerUsername,
-        fullName: repliedToPost.composerFullName,
-      },
-    }
+  const bottomMsgData = {
+    type: 'reply',
+    location: 'bottom',
+    info: {
+      username: repliedToPost?.composerUsername,
+      fullName: repliedToPost?.composerFullName,
+    },
+  }
+
+  const replyMsgData = {
+    type: 'reply',
+    location: 'inner',
+    info: {
+      username: post?.composerUsername,
+      fullName: post?.composerFullName,
+    },
+  }
 
   if (isLoadingPost && isLoadingReply)
     return (
@@ -135,16 +141,20 @@ export const PostDetails: React.FC<PostDetailsProps> = ({}) => {
           <PostPreviewItem post={repliedToPost} />
         ) : null}
         {post ? (
-          bottomMsgData && post?.repliedTo ? (
+          post?.repliedTo ? (
             <MainPost post={post} msg={bottomMsgData} />
           ) : (
             <MainPost post={post} />
           )
         ) : null}
       </section>
-      <TweetEdit />
+      <TweetEdit className="reply-edit" replyingTo={post} />
       {replies ? (
-        replies.map((reply) => <PostPreviewItem key={reply._id} post={reply} />)
+        <section className="replies">
+          {replies.map((reply) => (
+            <PostPreviewItem key={reply._id} post={reply} msg={replyMsgData} />
+          ))}
+        </section>
       ) : (
         <LoadingCircle />
       )}

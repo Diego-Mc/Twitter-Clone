@@ -55,7 +55,7 @@ export const TweetEditPopup: React.FC<TweetEditPopupProps> = ({
   return (
     <div className="popup" onClick={(e) => onComposeClose()}>
       <section
-        className={`tweet-edit  ${replyingTo ? 'reply' : ''}`}
+        className={`tweet-edit  ${replyingTo ? 'reply reply-edit' : ''}`}
         onClick={(e) => e.stopPropagation()}>
         <div className="close-section">
           <div className="icon-wrap" onClick={(e) => onComposeClose()}>

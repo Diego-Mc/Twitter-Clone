@@ -1,6 +1,7 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useFollowUserMutation } from '../features/api/api.slice'
+import { userService } from '../services/user.service'
 import { UserProps } from '../types/models'
 
 interface UserPreviewProps {
@@ -33,9 +34,15 @@ export const UserPreview: React.FC<UserPreviewProps> = ({ user }) => {
             </h5>
             <p className="username trunc">@{user?.username}</p>
           </div>
-          <button className="follow-btn black pill" onClick={handleFollow}>
-            Follow
-          </button>
+          {user.followers.includes(userService.getLoggedInUser()._id) ? (
+            <button className="pill white setup-btn" onClick={handleFollow}>
+              Following
+            </button>
+          ) : (
+            <button className="follow-btn black pill" onClick={handleFollow}>
+              Follow
+            </button>
+          )}
         </div>
         <div className="description">
           <span className="text">{user?.description}</span>

@@ -6,13 +6,22 @@ import { ReactComponent as DateIcon } from '../assets/icons/date.svg'
 import { ReactComponent as LocationIcon } from '../assets/icons/location.svg'
 import { useEffect, useRef } from 'react'
 import { TweetEditBase } from './TweetEditBase'
+import { PostProps } from '../types/models'
 
-interface TweetEditProps {}
+interface TweetEditProps {
+  setFocusRef?: (el: HTMLDivElement) => void
+  onComposeClose?: () => void
+  replyingTo?: PostProps
+  className?: string
+}
 
-export const TweetEdit: React.FC<TweetEditProps> = ({}) => {
+export const TweetEdit: React.FC<TweetEditProps> = ({
+  className,
+  ...props
+}) => {
   return (
-    <section className="tweet-edit">
-      <TweetEditBase />
+    <section className={`tweet-edit ${className}`}>
+      <TweetEditBase {...props} />
     </section>
   )
 }

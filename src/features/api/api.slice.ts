@@ -19,7 +19,14 @@ export const apiSlice = createApi({
         : 'http://localhost:3001/api',
     credentials: 'include',
   }),
-  tagTypes: ['Posts', 'Tags', 'ToFollow', 'Users', 'LoggedInUser'],
+  tagTypes: [
+    'Posts',
+    'PostsByUser',
+    'Tags',
+    'ToFollow',
+    'Users',
+    'LoggedInUser',
+  ],
   endpoints: (builder) => ({
     getPosts: builder.query<PostProps[], string | void>({
       queryFn: async (query = undefined, queryApi, extraOptions, baseQuery) => {
@@ -35,6 +42,10 @@ export const apiSlice = createApi({
           ? [
               ...res.map(
                 ({ _id }: any) => ({ type: 'Posts', id: _id } as const)
+              ),
+              ...res.map(
+                ({ userId }: any) =>
+                  ({ type: 'PostsByUser', id: userId } as const)
               ),
               { type: 'Posts', id: 'LIST' },
             ]
@@ -56,14 +67,22 @@ export const apiSlice = createApi({
         const data = result.data as PostProps
         return { data }
       },
-      providesTags: (res, err, postId) => [{ type: 'Posts', id: postId }],
+      providesTags: (res, err, postId) => [
+        { type: 'Posts', id: postId },
+        { type: 'PostsByUser', id: res?.userId },
+      ],
     }),
     //NOTE: I can use "selectFromResult" from getPosts instead of calling getPost
     getPostReplies: builder.query<PostProps[], string>({
       query: (postId) => `/posts/${postId}/replies`,
       providesTags: (res, err, postId) =>
         res
-          ? [...res.map(({ _id }) => ({ type: 'Posts', id: _id } as const))]
+          ? [
+              ...res.map(({ _id }) => ({ type: 'Posts', id: _id } as const)),
+              ...res.map(
+                ({ userId }) => ({ type: 'PostsByUser', id: userId } as const)
+              ),
+            ]
           : [{ type: 'Posts', id: postId }],
     }),
     addPost: builder.mutation({
@@ -318,21 +337,81 @@ export const apiSlice = createApi({
           }
         return { data: user.data as UserProps }
       },
-      providesTags: ['Users'],
+      providesTags: (res) =>
+        res ? [{ type: 'Users', id: res._id }] : ['Users'],
     }),
     getUserId: builder.query<string, string>({
       query: (username) => `/users/get-id/${username}`,
     }),
     getRandomUsersToFollow: builder.query<UserProps[], void>({
       query: () => `/users/random-to-follow`,
-      providesTags: ['ToFollow'],
+      providesTags: (res) =>
+        res
+          ? [
+              ...res.map(({ _id }) => ({ type: 'Users', id: _id } as const)),
+              { type: 'Users', id: 'TO_FOLLOW' },
+            ]
+          : [{ type: 'Users', id: 'TO_FOLLOW' }],
+      //TODO: add option to only regenerate a user missing after following him
     }),
     followUser: builder.mutation({
       query: (userToFollowId) => ({
         url: `/users/${userToFollowId}/follow`,
         method: 'PATCH',
       }),
-      invalidatesTags: ['ToFollow', 'Users'],
+      async onQueryStarted(
+        userToFollowId: string,
+        { dispatch, queryFulfilled }
+      ) {
+        try {
+          const loggedInUserId = userService.getLoggedInUser()?._id
+          if (!loggedInUserId) throw new Error('Not logged in!')
+          dispatch(
+            apiSlice.util.updateQueryData(
+              'getUser',
+              userToFollowId,
+              (user: UserProps) => {
+                const followIdx = user.followers.indexOf(loggedInUserId)
+                if (followIdx < 0) user.followers.push(loggedInUserId)
+                else user.followers.splice(followIdx, 1)
+              }
+            )
+          )
+          dispatch(
+            apiSlice.util.updateQueryData(
+              'getUser',
+              loggedInUserId,
+              (user: UserProps) => {
+                const followIdx = user.followings.indexOf(userToFollowId)
+                if (followIdx < 0) user.followings.push(userToFollowId)
+                else user.followings.splice(followIdx, 1)
+              }
+            )
+          )
+          dispatch(
+            apiSlice.util.updateQueryData(
+              'getRandomUsersToFollow',
+              undefined,
+              (users: UserProps[]) => {
+                const user = users.find(({ _id }) => _id === userToFollowId)
+                if (!user) return
+                const followIdx = user.followers.indexOf(loggedInUserId)
+                if (followIdx < 0) user.followers.push(loggedInUserId)
+                else user.followers.splice(followIdx, 1)
+              }
+            )
+          )
+
+          await queryFulfilled
+
+          dispatch(
+            apiSlice.util.invalidateTags([{ type: 'Users', id: 'TO_FOLLOW' }])
+          )
+        } catch (err) {
+          console.log('error following user, invalidating {LoggedInUser}', err)
+          dispatch(apiSlice.util.invalidateTags([{ type: 'LoggedInUser' }]))
+        }
+      },
     }),
     uploadProfilePic: builder.mutation({
       query: (url) => ({
@@ -340,7 +419,13 @@ export const apiSlice = createApi({
         method: 'PATCH',
         body: { imgUrl: url },
       }),
-      invalidatesTags: ['LoggedInUser'],
+      invalidatesTags: (res) =>
+        res
+          ? [
+              { type: 'Users', id: res._id },
+              { type: 'PostsByUser', id: res._id },
+            ]
+          : ['LoggedInUser', 'Posts'],
     }),
     uploadCoverPic: builder.mutation({
       query: (url) => ({
@@ -348,7 +433,8 @@ export const apiSlice = createApi({
         method: 'PATCH',
         body: { imgUrl: url },
       }),
-      invalidatesTags: ['LoggedInUser'],
+      invalidatesTags: (res) =>
+        res ? [{ type: 'Users', id: res._id }] : ['LoggedInUser'],
     }),
     updateDescription: builder.mutation({
       query: (description) => ({
@@ -356,7 +442,8 @@ export const apiSlice = createApi({
         method: 'PATCH',
         body: { description },
       }),
-      invalidatesTags: ['LoggedInUser'],
+      invalidatesTags: (res) =>
+        res ? [{ type: 'Users', id: res._id }] : ['LoggedInUser'],
     }),
 
     /* AUTH */

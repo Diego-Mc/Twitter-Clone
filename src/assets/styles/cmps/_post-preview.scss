@@ -186,6 +186,11 @@
   }
 }
 
+.msg-inner {
+  color: var(--dark-gray);
+  margin-bottom: 2px;
+}
+
 .post-group {
   .post-preview:not(:last-child) {
     border: none;

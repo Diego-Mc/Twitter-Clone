@@ -1,7 +1,7 @@
-import { useAppDispatch } from './../features/store'
+import { useAppDispatch } from '../features/store'
 import { useEffect } from 'react'
 import { PrefetchOptions } from '@reduxjs/toolkit/dist/query/core/module'
-import { apiSlice } from './../features/api/api.slice'
+import { apiSlice } from '../features/api/api.slice'
 
 type EndpointNames = keyof typeof apiSlice.endpoints
 

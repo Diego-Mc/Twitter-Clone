@@ -47,7 +47,7 @@ export const PostPreviewItem: React.FC<PostPreviewItemProps> = ({
               <CommentFilledIcon className="group-icon" />
               <p className="group-msg trunc">{msg.info.fullName} replied</p>
             </div>
-          ) : (
+          ) : msg.location === 'bottom' ? (
             <p className="group-msg msg-bottom trunc">
               Replying to&nbsp;
               <Mention
@@ -55,7 +55,7 @@ export const PostPreviewItem: React.FC<PostPreviewItemProps> = ({
                 onNavigate={onComposeClose}
               />
             </p>
-          )
+          ) : null
         ) : (
           <>
             <div className="pipe-top"></div>
@@ -79,6 +79,15 @@ export const PostPreviewItem: React.FC<PostPreviewItemProps> = ({
               <TimeAgo datetime={post.createdAt as Date} locale="twitter" />
             </span>
           </span>
+          {msg?.location === 'inner' ? (
+            <p className="group-msg trunc msg-inner">
+              Replying to&nbsp;
+              <Mention
+                username={msg.info.username as string}
+                onNavigate={onComposeClose}
+              />
+            </p>
+          ) : null}
           <div className="post-content">
             <p className="post-text">{formatPost(post)}</p>
             {post.imgUrl ? (

@@ -23,7 +23,7 @@ import { LoginPopup } from './components/LoginPopup'
 import { RegisterPopup } from './components/RegisterPopup'
 import { LoginBottomCTA } from './components/LoginBottomCTA'
 import { SetupProfilePopup } from './components/SetupProfilePopup'
-import { usePrefetchImmediately } from './hooks/usePrefetchImmediatly'
+import { usePrefetchImmediately } from './hooks/usePrefetchImmediately'
 
 function App() {
   const [loginPopup, setLoginPopup] = useState(false)

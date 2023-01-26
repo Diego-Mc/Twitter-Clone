@@ -68,6 +68,12 @@
       padding-block: 0;
     }
   }
+
+  &.reply-edit {
+    .content:empty:after {
+      content: 'Tweet your reply';
+    }
+  }
 }
 
 .popup {

@@ -1,12 +1,13 @@
 import React from 'react'
 import { LoadingCircle } from '../components/LoadingCircle'
 import { PostList } from '../components/PostList'
+import { PostPreviewItem } from '../components/PostPreview'
 import {
   useGetBookmarksFromUserQuery,
   useGetUserQuery,
 } from '../features/api/api.slice'
 import { userService } from '../services/user.service'
-import { UserProps } from '../types/models'
+import { PostProps, UserProps } from '../types/models'
 
 interface BookmarksProps {}
 
@@ -16,7 +17,13 @@ export const Bookmarks: React.FC<BookmarksProps> = ({}) => {
 
   return (
     <section className="bookmarks-view">
-      {bookmarks ? <PostList posts={bookmarks} /> : <LoadingCircle />}
+      {bookmarks ? (
+        bookmarks.map((post: PostProps) => (
+          <PostPreviewItem key={post._id} post={post} />
+        ))
+      ) : (
+        <LoadingCircle />
+      )}
     </section>
   )
 }
