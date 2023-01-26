@@ -58,26 +58,12 @@ export const apiSlice = createApi({
           : [{ type: 'Posts', id: postId }],
     }),
     addPost: builder.mutation({
-      query: (post) => ({
+      query: ({ post }) => ({
         url: '/posts',
         method: 'POST',
         body: post,
       }),
-      async onQueryStarted(post, { dispatch, queryFulfilled }) {
-        try {
-          const { data: updatedPost } = await queryFulfilled
-          dispatch(
-            apiSlice.util.updateQueryData('getPosts', undefined, (posts) => {
-              posts.unshift(updatedPost)
-            })
-          )
-        } catch (err) {
-          console.log('error adding post, invalidating {Posts - LIST}', err)
-          dispatch(
-            apiSlice.util.invalidateTags([{ type: 'Posts', id: 'LIST' }])
-          )
-        }
-      },
+      invalidatesTags: [{ type: 'Posts', id: 'LIST' }],
     }),
     addReply: builder.mutation({
       query: ({ post, replyingTo }) => ({
@@ -85,6 +71,9 @@ export const apiSlice = createApi({
         method: 'POST',
         body: post,
       }),
+      invalidatesTags: (res, err, { post, replyingTo }) => [
+        { type: 'Posts', id: replyingTo._id },
+      ],
       async onQueryStarted({ post, replyingTo }, { dispatch, queryFulfilled }) {
         try {
           const { data: updatedReply } = await queryFulfilled
@@ -126,13 +115,17 @@ export const apiSlice = createApi({
           const updatedPost = posts.find(({ _id }) => _id === post._id)
           if (!updatedPost) return
           if (!userId) return //TODO: error
-          updatedPost.likes[userId] = !updatedPost.likes[userId]
+          const isLiked = updatedPost.likes[userId]
+          if (isLiked) delete updatedPost.likes[userId]
+          else updatedPost.likes[userId] = !updatedPost.likes[userId]
         }
 
         const update = (post: PostProps) => {
           const userId = userService.getLoggedInUser()._id
           if (!userId) return //TODO: error
-          post.likes[userId] = !post.likes[userId]
+          const isLiked = post.likes[userId]
+          if (isLiked) delete post.likes[userId]
+          else post.likes[userId] = !post.likes[userId]
         }
 
         dispatch(
@@ -151,7 +144,9 @@ export const apiSlice = createApi({
                     (p) => p?._id === post._id
                   )
                   if (!updatedPost) return
-                  updatedPost.likes[userId] = !updatedPost.likes[userId]
+                  const isLiked = updatedPost.likes[userId]
+                  if (isLiked) delete updatedPost.likes[userId]
+                  else updatedPost.likes[userId] = !updatedPost.likes[userId]
                 }
               )
             }
@@ -272,6 +267,26 @@ export const apiSlice = createApi({
     getLoggedInUser: builder.query<UserProps, void>({
       query: () => `/users/logged-in`,
       providesTags: ['LoggedInUser'],
+      async onQueryStarted(arg, { dispatch, queryFulfilled }): Promise<any> {
+        try {
+          const { data } = await queryFulfilled
+          if (userService.getLoggedInUser()?._id === data?._id) {
+          } else if (!userService.getLoggedInUser()?._id && data?._id) {
+            sessionStorage.setItem(
+              'loggedInUser',
+              JSON.stringify({ _id: data._id })
+            )
+          } else {
+            sessionStorage.removeItem('loggedInUser')
+            await dispatch(apiSlice.endpoints.logout.initiate())
+            throw new Error('not logged in')
+          }
+          return { data }
+        } catch (err) {
+          sessionStorage.removeItem('loggedInUser')
+        }
+      },
+      transformErrorResponse: (err) => {},
     }),
     getUser: builder.query<UserProps, string>({
       query: (userId) => `/users/${userId}`,
@@ -325,6 +340,7 @@ export const apiSlice = createApi({
       }),
       transformResponse: (res: { token: string; user: { _id: string } }) => {
         sessionStorage.setItem('loggedInUser', JSON.stringify(res.user))
+        window.location.reload()
         return res
       },
       invalidatesTags: ['LoggedInUser'],
@@ -337,6 +353,7 @@ export const apiSlice = createApi({
       }),
       transformResponse: (res: { token: string; user: { _id: string } }) => {
         sessionStorage.setItem('loggedInUser', JSON.stringify(res.user))
+        window.location.reload()
         return res
       },
       invalidatesTags: ['LoggedInUser'],
@@ -348,6 +365,7 @@ export const apiSlice = createApi({
       }),
       transformResponse: (res: { msg: string }) => {
         sessionStorage.removeItem('loggedInUser')
+        window.location.reload()
         return res.msg
       },
       invalidatesTags: ['LoggedInUser'],

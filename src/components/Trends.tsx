@@ -1,6 +1,9 @@
 import React from 'react'
 import { createSearchParams, useNavigate } from 'react-router-dom'
-import { useGetTrendsQuery } from '../features/api/api.slice'
+import {
+  useGetTrendPostsQuery,
+  useGetTrendsQuery,
+} from '../features/api/api.slice'
 import { TagProps } from '../types/models'
 import { LoadingCircle } from './LoadingCircle'
 
@@ -20,7 +23,7 @@ export const TrendPreview: React.FC<TrendPreviewProps> = ({ tag }) => {
   return (
     <article className="trend-preview" onClick={handleTrendSelect}>
       <small className="tag">Trending</small>
-      <h6 className="trend-name trunc">{tag.tagName}</h6>
+      <h6 className="trend-name trunc">#{tag.tagName}</h6>
       <small className="tweet-count">
         {Object.keys(tag.posts).length} Tweets
       </small>
@@ -32,6 +35,7 @@ interface TrendsProps {}
 
 export const Trends: React.FC<TrendsProps> = ({}) => {
   const { data: trends } = useGetTrendsQuery()
+
   return (
     <section className="trends">
       <h3 className="title">Trends for you</h3>

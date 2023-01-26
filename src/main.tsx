@@ -6,26 +6,26 @@ import './assets/styles/main.scss'
 import { store } from './features/store'
 import * as timeago from 'timeago.js'
 
-const twitterLong = (number: number, index: number): [string, string] => {
+const twitter = (number: number, index: number): [string, string] => {
   return [
-    ['just now', 'right now'],
-    ['%ss ago', 'in %ss'],
-    ['1m ago', 'in 1m'],
-    ['%sm ago', 'in %sm'],
-    ['1h ago', 'in 1h'],
-    ['%sh ago', 'in %sh'],
-    ['1d ago', 'in 1d'],
-    ['%sd ago', 'in %sd'],
-    ['1w ago', 'in 1w'],
-    ['%sw ago', 'in %sw'],
-    ['1mo ago', 'in 1mo'],
-    ['%smo ago', 'in %smo'],
-    ['1yr ago', 'in 1yr'],
-    ['%syr ago', 'in %syr'],
+    ['now', 'right now'],
+    ['%ss', 'in %ss'],
+    ['1m', 'in 1m'],
+    ['%sm', 'in %sm'],
+    ['1h', 'in 1h'],
+    ['%sh', 'in %sh'],
+    ['1d', 'in 1d'],
+    ['%sd', 'in %sd'],
+    ['1w', 'in 1w'],
+    ['%sw', 'in %sw'],
+    ['1mo', 'in 1mo'],
+    ['%smo', 'in %smo'],
+    ['1yr', 'in 1yr'],
+    ['%syr', 'in %syr'],
   ][index] as [string, string]
 }
 
-timeago.register('twitter-long', twitterLong)
+timeago.register('twitter', twitter)
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>

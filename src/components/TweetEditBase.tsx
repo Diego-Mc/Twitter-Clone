@@ -15,6 +15,12 @@ import {
 import { PostProps } from '../types/models'
 import { uploadImg } from '../services/upload.service'
 import GifPicker, { TenorImage } from 'gif-picker-react'
+import { useGetRouteName } from '../hooks/useGetRouteName'
+import {
+  createSearchParams,
+  useParams,
+  useSearchParams,
+} from 'react-router-dom'
 
 interface TweetEditBaseProps {
   setFocusRef?: (el: HTMLDivElement) => void
@@ -48,11 +54,10 @@ export const TweetEditBase: React.FC<TweetEditBaseProps> = ({
 
     const post = postService.getEmptyPost()
     post.text = tweetText
-    console.log(imgUrl)
     if (imgUrl) post.imgUrl = imgUrl
     post.composerId = user._id as string
 
-    replyingTo ? addReply({ post, replyingTo }) : addPost({ ...post })
+    replyingTo ? addReply({ post, replyingTo }) : addPost({ post })
 
     contentTextRef.current.innerText = ''
     if (onComposeClose) onComposeClose()

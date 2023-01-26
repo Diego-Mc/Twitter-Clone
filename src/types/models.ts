@@ -32,4 +32,5 @@ export type PostProps = {
     [key: string]: boolean
   }
   replies: string[]
+  createdAt?: Date
 }

@@ -64,17 +64,31 @@ export const MainPost: React.FC<PostPreviewItemProps> = ({ post, msg }) => {
         ) : null}
       </div>
       <div className="time-bar">
-        <p className="time-info">8:44 PM</p>
+        <p className="time-info">
+          {new Date(post.createdAt as Date).toLocaleString('default', {
+            // month: 'long',
+            // year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+          })}
+        </p>
         <span className="divider">·</span>
-        <p className="date-info">Jan 19, 2023</p>
-        <span className="divider">·</span>
+        <p className="date-info">
+          {new Date(post.createdAt as Date).toLocaleString('default', {
+            month: 'short',
+            day: '2-digit',
+            year: 'numeric',
+          })}
+        </p>
+        {/* <span className="divider">·</span>
         <p className="view-info">
           <span className="bold">144</span> Views
-        </p>
+        </p> */}
       </div>
       <div className="stats">
         <p className="likes-amount">
-          <span className="bold">5</span> Likes
+          <span className="bold">{Object.keys(post.likes).length}</span>{' '}
+          {Object.keys(post.likes).length === 1 ? 'Like' : 'Likes'}
         </p>
       </div>
       <PostActions post={post} />

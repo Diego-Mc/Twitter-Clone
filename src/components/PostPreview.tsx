@@ -18,6 +18,7 @@ import { postService } from '../services/post.service'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { ReactDOM } from 'react'
 import { useFormatPost } from '../hooks/useFormatPost'
+import TimeAgo from 'timeago-react'
 
 export interface PostPreviewItemProps {
   post: PostProps
@@ -86,7 +87,9 @@ export const PostPreviewItem: React.FC<PostPreviewItemProps> = ({
             </span>
             <span className="username trunc">@{post.composerUsername}</span>
             <span className="divider">·</span>
-            <span className="time link">6h</span>
+            <span className="time link">
+              <TimeAgo datetime={post.createdAt as Date} locale="twitter" />
+            </span>
           </span>
           <div className="post-content">
             <p className="post-text">{formatPost(post)}</p>

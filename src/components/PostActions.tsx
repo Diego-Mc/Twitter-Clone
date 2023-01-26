@@ -40,26 +40,30 @@ export const PostActions: React.FC<PostActionsProps> = ({ post }) => {
 
   const isBookmarked = user?.bookmarks.includes(post._id)
 
-  const handleLike = (ev: React.MouseEvent) => {
-    ev.stopPropagation()
-    // console.log('dffdsfs', params, location.pathname.split('/')[3])
-    //TODO: what's going on here??
+  const getSearchObj = () => {
     let searchObj: any = undefined
     if (route === 'search') searchObj = searchParams.toString()
     else if (route === 'profile') {
-      if (params.userId) {
-        const filter = location.pathname.split('/')[3]
-        const user = params.userId
-        searchObj = { user, filter }
+      const locSplit = location.pathname.split('/')
+      let filter = ''
+      let user = ''
+      if (params?.userId) {
+        filter = locSplit[3]
+        user = params.userId
       } else {
-        const filter = location.pathname.split('/')[3]
-        const user = params.userId
-        searchObj = { user, filter }
+        filter = locSplit[2]
+        user = userService.getLoggedInUser()?._id
       }
+      searchObj = { user, filter }
       if (searchObj.user === undefined) delete searchObj.user
       searchObj = createSearchParams(searchObj).toString()
     }
+    return searchObj
+  }
 
+  const handleLike = (ev: React.MouseEvent) => {
+    ev.stopPropagation()
+    const searchObj = getSearchObj()
     likePost({ post, params: searchObj, user })
   }
 

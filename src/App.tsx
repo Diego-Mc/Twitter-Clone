@@ -27,6 +27,7 @@ import { LoginPopup } from './components/LoginPopup'
 import { RegisterPopup } from './components/RegisterPopup'
 import { LoginBottomCTA } from './components/LoginBottomCTA'
 import { SetupProfilePopup } from './components/SetupProfilePopup'
+import { usePrefetchImmediately } from './hooks/usePrefetchImmediatly'
 
 function App() {
   const [loginPopup, setLoginPopup] = useState(false)
@@ -34,7 +35,8 @@ function App() {
   const [setupProfilePopup, setSetupProfilePopup] = useState(false)
   const [tweetPopup, setTweetPopup] = useState(false)
   const [commentPost, setCommentPost] = useState<PostProps | null>(null)
-  const { data: user } = useGetLoggedInUserQuery()
+  // const { data: user } = useGetLoggedInUserQuery()
+  usePrefetchImmediately('getLoggedInUser', undefined, { force: true })
 
   const toggleTweetPopup = (force: boolean) => {
     setTweetPopup(force ?? !tweetPopup)
