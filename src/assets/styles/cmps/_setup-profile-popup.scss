@@ -78,6 +78,8 @@
       border-radius: 50%;
       filter: brightness(70%);
       opacity: 0.8;
+      object-fit: cover;
+      height: 100%;
     }
   }
 
@@ -109,6 +111,7 @@
         width: 106px;
         height: 106px;
         border-radius: 50%;
+        object-fit: cover;
       }
       .full-name {
         font-size: 23px;
