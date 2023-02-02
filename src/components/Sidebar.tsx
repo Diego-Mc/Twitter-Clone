@@ -14,6 +14,8 @@ import { useGetUserQuery, useLogoutMutation } from '../features/api/api.slice'
 import { useGetRouteName } from '../hooks/useGetRouteName'
 import { userService } from '../services/user.service'
 
+//TOOD: break to components
+
 interface NavButtonProps {
   type: string
   to: string
@@ -29,6 +31,7 @@ const NavButton: React.FC<NavButtonProps> = ({
 
   const params = useLocation()
 
+  //TODO: move to hook
   const force = disableOnParams
     ? !params.pathname.split('/')[3] && routeName === type
     : routeName === type
@@ -44,6 +47,7 @@ const NavButton: React.FC<NavButtonProps> = ({
     profileFilled: <ProfileIconFilled />,
   }
 
+  //TODO: move to service
   const getIcon = (isActive: boolean) => {
     const key = type + (isActive ? 'Filled' : '')
     return icons[key as keyof typeof icons]
@@ -65,7 +69,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ onComposeTweet }) => {
   const { data: user } = useGetUserQuery(userService.getLoggedInUser()?._id)
   const [userOptionsPopup, setUserOptionsPopup] = useState(false)
 
-  const toggleUserOptionsPopup = (force: boolean | undefined = undefined) => {
+  const toggleUserOptionsPopup = (force?: boolean): void => {
     setUserOptionsPopup(force ?? !userOptionsPopup)
   }
 
@@ -90,7 +94,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ onComposeTweet }) => {
             onClick={() => toggleUserOptionsPopup()}>
             <UserPreview user={user} />
             {userOptionsPopup ? (
-              <OptionsPopup handleClose={() => toggleUserOptionsPopup(false)} />
+              <UserOptionsPopup
+                handleClose={() => toggleUserOptionsPopup(false)}
+              />
             ) : null}
           </div>
         </>
@@ -109,7 +115,9 @@ interface OptionsPopupProps {
   handleClose: () => void
 }
 
-export const OptionsPopup: React.FC<OptionsPopupProps> = ({ handleClose }) => {
+export const UserOptionsPopup: React.FC<OptionsPopupProps> = ({
+  handleClose,
+}) => {
   const { data: user } = useGetUserQuery(userService.getLoggedInUser()?._id)
   const [logout] = useLogoutMutation()
   const navigate = useNavigate()

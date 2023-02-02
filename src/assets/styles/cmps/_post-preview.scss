@@ -6,6 +6,29 @@
   column-gap: 12px;
   cursor: pointer;
   line-height: 20px;
+  position: relative;
+
+  .options-wrapper {
+    position: absolute;
+    right: 16px;
+    top: 12px;
+
+    .icon-wrap {
+      z-index: 100;
+      @media (hover: hover) {
+        &:hover {
+          background-color: var(--blue-hover);
+          color: var(--blue);
+        }
+      }
+    }
+
+    .options-popup {
+      right: 0;
+    }
+
+    color: var(--dark-gray);
+  }
 
   .left-wrapper {
     display: flex;

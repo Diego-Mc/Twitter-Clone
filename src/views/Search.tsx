@@ -1,9 +1,8 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { LoadingCircle } from '../components/LoadingCircle'
 import { PostList } from '../components/PostList'
 import { useGetPostsQuery } from '../features/api/api.slice'
-import { useGetParams } from '../hooks/useGetParams'
 
 interface SearchProps {}
 

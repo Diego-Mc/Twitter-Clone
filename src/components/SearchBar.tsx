@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import {
   createSearchParams,
   useNavigate,
-  useParams,
   useSearchParams,
 } from 'react-router-dom'
 import { ReactComponent as SearchIcon } from '../assets/icons/search.svg'
@@ -20,7 +19,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({}) => {
     searchParams?.get('search') || ''
   )
 
-  const handleSearch = (ev: FormEventProps) => {
+  const handleSearch = (ev: FormEventProps): void => {
     ev.preventDefault()
     if (!searchValue) return
 

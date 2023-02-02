@@ -4,7 +4,6 @@ import { useGetRouteName } from '../hooks/useGetRouteName'
 import { userService } from '../services/user.service'
 import { LoginBlock } from './LoginBlock'
 import { RandomRegister } from './RandomRegisterBlock'
-import { SearchBar } from './SearchBar'
 import { Trends } from './Trends'
 import { WhoToFollow } from './WhoToFollow'
 

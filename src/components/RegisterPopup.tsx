@@ -24,10 +24,10 @@ export const RegisterPopup: React.FC<RegisterPopupProps> = ({
   }
 
   return (
-    <div className="popup" onClick={(e) => onComposeClose()}>
+    <div className="popup" onClick={() => onComposeClose()}>
       <section className={`auth-card`} onClick={(e) => e.stopPropagation()}>
         <div className="close-section">
-          <div className="icon-wrap" onClick={(e) => onComposeClose()}>
+          <div className="icon-wrap" onClick={() => onComposeClose()}>
             <CloseIcon />
           </div>
         </div>

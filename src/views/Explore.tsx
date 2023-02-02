@@ -1,12 +1,8 @@
-import React, { useRef } from 'react'
+import React from 'react'
 import { PostList } from '../components/PostList'
 import { Trends } from '../components/Trends'
-import {
-  useGetTrendPostsQuery,
-  useGetTrendsQuery,
-} from '../features/api/api.slice'
+import { useGetTrendPostsQuery } from '../features/api/api.slice'
 import { ReactComponent as ExploreTitleIcon } from '../assets/icons/explore-title.svg'
-import { PostProps } from '../types/models'
 import { LoadingCircle } from '../components/LoadingCircle'
 
 interface ExploreProps {}
@@ -14,6 +10,7 @@ interface ExploreProps {}
 export const Explore: React.FC<ExploreProps> = ({}) => {
   const { data: trendSections } = useGetTrendPostsQuery()
 
+  //TODO: move map to function
   return (
     <section className="explore-view">
       <Trends />

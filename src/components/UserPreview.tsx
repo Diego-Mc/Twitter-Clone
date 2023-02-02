@@ -12,11 +12,11 @@ export const UserPreview: React.FC<UserPreviewProps> = ({ user }) => {
   const [followUser] = useFollowUserMutation()
   const navigate = useNavigate()
 
-  const handleFollow = () => {
+  const handleFollow = (): void => {
     followUser(user._id)
   }
 
-  const openProfile = (ev: React.MouseEvent) => {
+  const openProfile = (ev: React.MouseEvent): void => {
     ev.stopPropagation()
     navigate(`/profile/${user._id}`)
   }

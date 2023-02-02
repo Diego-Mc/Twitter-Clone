@@ -13,11 +13,13 @@ import { UserProps } from '../types/models'
 import { userService } from '../services/user.service'
 import { toast } from 'react-hot-toast'
 
+//TODO: reorganize!
+
 interface uploadPicStageProps {
   uploadAreaRef: React.MutableRefObject<HTMLDivElement | null>
-  onDragEnter: (ev: any) => void
-  onDragLeave: (ev: any) => void
-  onDrop: (ev: any) => Promise<void>
+  onDragEnter: (ev: React.DragEvent<HTMLElement>) => void
+  onDragLeave: (ev: React.DragEvent<HTMLElement>) => void
+  onDrop: (ev: React.DragEvent<HTMLElement>) => Promise<void>
   imgUploadRef: React.MutableRefObject<HTMLInputElement | null>
   user?: UserProps
 }
@@ -162,9 +164,9 @@ export const SetupProfilePopup: React.FC<SetupProfilePopupProps> = ({
     if (screenCounter === 1) url && uploadCoverPic(url)
   }
 
-  const handleUpload = async (ev: any) => {
+  const handleUpload = async (ev: React.ChangeEvent<HTMLInputElement>) => {
     //TODO: check size and type
-    if (!ev.target.files[0]) return
+    if (!ev.target?.files?.[0]) return
     setScreenCounter((prev) => prev + 1)
     const imgUrl = uploadImg(ev.target.files[0])
 
@@ -177,17 +179,17 @@ export const SetupProfilePopup: React.FC<SetupProfilePopupProps> = ({
     setImgUrl(await imgUrl)
   }
 
-  const handleDragEnter = (ev: any) => {
+  const handleDragEnter = (ev: React.DragEvent<HTMLElement>) => {
     ev.preventDefault()
     uploadAreaRef.current?.classList.add('dragover')
   }
 
-  const handleDragLeave = (ev: any) => {
+  const handleDragLeave = (ev: React.DragEvent<HTMLElement>) => {
     ev.preventDefault()
     uploadAreaRef.current?.classList.remove('dragover')
   }
 
-  const handleDrop = async (ev: any) => {
+  const handleDrop = async (ev: React.DragEvent<HTMLElement>) => {
     ev.preventDefault()
     uploadAreaRef.current?.classList.remove('dragover')
     if (!ev.dataTransfer.files[0]) return
@@ -217,7 +219,7 @@ export const SetupProfilePopup: React.FC<SetupProfilePopupProps> = ({
   }
 
   return (
-    <div className="popup" onClick={(e) => onComposeClose()}>
+    <div className="popup" onClick={onComposeClose}>
       <section
         className={`setup-profile-popup ${screenCounter === 3 ? 'final' : ''}`}
         onClick={(e) => e.stopPropagation()}>

@@ -10,7 +10,7 @@ interface LoginPopupProps {
 export const LoginPopup: React.FC<LoginPopupProps> = ({ onComposeClose }) => {
   const [login] = useLoginMutation()
 
-  const handleSubmit = async (ev: React.FormEvent) => {
+  const handleSubmit = async (ev: React.FormEvent): Promise<void> => {
     ev.preventDefault()
     const formData = new FormData(ev.target as HTMLFormElement)
     const userCred = Object.fromEntries([...formData])
@@ -20,10 +20,10 @@ export const LoginPopup: React.FC<LoginPopupProps> = ({ onComposeClose }) => {
   }
 
   return (
-    <div className="popup" onClick={(e) => onComposeClose()}>
+    <div className="popup" onClick={() => onComposeClose()}>
       <section className={`auth-card`} onClick={(e) => e.stopPropagation()}>
         <div className="close-section">
-          <div className="icon-wrap" onClick={(e) => onComposeClose()}>
+          <div className="icon-wrap" onClick={() => onComposeClose()}>
             <CloseIcon />
           </div>
         </div>

@@ -233,6 +233,13 @@ export const apiSlice = createApi({
         }
       },
     }),
+    deletePost: builder.mutation({
+      query: (postId) => ({
+        url: `/posts/${postId}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: (res, err, postId) => [{ type: 'Posts', id: postId }],
+    }),
     getBookmarksFromUser: builder.query<any, UserProps>({
       queryFn: async (user, queryApi, extraOptions, baseQuery) => {
         if (!user) return { data: null }
@@ -240,7 +247,9 @@ export const apiSlice = createApi({
         const bookmarks = await Promise.all(
           user.bookmarks.map((bookmark) => baseQuery(`posts/${bookmark}`))
         )
-        const merged = [...bookmarks?.map((result: any) => result.data)]
+        const merged = [
+          ...bookmarks?.map((result: any) => result.data),
+        ].reverse()
         return { data: merged }
       },
       providesTags: (res, err, user) =>
@@ -495,6 +504,7 @@ export const {
   useAddPostMutation,
   useAddReplyMutation,
   useLikePostMutation,
+  useDeletePostMutation,
   useBookmarkPostMutation,
   useGetBookmarksFromUserQuery,
 } = apiSlice

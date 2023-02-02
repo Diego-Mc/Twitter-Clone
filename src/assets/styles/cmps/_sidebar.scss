@@ -88,6 +88,7 @@
       width: fit-content;
       padding: 12px;
       margin-bottom: 12px;
+      min-width: 90%;
 
       .preview-content {
         display: none;
@@ -110,42 +111,9 @@
         }
       }
     }
-
-    .bg-close-popup {
-      position: fixed;
-      inset: 0;
-      z-index: 999;
-    }
-
     .options-popup {
-      position: absolute;
       bottom: 100%;
       left: 0;
-      width: 300px;
-      min-width: 260px;
-      min-height: 30px;
-      max-width: 360px;
-      max-height: 480px;
-      overflow: auto;
-      z-index: 1000;
-      border-radius: 16px;
-      box-shadow: rgb(101 119 134 / 20%) 0px 0px 15px,
-        rgb(101 119 134 / 15%) 0px 0px 3px 1px;
-      background-color: var(--white);
-      padding-block: 12px;
-
-      .option {
-        padding: 12px 16px;
-        font-weight: 700;
-        line-height: 20px;
-        cursor: pointer;
-        transition: 0.2s ease;
-        @media (hover: hover) {
-          &:hover {
-            background-color: var(--extra-extra-light-gray);
-          }
-        }
-      }
     }
   }
 }

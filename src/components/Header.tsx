@@ -1,14 +1,10 @@
 import React from 'react'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { ReactComponent as LogoIcon } from '../assets/icons/logo.svg'
-import { ReactComponent as SparkIcon } from '../assets/icons/spark.svg'
-import { ReactComponent as BackIcon } from '../assets/icons/back.svg'
 import { useGetUserQuery } from '../features/api/api.slice'
 import { SearchBar } from './SearchBar'
 import { BackIconBtn } from './BackIconBtn'
 import { useGetRouteName } from '../hooks/useGetRouteName'
-import { renderToString } from 'react-dom/server'
-import { Link } from 'react-router-dom'
 import { userService } from '../services/user.service'
 
 interface HeaderProps {}
@@ -17,11 +13,13 @@ export const Header: React.FC<HeaderProps> = ({}) => {
   const navigate = useNavigate()
   const routeName = useGetRouteName()
 
+  //TODO: break to hook
   let params = useLocation().pathname.split('/') // => ""/profile/:userId/tweets
   let userId = params[3] ? params[2] : userService.getLoggedInUser()?._id
 
   const { data: user, isFetching } = useGetUserQuery(userId)
 
+  //TODO: rewrite clearly
   return (
     <header className={`main-header ${routeName}`}>
       <div className="logo-wrapper">

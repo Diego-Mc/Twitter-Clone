@@ -18,6 +18,8 @@ import { uploadImg } from '../services/upload.service'
 import GifPicker, { TenorImage } from 'gif-picker-react'
 import { toast } from 'react-hot-toast'
 
+//TODO: break to components
+
 interface TweetEditBaseProps {
   setFocusRef?: (el: HTMLDivElement) => void
   onComposeClose?: () => void
@@ -39,12 +41,12 @@ export const TweetEditBase: React.FC<TweetEditBaseProps> = ({
   const [addPost] = useAddPostMutation()
   const [addReply] = useAddReplyMutation()
 
-  const setContentRefs = (el: HTMLDivElement) => {
+  const setContentRefs = (el: HTMLDivElement): void => {
     if (setFocusRef) setFocusRef(el)
     contentTextRef.current = el
   }
 
-  const handleTweetPost = async () => {
+  const handleTweetPost = async (): Promise<void> => {
     if (!contentTextRef.current) return
     const tweetText = contentTextRef.current.innerText
     if (!tweetText || !user) return
@@ -74,11 +76,13 @@ export const TweetEditBase: React.FC<TweetEditBaseProps> = ({
     toast.dismiss(toastId)
   }
 
-  const handleUpload = async (ev: any) => {
+  const handleUpload = async (
+    ev: React.ChangeEvent<HTMLInputElement>
+  ): Promise<void> => {
     //TODO: check size and type
-    console.log(ev.target.files[0])
+    console.log(ev.target?.files?.[0])
 
-    const imgUrl = uploadImg(ev.target.files[0])
+    const imgUrl = uploadImg(ev.target?.files?.[0])
 
     toast.promise(imgUrl, {
       loading: 'Uploading...',
@@ -89,17 +93,19 @@ export const TweetEditBase: React.FC<TweetEditBaseProps> = ({
     setImgUrl((await imgUrl).url)
   }
 
-  const handleDragEnter = (ev: any) => {
+  const handleDragEnter = (ev: React.DragEvent<HTMLDivElement>): void => {
     ev.preventDefault()
     contentTextRef.current?.classList.add('dragover')
   }
 
-  const handleDragLeave = (ev: any) => {
+  const handleDragLeave = (ev: React.DragEvent<HTMLDivElement>): void => {
     ev.preventDefault()
     contentTextRef.current?.classList.remove('dragover')
   }
 
-  const handleDrop = async (ev: any) => {
+  const handleDrop = async (
+    ev: React.DragEvent<HTMLDivElement>
+  ): Promise<void> => {
     ev.preventDefault()
     contentTextRef.current?.classList.remove('dragover')
     console.log(JSON.stringify(ev.dataTransfer.files[0].name))
@@ -116,20 +122,22 @@ export const TweetEditBase: React.FC<TweetEditBaseProps> = ({
     setImgUrl((await imgUrl).url)
   }
 
-  const handleContentUpdate = (ev: any) => {
-    setContent((p) => ev.target.innerText.trim())
+  const handleContentUpdate = (
+    ev: React.KeyboardEvent<HTMLDivElement>
+  ): void => {
+    setContent(() => (ev.target as HTMLDivElement).innerText.trim())
   }
 
-  const handleGifIconClick = () => {
+  const handleGifIconClick = (): void => {
     setGifPopup(true)
   }
 
-  const closeGifPopup = (ev: React.MouseEvent) => {
+  const closeGifPopup = (ev: React.MouseEvent): void => {
     ev.stopPropagation()
     setGifPopup(false)
   }
 
-  const handleGifSelect = (gifObj: TenorImage) => {
+  const handleGifSelect = (gifObj: TenorImage): void => {
     setImgUrl(gifObj.url)
     setGifPopup(false)
   }

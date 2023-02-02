@@ -8,6 +8,8 @@ interface WhoToFollowProps {}
 export const WhoToFollow: React.FC<WhoToFollowProps> = ({}) => {
   const { data: usersToFollow } = useGetRandomUsersToFollowQuery()
 
+  //TODO: seems repetitive
+
   if (!usersToFollow)
     return (
       <section className="who-to-follow">

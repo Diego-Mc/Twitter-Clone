@@ -10,7 +10,7 @@ interface MentionProps {
 export const Mention: React.FC<MentionProps> = ({ username, onNavigate }) => {
   const { data: userId } = useGetUserIdQuery(username)
 
-  const handleLinkClick = (ev: React.MouseEvent) => {
+  const handleLinkClick = (ev: React.MouseEvent): void => {
     ev.stopPropagation()
     if (onNavigate) onNavigate()
   }

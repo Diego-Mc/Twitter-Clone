@@ -1,6 +1,5 @@
 import React from 'react'
 import { LoadingCircle } from '../components/LoadingCircle'
-import { PostList } from '../components/PostList'
 import { PostPreviewItem } from '../components/PostPreview'
 import {
   useGetBookmarksFromUserQuery,
@@ -13,8 +12,10 @@ interface BookmarksProps {}
 
 export const Bookmarks: React.FC<BookmarksProps> = ({}) => {
   const { data: user } = useGetUserQuery(userService.getLoggedInUser()?._id)
+  //TODO: is this right?
   const { data: bookmarks } = useGetBookmarksFromUserQuery(user as UserProps)
 
+  //TODO: move map to function
   return (
     <section className="bookmarks-view">
       {bookmarks ? (

@@ -6,6 +6,8 @@ import './assets/styles/main.scss'
 import { store } from './features/store'
 import * as timeago from 'timeago.js'
 
+//TODO: move timeAgo stuff to  a specific service
+
 const twitter = (number: number, index: number): [string, string] => {
   return [
     ['now', 'right now'],

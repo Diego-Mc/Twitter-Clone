@@ -6,7 +6,7 @@ interface BackIconBtnProps {}
 
 export const BackIconBtn: React.FC<BackIconBtnProps> = ({}) => {
   const navigate = useNavigate()
-  const handleBack = () => {
+  const handleBack = (): void => {
     navigate(-1)
   }
 

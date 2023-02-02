@@ -1,12 +1,25 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { ReactComponent as CommentFilledIcon } from '../assets/icons/comment_filled.svg'
-import { useGetPostQuery } from '../features/api/api.slice'
+import { ReactComponent as OptionsIcon } from '../assets/icons/options.svg'
+import { ReactComponent as TrashIcon } from '../assets/icons/trash.svg'
+import { ReactComponent as FollowIcon } from '../assets/icons/follow.svg'
+import { ReactComponent as UnfollowIcon } from '../assets/icons/unfollow.svg'
+import {
+  useDeletePostMutation,
+  useFollowUserMutation,
+  useGetPostQuery,
+  useGetUserQuery,
+} from '../features/api/api.slice'
 import { PostProps } from '../types/models'
 import { useNavigate } from 'react-router-dom'
 import { Mention } from './Mention'
 import { PostActions } from './PostActions'
 import { useFormatPost } from '../hooks/useFormatPost'
 import TimeAgo from 'timeago-react'
+import { userService } from '../services/user.service'
+import { toast } from 'react-hot-toast'
+
+//TODO: break up Item from regular?
 
 export interface PostPreviewItemProps {
   post: PostProps
@@ -28,10 +41,21 @@ export const PostPreviewItem: React.FC<PostPreviewItemProps> = ({
 }) => {
   const navigate = useNavigate()
 
-  const goto = (url: string, ev?: React.MouseEvent) => {
+  const [postPopup, setPostPopup] = useState(false)
+
+  const goto = (url: string, ev?: React.MouseEvent): void => {
     if (onComposeClose) onComposeClose()
     if (ev) ev.stopPropagation()
     navigate(url)
+  }
+
+  const togglePostPopup = (
+    force: boolean
+  ): ((e?: React.MouseEvent<HTMLDivElement, MouseEvent>) => void) => {
+    return (e) => {
+      e?.stopPropagation()
+      setPostPopup(force)
+    }
   }
 
   const [formatPost] = useFormatPost()
@@ -41,6 +65,19 @@ export const PostPreviewItem: React.FC<PostPreviewItemProps> = ({
       <article
         className="post-preview"
         onClick={() => goto(`/post/${post._id}`)}>
+        <div className="options-wrapper">
+          <div className="icon-wrap" onClick={togglePostPopup(true)}>
+            <OptionsIcon />
+          </div>
+          {postPopup ? (
+            <PostOptionsPopup
+              postId={post._id}
+              composerId={post.userId}
+              composerUsername={post.composerUsername}
+              handleClose={togglePostPopup(false)}
+            />
+          ) : null}
+        </div>
         {msg ? (
           msg.location === 'top' ? (
             <div className="msg-top ">
@@ -141,5 +178,63 @@ export const PostPreview: React.FC<PostPreviewProps> = ({
         msg={msgLocation === 'bottom' ? bottomMsgData : undefined}
       />
     </section>
+  )
+}
+
+interface OptionsPopupProps {
+  handleClose: (e?: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
+  composerId: string
+  postId: string
+  composerUsername: string
+}
+
+export const PostOptionsPopup: React.FC<OptionsPopupProps> = ({
+  handleClose,
+  postId,
+  composerId,
+  composerUsername,
+}) => {
+  const { data: user } = useGetUserQuery(userService.getLoggedInUser()?._id)
+  const [follow] = useFollowUserMutation()
+  const [deletePost] = useDeletePostMutation()
+
+  const handleDeletePost = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    e.stopPropagation()
+    const deletePrms = deletePost(postId).unwrap()
+    toast.promise(deletePrms, {
+      loading: 'Deleting post...',
+      success: 'Post deleted successfully',
+      error: 'Unable to delete post',
+    })
+    handleClose()
+  }
+
+  const handleFollowUser = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    e.stopPropagation()
+    follow(composerId)
+    handleClose()
+  }
+
+  const isFollowing = () => {
+    return user?.followings.includes(composerId)
+  }
+
+  return (
+    <>
+      <div className="bg-close-popup" onClick={handleClose}></div>
+      <section className="options-popup">
+        {user?._id !== composerId ? (
+          <article className="option" onClick={handleFollowUser}>
+            {isFollowing() ? <UnfollowIcon /> : <FollowIcon />}
+            {isFollowing() ? 'Unfollow' : 'Follow'} @{composerUsername}
+          </article>
+        ) : (
+          <article className="option red" onClick={handleDeletePost}>
+            <TrashIcon />
+            Delete
+          </article>
+        )}
+      </section>
+    </>
   )
 }

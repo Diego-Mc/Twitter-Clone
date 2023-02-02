@@ -2,8 +2,9 @@ import React, { useEffect, useRef } from 'react'
 import { TweetEditBase } from './TweetEditBase'
 import { ReactComponent as CloseIcon } from '../assets/icons/close.svg'
 import { PostProps } from '../types/models'
-import { PostPreview, PostPreviewItem } from './PostPreview'
-import { Mention } from './Mention'
+import { PostPreviewItem } from './PostPreview'
+
+//TODO: break to components
 
 interface PostToReplyProps {
   post: PostProps
@@ -53,12 +54,12 @@ export const TweetEditPopup: React.FC<TweetEditPopupProps> = ({
   }
 
   return (
-    <div className="popup" onClick={(e) => onComposeClose()}>
+    <div className="popup" onClick={() => onComposeClose()}>
       <section
         className={`tweet-edit  ${replyingTo ? 'reply reply-edit' : ''}`}
         onClick={(e) => e.stopPropagation()}>
         <div className="close-section">
-          <div className="icon-wrap" onClick={(e) => onComposeClose()}>
+          <div className="icon-wrap" onClick={() => onComposeClose()}>
             <CloseIcon />
           </div>
         </div>

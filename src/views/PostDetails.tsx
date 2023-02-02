@@ -1,31 +1,30 @@
-import React from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
-import { PostList } from '../components/PostList'
+import React, { useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import {
-  PostPreview,
+  PostOptionsPopup,
   PostPreviewItem,
   PostPreviewItemProps,
 } from '../components/PostPreview'
-import { ReactComponent as CommentFilledIcon } from '../assets/icons/comment_filled.svg'
 
 import { TweetEdit } from '../components/TweetEdit'
 import {
   useGetPostQuery,
   useGetPostRepliesQuery,
 } from '../features/api/api.slice'
-import { PostProps } from '../types/models'
 import { Mention } from '../components/Mention'
-import { postService } from '../services/post.service'
 import { PostActions } from '../components/PostActions'
 import { LoadingCircle } from '../components/LoadingCircle'
-import { renderToString } from 'react-dom/server'
-import { utilService } from '../services/util.service'
 import { useFormatPost } from '../hooks/useFormatPost'
+import { ReactComponent as OptionsIcon } from '../assets/icons/options.svg'
+
+//TODO: break to components
 
 export const MainPost: React.FC<PostPreviewItemProps> = ({ post, msg }) => {
   const [formatPost] = useFormatPost()
   const navigate = useNavigate()
+  const [postPopup, setPostPopup] = useState(false)
 
+  //TODO: appeared before - move to hook
   const goto = (url: string, ev?: React.MouseEvent) => {
     if (ev) ev.stopPropagation()
     navigate(url)
@@ -33,6 +32,19 @@ export const MainPost: React.FC<PostPreviewItemProps> = ({ post, msg }) => {
 
   return (
     <article className="post-preview main">
+      <div className="options-wrapper">
+        <div className="icon-wrap" onClick={() => setPostPopup(true)}>
+          <OptionsIcon />
+        </div>
+        {postPopup ? (
+          <PostOptionsPopup
+            postId={post._id}
+            composerId={post.userId}
+            composerUsername={post.composerUsername}
+            handleClose={() => setPostPopup(false)}
+          />
+        ) : null}
+      </div>
       {msg ? (
         <section className="pipe-top-section">
           <div className="pipe pipe-top"></div>

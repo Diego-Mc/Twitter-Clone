@@ -4,11 +4,11 @@ import { EventBus } from '../services/eventbus.service'
 interface LoginBlockProps {}
 
 export const LoginBlock: React.FC<LoginBlockProps> = ({}) => {
-  const handleLoginSelect = () => {
+  const handleLoginSelect = (): void => {
     EventBus.$emit('login-select')
   }
 
-  const handleRegisterSelect = () => {
+  const handleRegisterSelect = (): void => {
     EventBus.$emit('register-select')
   }
   return (

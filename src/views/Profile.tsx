@@ -4,23 +4,21 @@ import { WhoToFollow } from '../components/WhoToFollow'
 import { ReactComponent as CalendarIcon } from '../assets/icons/calendar.svg'
 import {
   createSearchParams,
-  Navigate,
   Outlet,
   useNavigate,
   useParams,
 } from 'react-router-dom'
 import {
   useFollowUserMutation,
-  useGetLoggedInUserQuery,
-  useGetPostQuery,
   useGetPostsQuery,
   useGetUserQuery,
 } from '../features/api/api.slice'
 import { useProfileTab } from '../hooks/profile'
 import { EventBus } from '../services/eventbus.service'
 import { userService } from '../services/user.service'
-import { PostProps } from '../types/models'
 import { LoadingCircle } from '../components/LoadingCircle'
+
+//TODO: break to components
 
 interface ProfileProps {}
 

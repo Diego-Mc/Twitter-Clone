@@ -1,12 +1,8 @@
 import React, { useState } from 'react'
-import Chance from 'chance'
 import { useRegisterMutation } from '../features/api/api.slice'
-import { utilService } from '../services/util.service'
-import { uploadImg } from '../services/upload.service'
 import { LoadingCircle } from './LoadingCircle'
 import { useRandomRegister } from '../hooks/useRandomRegister'
 import { toast } from 'react-hot-toast'
-const chance = new Chance()
 
 interface RandomRegisterBlockProps {}
 
@@ -15,7 +11,7 @@ export const RandomRegister: React.FC<RandomRegisterBlockProps> = ({}) => {
   const [isLoading, setIsLoading] = useState(false)
   const [triggerRandomRegister] = useRandomRegister()
 
-  const handleRandomRegister = async () => {
+  const handleRandomRegister = async (): Promise<void> => {
     setIsLoading(true)
     const userCredPrms = triggerRandomRegister()
     toast.promise(userCredPrms, {

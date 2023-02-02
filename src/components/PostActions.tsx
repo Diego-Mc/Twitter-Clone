@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { ReactComponent as CommentIcon } from '../assets/icons/comment.svg'
 import { ReactComponent as HeartIcon } from '../assets/icons/heart.svg'
 import { ReactComponent as HeartFilledIcon } from '../assets/icons/heart_filled.svg'
@@ -12,9 +12,7 @@ import {
 } from '../features/api/api.slice'
 import { EventBus } from '../services/eventbus.service'
 import { userService } from '../services/user.service'
-import { PostProps, UserProps } from '../types/models'
-import { TweetEditPopup } from './TweetEditPopup'
-import { RootState } from '../features/store'
+import { PostProps } from '../types/models'
 import {
   createSearchParams,
   useLocation,
@@ -24,11 +22,21 @@ import {
 import { useGetRouteName } from '../hooks/useGetRouteName'
 import { toast } from 'react-hot-toast'
 
-interface PostActionsProps {
-  post: PostProps
+interface IPostActions {
+  PostActionsProps: {
+    post: PostProps
+  }
+  searchData: {
+    user?: string
+    filter: string
+  }
 }
 
-export const PostActions: React.FC<PostActionsProps> = ({ post }) => {
+//TODO: break into components
+
+export const PostActions: React.FC<IPostActions['PostActionsProps']> = ({
+  post,
+}) => {
   const [likePost] = useLikePostMutation()
   const [bookmarkPost] = useBookmarkPostMutation()
   const { data: user } = useGetUserQuery(userService.getLoggedInUser()?._id)
@@ -36,44 +44,43 @@ export const PostActions: React.FC<PostActionsProps> = ({ post }) => {
   const params = useParams()
   const location = useLocation()
 
+  //TODO: check "as" cases
   const isLiked = user !== undefined && post.likes[user._id as string]
   const [searchParams] = useSearchParams()
 
   const isBookmarked = user?.bookmarks.includes(post._id)
 
-  const getSearchObj = () => {
-    let searchObj: any = undefined
-    if (route === 'search') searchObj = searchParams.toString()
-    else if (route === 'profile') {
-      const locSplit = location.pathname.split('/')
-      let filter = ''
-      let user = ''
-      if (params?.userId) {
-        filter = locSplit[3]
-        user = params.userId
-      } else {
-        filter = locSplit[2]
-        user = userService.getLoggedInUser()?._id
-      }
-      searchObj = { user, filter }
-      if (searchObj.user === undefined) delete searchObj.user
-      searchObj = createSearchParams(searchObj).toString()
+  const getSearchParams = (): string | void => {
+    if (route === 'search') return searchParams.toString()
+    else if (route !== 'profile') return
+
+    const locSplit = location.pathname.split('/')
+    let filter = ''
+    let user = ''
+    if (params?.userId) {
+      filter = locSplit[3]
+      user = params.userId
+    } else {
+      filter = locSplit[2]
+      user = userService.getLoggedInUser()?._id
     }
-    return searchObj
+    const data: IPostActions['searchData'] = { user, filter }
+    if (data.user === undefined) delete data.user
+    return createSearchParams(data).toString()
   }
 
-  const handleLike = (ev: React.MouseEvent) => {
+  const handleLike = (ev: React.MouseEvent): void => {
     ev.stopPropagation()
-    const searchObj = getSearchObj()
-    likePost({ post, params: searchObj, user })
+    const searchParams = getSearchParams()
+    likePost({ post, params: searchParams, user })
   }
 
-  const handleComment = (ev: React.MouseEvent) => {
+  const handleComment = (ev: React.MouseEvent): void => {
     ev.stopPropagation()
     EventBus.$emit('comment', post)
   }
 
-  const handleShare = async (ev: React.MouseEvent) => {
+  const handleShare = async (ev: React.MouseEvent): Promise<void> => {
     ev.stopPropagation()
     const postUrl = window.location.origin + '/post/' + post._id
     const copyPrms = navigator.clipboard.writeText(postUrl)
@@ -85,7 +92,7 @@ export const PostActions: React.FC<PostActionsProps> = ({ post }) => {
     await copyPrms
   }
 
-  const handleBookmark = (ev: React.MouseEvent) => {
+  const handleBookmark = (ev: React.MouseEvent): void => {
     ev.stopPropagation()
     bookmarkPost(post._id)
   }

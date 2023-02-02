@@ -10,15 +10,15 @@ export const LoginBottomCTA: React.FC<LoginBottomCTAProps> = ({}) => {
   const [triggerRandomRegister] = useRandomRegister()
   const [register] = useRegisterMutation()
 
-  const handleLoginSelect = () => {
+  const handleLoginSelect = (): void => {
     EventBus.$emit('login-select')
   }
 
-  const handleRegisterSelect = () => {
+  const handleRegisterSelect = (): void => {
     EventBus.$emit('register-select')
   }
 
-  const handleRandomRegister = async () => {
+  const handleRandomRegister = async (): Promise<void> => {
     const userCredPrms = triggerRandomRegister()
     toast.promise(userCredPrms, {
       loading: 'Generating user...',
